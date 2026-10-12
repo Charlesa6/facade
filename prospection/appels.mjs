@@ -32,6 +32,15 @@ function constat(p) {
   return `je n'ai pas trouvé de site internet pour ${p.company}`;
 }
 
+// Meilleur moment pour appeler : hors service pour les commerces, tôt ou tard pour les artisans.
+const QUAND = {
+  restaurant: 'entre 15 h et 17 h (jamais pendant le service)',
+  boulangerie: 'en début d\'après-midi, entre 14 h et 16 h',
+  coiffure: 'en milieu de matinée ou en début d\'après-midi, entre deux clients ; éviter le samedi',
+  fleuriste: 'en début d\'après-midi en semaine ; éviter le samedi et les veilles de fête',
+};
+const quand = (p) => QUAND[p.metier] || 'tôt le matin (7 h 30 – 8 h 30) ou en fin de journée (après 17 h 30)';
+
 const sms = (p) => `Bonjour, c'est Charles Allouard de Konsilys, suite à notre appel. Voici la maquette du site ${de(p.company)} : ${p.preview_url} — Elle est privée (pas sur Google). Dites-moi ce que vous en pensez !`;
 
 const rows = JSON.parse(readFileSync(IN, 'utf8'));
@@ -46,7 +55,7 @@ function carte(p, i) {
   return `<article class="c" id="p${i}">
   <div class="h"><b>${esc(p.company)}</b><span class="m">${esc(metier)} · ${esc(p.city || '')} · ${esc(p.effectif || '')}${p.rge ? ' · RGE' : ''}</span></div>
   <p>${qui}</p>
-  <a class="call" href="${tel(p.phone)}">📞 ${esc(p.phone)}</a>
+  <a class="call" href="${tel(p.phone)}">📞 ${esc(p.phone)}</a> <span class="m">· à appeler ${esc(quand(p))}</span>
   <p class="k"><b>Accroche :</b> « ${esc(constat(p).charAt(0).toUpperCase() + constat(p).slice(1))}. »</p>
   <p class="row"><a href="${esc(p.preview_url)}" target="_blank" rel="noopener">Voir sa maquette</a><a href="sms:${String(p.phone).replace(/[^\d+]/g, '')}?&body=${encodeURIComponent(sms(p))}">Envoyer le SMS</a>${p.email ? `<span class="m">✉ ${esc(p.email)}</span>` : ''}</p>
   <div class="res"><label><input type="radio" name="r${i}" value="rdv"> Intéressé / RDV</label><label><input type="radio" name="r${i}" value="rappel"> À rappeler</label><label><input type="radio" name="r${i}" value="non"> Pas intéressé</label><label><input type="radio" name="r${i}" value="stop"> Ne plus appeler</label><label><input type="radio" name="r${i}" value="nrp"> Pas de réponse</label><textarea placeholder="Notes…" data-n="${i}"></textarea></div>
@@ -68,7 +77,7 @@ summary{font-weight:700;cursor:pointer}.c{background:var(--card);border:1px soli
 .res{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;margin-top:8px;border-top:1px solid var(--line);padding-top:8px}.res textarea{width:100%;min-height:44px;font:inherit;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:transparent;color:inherit}
 .stats{display:flex;flex-wrap:wrap;gap:8px}.stats span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px}
 </style></head><body><div class="w">
-<h1>Fiche d'appels — sites internet BTP</h1>
+<h1>Fiche d'appels — sites internet</h1>
 <p class="m">Générée le ${new Date().toLocaleDateString('fr-FR')}. Les résultats cochés et les notes restent sur cet appareil ; reporte-les ensuite (ou dicte-les à Claude) pour mettre la base à jour.</p>
 <div class="stats"><span><b>${sansEmail.length}</b> à appeler en priorité (pas d'email)</span><span><b>${avecEmail.length}</b> ont aussi un email</span><span>${sansTel.length} sans numéro trouvé</span></div>
 
@@ -99,7 +108,7 @@ summary{font-weight:700;cursor:pointer}.c{background:var(--card);border:1px soli
 <div class="box" style="border:0;padding:4px 0">
 <ul><li><b>Intéressé</b> : SMS envoyé, créneau de rappel noté. Au rappel : corriger les textes « à valider » de la maquette ensemble, puis mise en ligne.</li>
 <li><b>Ne plus appeler</b> : le dire à Claude → l'entreprise est retirée (statut « désinscrit ») et sa maquette supprimée.</li>
-<li><b>Pas de réponse</b> : rappeler un autre jour, à une autre heure (tôt le matin ou en fin de journée : les artisans sont sur les chantiers).</li></ul>
+<li><b>Pas de réponse</b> : rappeler un autre jour, à une autre heure (voir le créneau conseillé sur chaque carte : les artisans sont sur les chantiers, les commerçants servent leurs clients).</li></ul>
 </div></details>
 
 <h2>À appeler en priorité — pas d'email (${sansEmail.length})</h2>
