@@ -5,7 +5,7 @@
 
 export const METIERS = {
   maconnerie: {
-    label: 'Maçonnerie générale', naf: ['43.99C', '41.20A', '41.20B'],
+    label: 'Maçonnerie générale', naf: ['43.99C'],
     palette: { primary: '#9A3412', accent: '#F59E0B', dark: '#1C1917', soft: '#FFF7ED' },
     icon: 'brick',
     services: [

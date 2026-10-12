@@ -67,8 +67,11 @@ mkdirSync(join(ROOT, 'data', 'profils'), { recursive: true });
 
 const lines = [];
 let created = 0;
+let horsZone = 0;
 for (const e of data.results || []) {
   const s = e.siege || {};
+  // L'API retient une entreprise dès qu'UN établissement est dans le département : on ne garde que les sièges locaux.
+  if (s.departement !== dep) { horsZone++; continue; }
   const enseigne = (s.liste_enseignes || [])[0] || s.nom_commercial;
   const nom = titleCase(enseigne || e.nom_raison_sociale || e.nom_complet);
   const slug = slugify(`${nom}-${s.code_postal || dep}`);
@@ -121,4 +124,4 @@ for (const e of data.results || []) {
 const out = join(ROOT, 'data', 'candidats', `${dep}-${metier}-p${page}.jsonl`);
 writeFileSync(out, lines.join('\n') + (lines.length ? '\n' : ''));
 console.log(`${lines.length} entreprises (page ${page}/${data.total_pages ?? '?'}, ${data.total_results ?? '?'} au total) → ${out}`);
-console.log(`${created} nouveaux brouillons de profil dans data/profils/`);
+console.log(`${horsZone} écartées (siège hors du ${dep}), ${created} nouveaux brouillons de profil dans data/profils/`);
