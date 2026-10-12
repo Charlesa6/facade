@@ -4,7 +4,7 @@
 //   node prospection/audit.mjs <url-ou-domaine>...
 //
 // Sortie JSON par site : { url, verdict, score, problemes[] }
-//   verdict = aucun_site | site_obsolete | site_correct
+//   verdict = aucun_site | site_obsolete | site_correct | a_verifier
 // Les « problèmes » détectés servent d'argument concret dans l'email de prospection
 // (ex. « votre site ne s'affiche pas correctement sur mobile »).
 const targets = process.argv.slice(2);
@@ -26,26 +26,44 @@ async function fetchTimed(url) {
   }
 }
 
+// Verdict `a_verifier` : le script n'a pas pu conclure (proxy, anti-robot, boucle de redirection) →
+// vérification humaine ou navigateur. On ne classe JAMAIS « aucun site » sur une simple erreur réseau.
 async function audit(target) {
   const url = /^https?:\/\//.test(target) ? target : `https://${target}`;
-  let res;
-  try {
-    res = await fetchTimed(url);
-  } catch {
+  const tries = [url, url.replace(/^https:/, 'http:')];
+  let res, lastErr;
+  for (const u of tries) {
     try {
-      res = await fetchTimed(url.replace(/^https:/, 'http:'));
-    } catch {
-      return { url, verdict: 'aucun_site', score: 0, problemes: ['Site injoignable'] };
+      res = await fetchTimed(u);
+      if (res.ok) break;
+      lastErr = `HTTP ${res.status}`;
+    } catch (e) {
+      lastErr = String(e.cause?.code || e.cause?.message || e.message);
     }
+    res = null;
   }
-  if (!res.ok) return { url, verdict: 'aucun_site', score: 0, problemes: [`Le site renvoie une erreur ${res.status}`] };
+  if (!res) {
+    if (/ENOTFOUND|EAI_AGAIN/.test(lastErr)) return { url, verdict: 'aucun_site', score: 0, problemes: ['Le nom de domaine ne répond pas'] };
+    return { url, verdict: 'a_verifier', score: null, problemes: [`Audit automatique impossible (${lastErr}) : vérifier dans un navigateur`] };
+  }
+  const httpsBroken = !res.finalUrl.startsWith('https://') && url.startsWith('https://');
 
   const h = res.html;
   const problemes = [];
   let score = 100;
   const minus = (n, msg) => { score -= n; problemes.push(msg); };
 
-  if (!res.finalUrl.startsWith('https://')) minus(25, 'Pas de connexion sécurisée (HTTPS) : les navigateurs affichent « Non sécurisé »');
+  // Page d'attente / maintenance / page par défaut de l'hébergeur = pas de vrai site.
+  const text = h.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  if (text.length < 3000 && /site en construction|en cours de construction|under construction|coming soon|bientôt disponible|en maintenance|mode maintenance|maintenance mode|undergoing maintenance|available soon|site not installed|page par défaut|default page|domaine (?:a été )?réservé|this domain|parked/i.test(text))
+    return { url: res.finalUrl, verdict: 'aucun_site', score: 0, problemes: ['Le site n\'affiche qu\'une page d\'attente (« en construction » ou maintenance)'] };
+  if (/There has been a critical error|Erreur critique|Fatal error|Database Error/i.test(text) && text.length < 3000)
+    return { url: res.finalUrl, verdict: 'site_obsolete', score: 0, problemes: ['Le site affiche un message d\'erreur au lieu de son contenu'] };
+  if (/\.(wixsite\.com|e-monsite\.com|jimdofree\.com|jimdosite\.com|site123\.me|wordpress\.com|webnode\.fr|blogspot\.com)\b/i.test(new URL(res.finalUrl).hostname))
+    minus(35, `Site gratuit à l'adresse ${new URL(res.finalUrl).hostname} (publicité de l'hébergeur, pas de nom de domaine propre)`);
+
+  if (httpsBroken) minus(25, 'Certificat de sécurité absent ou invalide : les navigateurs affichent « Non sécurisé »');
+  else if (!res.finalUrl.startsWith('https://')) minus(25, 'Pas de connexion sécurisée (HTTPS) : les navigateurs affichent « Non sécurisé »');
   if (!/<meta[^>]+name=["']viewport["']/i.test(h)) minus(30, 'Le site n\'est pas adapté aux téléphones');
   const years = [...h.matchAll(/(?:©|&copy;|copyright)\s*(?:\d{4}\s*[-–]\s*)?(\d{4})/gi)].map((m) => Number(m[1]));
   const lastYear = years.length ? Math.max(...years) : null;
@@ -55,7 +73,6 @@ async function audit(target) {
   if (!/<title>[^<]{5,}<\/title>/i.test(h)) minus(10, 'Pas de titre de page (mauvais référencement Google)');
   if (!/<meta[^>]+name=["']description["']/i.test(h)) minus(5, 'Pas de description pour Google');
   if (res.ms > 4000) minus(10, `Chargement lent (${(res.ms / 1000).toFixed(1)} s)`);
-  if (/wix\.com|jimdo|e-monsite|site123/i.test(h) && /(free|gratuit|créé avec|made with)/i.test(h)) minus(10, 'Site gratuit avec publicité de l\'hébergeur');
   if (h.length < 1500) minus(20, 'Page quasi vide ou page d\'attente (« site en construction »)');
 
   score = Math.max(0, score);

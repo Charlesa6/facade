@@ -12,6 +12,7 @@
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { titleCase, enseigneUtilisable } from './noms.mjs';
 import { METIERS } from '../generator/metiers.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -49,7 +50,6 @@ async function get(url) {
   }
 }
 
-const titleCase = (s) => String(s || '').toLowerCase().replace(/(^|[\s'’-])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
 const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 const params = new URLSearchParams({
@@ -72,7 +72,7 @@ for (const e of data.results || []) {
   const s = e.siege || {};
   // L'API retient une entreprise dès qu'UN établissement est dans le département : on ne garde que les sièges locaux.
   if (s.departement !== dep) { horsZone++; continue; }
-  const enseigne = (s.liste_enseignes || [])[0] || s.nom_commercial;
+  const enseigne = [(s.liste_enseignes || [])[0], s.nom_commercial].find(enseigneUtilisable);
   const nom = titleCase(enseigne || e.nom_raison_sociale || e.nom_complet);
   const slug = slugify(`${nom}-${s.code_postal || dep}`);
   const candidat = {
@@ -89,7 +89,7 @@ for (const e of data.results || []) {
     code_postal: s.code_postal,
     ville: titleCase(s.libelle_commune),
     // Dirigeants : uniquement le nom et la qualité publiés au RNE, pour adresser le message.
-    dirigeants: (e.dirigeants || []).filter((d) => d.type_dirigeant === 'personne physique').map((d) => ({ nom: titleCase(`${d.prenoms || ''} ${d.nom || ''}`.trim()), qualite: d.qualite })),
+    dirigeants: (e.dirigeants || []).filter((d) => d.type_dirigeant === 'personne physique').map((d) => ({ prenom: titleCase(String(d.prenoms || '').split(/\s+/)[0]), nom: titleCase(String(d.nom || '').replace(/\s*\(.*?\)/g, '')), qualite: d.qualite })),
     source: `https://annuaire-entreprises.data.gouv.fr/entreprise/${e.siren}`,
     slug,
   };
