@@ -19,10 +19,10 @@ Tu ne modifies jamais le code ni les sites. En base (projet Supabase `facade`, `
 ## Envoi (Resend, domaine `konsilys.com`)
 
 - **Expéditeur** : `Charles Allouard — Konsilys <contact@konsilys.com>` (réponses vers la même adresse). Tant que le domaine konsilys.com n'est pas vérifié chez Resend, **n'envoie rien** et signale-le.
-- **Format** : texte brut, ≤ 110 mots, vouvoiement, un seul appel à l'action, **le lien de SA maquette** (`preview_url` = `https://www.konsilys.com/apercu/<preview_token>`, rendue à la volée depuis `profile`), et un détail concret tiré de son profil ou de l'audit (ex. « votre site ne s'affiche pas sur téléphone », « je n'ai pas trouvé de site à votre nom »). Modèles : `emails/sequence.md`.
+- **Format** : texte brut, ≤ 110 mots, vouvoiement, un seul appel à l'action (un échange de 10 minutes, avec le numéro de Charles : 06 71 58 20 74), **le lien de SA maquette** (`preview_url` = `https://www.konsilys.com/apercu/<preview_token>`, rendue à la volée depuis `profile`), et un détail concret tiré de son profil ou de l'audit (ex. « votre site ne s'affiche pas sur téléphone », « je n'ai pas trouvé de site à votre nom »). Modèles : `emails/sequence.md`.
 - **Pied obligatoire** sur chaque email :
   ```
-  Charles Allouard — Konsilys · konsilys.com
+  Charles Allouard — Konsilys · 06 71 58 20 74 · konsilys.com
   Je vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de <source lisible : « l'annuaire public des entreprises RGE (ADEME) » ou le nom du site où l'adresse est publiée>. Pour ne plus recevoir mes messages et supprimer la maquette : https://www.konsilys.com/desinscription?t=<unsub_token>
   ```
   En-têtes : `List-Unsubscribe: <https://hxxbhbfueqwsvwqrojea.supabase.co/functions/v1/unsubscribe?t=<unsub_token>>` et `List-Unsubscribe-Post: List-Unsubscribe=One-Click`.

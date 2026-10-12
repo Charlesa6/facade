@@ -62,7 +62,7 @@ function email(d, e, url) {
     site_de: `Le site ${de(d.name)}`,
     lien_maquette: url,
     probleme: (PROBLEMES[e.verdict] || PROBLEMES.aucun_site)(d, e),
-    pied: `Charles Allouard — Konsilys · konsilys.com\nJe vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de ${sourceLisible(e.email_source)}. Pour ne plus recevoir mes messages et supprimer la maquette : <lien de désinscription>`,
+    pied: `Charles Allouard — Konsilys · 06 71 58 20 74 · konsilys.com\nJe vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de ${sourceLisible(e.email_source)}. Pour ne plus recevoir mes messages et supprimer la maquette : <lien de désinscription>`,
   };
   const fill = (t) => t.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? `{${k}}`);
   let body = fill(m1[2]).replace(/^Bonjour ,/m, 'Bonjour,');

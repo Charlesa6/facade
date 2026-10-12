@@ -19,7 +19,7 @@ Plutôt que de vous proposer un devis, j'ai préparé une maquette du site de {e
 
 Elle est privée (invisible sur Google). Si elle vous plaît, on la corrige ensemble et elle est en ligne sous votre nom en 48 h, pour 49 € HT par mois, domaine et hébergement compris.
 
-Un appel de 10 minutes cette semaine ?
+Je vous propose d'en parler 10 minutes cette semaine : dites-moi quand vous êtes disponible, ou appelez-moi directement au 06 71 58 20 74.
 
 Charles
 
@@ -38,7 +38,7 @@ Vos futurs clients, même quand ils vous ont été recommandés, vérifient souv
 Votre maquette est faite pour ça : vos prestations, votre zone, et un bouton pour vous appeler directement.
 {lien_maquette}
 
-Voulez-vous que je l'adapte (textes, photos de vos chantiers) ?
+Voulez-vous que je l'adapte (textes, photos de vos chantiers) ? Le plus simple est d'en parler de vive voix : je suis joignable au 06 71 58 20 74.
 
 Charles
 
@@ -55,6 +55,8 @@ Bonjour {prenom_nom},
 Je ne vous relancerai plus : je supprime la maquette de {entreprise} à la fin du mois, sauf si elle vous intéresse.
 
 {lien_maquette}
+
+Si vous voulez en parler, je reste joignable au 06 71 58 20 74.
 
 Bonne continuation,
 Charles
