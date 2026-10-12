@@ -12,7 +12,7 @@ Une PME du bâtiment de 3 à 20 personnes est choisie sur recommandation, puis *
 | | **Essentiel** | **Pro** |
 |---|---|---|
 | Mise en ligne | 0 € (pilote) | 290 € HT |
-| Abonnement | **49 € HT/mois** | **89 € HT/mois** |
+| Abonnement | **39 € HT/mois** | **69 € HT/mois** |
 | Site | 1 page : prestations, entreprise, zone, contact | Multi-pages + galerie de chantiers + page par prestation |
 | Nom de domaine + hébergement + HTTPS | inclus | inclus |
 | Modifications | 2 par mois | illimitées |
@@ -20,7 +20,7 @@ Une PME du bâtiment de 3 à 20 personnes est choisie sur recommandation, puis *
 | Référencement local | de base (titres, données structurées) | pages ville/prestation |
 | Engagement | 12 mois, puis mensuel | 12 mois, puis mensuel |
 
-Annuel = 10 × le mensuel (2 mois offerts), comme pour Konsilys. **Prix à valider pendant le pilote** (voir §6).
+Annuel = 10 × le mensuel (2 mois offerts). Tarifs fixés par Charles le 12/10/2026 : **39 € et 69 € HT/mois**.
 
 Le client est **propriétaire de son nom de domaine** et peut partir avec son site (export HTML) : argument de confiance face aux offres « location de site » mal perçues dans le BTP.
 
@@ -79,7 +79,7 @@ Une plainte ou un rebond sur la prospection n'affecte que la réputation de kons
 
 - Coût de production d'une maquette : quelques centimes (génération automatique) + 5 min de relecture.
 - Coût d'un client en production : domaine ~8 €/an, hébergement ~0 € (Vercel, statique), Stripe ~1,5 %.
-- **100 clients Essentiel ≈ 4 900 €/mois ≈ 59 k€/an de revenu récurrent**, marge brute > 90 %.
+- **100 clients Essentiel ≈ 3 900 €/mois ≈ 47 k€/an de revenu récurrent**, marge brute > 90 %.
 - Le vrai coût est le temps commercial (appels de closing) : c'est lui qu'il faut mesurer pendant le pilote.
 
 ## 8. Cadre légal (à faire valider par un juriste avant le passage à l'échelle)

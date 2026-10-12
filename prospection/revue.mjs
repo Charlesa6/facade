@@ -12,7 +12,7 @@ import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHmac } from 'node:crypto';
 import { renderIndex, renderMentions, normalize } from '../generator/render.mjs';
-import { METIERS } from '../generator/metiers.mjs';
+import { METIERS, prospection } from '../generator/metiers.mjs';
 import { titleCase, salutation } from './noms.mjs';
 
 // « de » + élision : « le site d'AB Habitations », « le site de Spalu ».
@@ -59,11 +59,11 @@ function email(d, e, url) {
     entreprise: d.name,
     de_entreprise: de(d.name),
     ville: titleCase(d.ville || '') || 'votre secteur',
-    pros: (METIERS[d.metier] || METIERS.general).pros,
+    ...prospection(d.metier),
     site_de: `Le site ${de(d.name)}`,
     lien_maquette: url,
     probleme: (PROBLEMES[e.verdict] || PROBLEMES.aucun_site)(d, e),
-    pied: `Charles Allouard — Konsilys · 06 71 58 20 74 · konsilys.com\nJe vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de ${sourceLisible(e.email_source)}. Pour ne plus recevoir mes messages et supprimer la maquette : <lien de désinscription>`,
+    pied: `--\nCharles Allouard — Konsilys, Lyon · plus de 5 ans de conseil en informatique · 06 71 58 20 74 · konsilys.com\nJe vous écris car vous dirigez ${prospection(d.metier).activite} ; vos coordonnées proviennent de ${sourceLisible(e.email_source)}. Pour ne plus recevoir mes messages et supprimer la maquette : <lien de désinscription>`,
   };
   const fill = (t) => t.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? `{${k}}`);
   let body = fill(m1[2]).replace(/^Bonjour ,/m, 'Bonjour,');

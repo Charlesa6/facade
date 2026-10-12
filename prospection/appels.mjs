@@ -47,7 +47,7 @@ function carte(p, i) {
   <div class="h"><b>${esc(p.company)}</b><span class="m">${esc(metier)} · ${esc(p.city || '')} · ${esc(p.effectif || '')}${p.rge ? ' · RGE' : ''}</span></div>
   <p>${qui}</p>
   <a class="call" href="${tel(p.phone)}">📞 ${esc(p.phone)}</a>
-  <p class="k"><b>Accroche :</b> « … et ${esc(constat(p))}. »</p>
+  <p class="k"><b>Accroche :</b> « ${esc(constat(p).charAt(0).toUpperCase() + constat(p).slice(1))}. »</p>
   <p class="row"><a href="${esc(p.preview_url)}" target="_blank" rel="noopener">Voir sa maquette</a><a href="sms:${String(p.phone).replace(/[^\d+]/g, '')}?&body=${encodeURIComponent(sms(p))}">Envoyer le SMS</a>${p.email ? `<span class="m">✉ ${esc(p.email)}</span>` : ''}</p>
   <div class="res"><label><input type="radio" name="r${i}" value="rdv"> Intéressé / RDV</label><label><input type="radio" name="r${i}" value="rappel"> À rappeler</label><label><input type="radio" name="r${i}" value="non"> Pas intéressé</label><label><input type="radio" name="r${i}" value="stop"> Ne plus appeler</label><label><input type="radio" name="r${i}" value="nrp"> Pas de réponse</label><textarea placeholder="Notes…" data-n="${i}"></textarea></div>
 </article>`;
@@ -76,10 +76,10 @@ summary{font-weight:700;cursor:pointer}.c{background:var(--card);border:1px soli
 <div class="box">
 <ol>
 <li><b>Présentation</b> — « Bonjour, [Prénom Nom] ? Charles Allouard, de Konsilys, à Lyon. Je vous prends deux minutes, c'est au sujet de [entreprise]. »</li>
-<li><b>Accroche</b> — « Je crée les sites internet des entreprises du bâtiment, et [accroche de la carte]. »</li>
+<li><b>Accroche</b> — « Je suis consultant en informatique depuis plus de 5 ans, et je crée les sites internet des entreprises et des commerces lyonnais. [Accroche de la carte]. »</li>
 <li><b>La maquette</b> — « Plutôt que de vous envoyer un devis, j'ai déjà préparé une maquette du site de [entreprise]. Je vous envoie le lien par SMS, vous y jetez un œil quand vous avez deux minutes ? »</li>
 <li><b>Si oui</b> — envoyer le SMS (bouton sur la carte), puis : « Je vous rappelle [jour] pour avoir votre avis ? » → noter le créneau.</li>
-<li><b>Le prix, s'il demande</b> — « 49 € HT par mois, la création est offerte : nom de domaine, hébergement et modifications compris. En ligne en 48 heures après votre accord. Engagement d'un an, ensuite sans engagement. »</li>
+<li><b>Le prix, s'il demande</b> — « 39 € HT par mois, la création est offerte : nom de domaine, hébergement et modifications compris. En ligne en 48 heures après votre accord. Engagement d'un an, ensuite sans engagement. »</li>
 </ol>
 <p class="m">Toujours : poli, court, pas de jargon (« site », « Google », « téléphone », jamais « SEO » ou « responsive »). Pas de promesse de résultat (« premier sur Google », « X clients en plus »).</p>
 </div>
@@ -89,7 +89,7 @@ summary{font-weight:700;cursor:pointer}.c{background:var(--card);border:1px soli
 <p><b>« J'ai assez de travail. »</b> — « Tant mieux ! Le site sert aussi à rassurer les clients qui vous découvrent par recommandation, et à recruter. Il travaille pour vous sans que vous y passiez du temps. »</p>
 <p><b>« Je n'ai pas besoin d'internet, tout se fait par le bouche-à-oreille. »</b> — « Justement : quelqu'un à qui on vous recommande va presque toujours vérifier sur son téléphone avant d'appeler. Sans site, il ne trouve rien. »</p>
 <p><b>« Mon neveu / un ami va me le faire. »</b> — « Très bien. Regardez quand même la maquette, elle est gratuite ; si elle ne vous sert pas, je la supprime. »</p>
-<p><b>« C'est trop cher. »</b> — « C'est 49 € HT par mois, tout compris, création offerte : moins qu'un seul chantier perdu dans l'année. »</p>
+<p><b>« C'est trop cher. »</b> — « C'est 39 € HT par mois, tout compris, création offerte : moins qu'un seul client perdu dans l'année. »</p>
 <p><b>« Je n'aime pas les engagements. »</b> — « Je comprends. Je note, et je reviens vers vous avec une proposition. » (pas de geste commercial sans décision de ta part)</p>
 <p><b>« Comment avez-vous eu mon numéro ? »</b> — « Il est publié dans les annuaires d'entreprises. Si vous préférez ne plus être appelé, je le note tout de suite. » → cocher <i>Ne plus appeler</i>.</p>
 <p><b>« Envoyez-moi un email. »</b> — envoyer le SMS ou l'email avec le lien de la maquette, et proposer un rappel.</p>

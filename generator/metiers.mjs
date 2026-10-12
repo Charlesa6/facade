@@ -1,4 +1,5 @@
 // Préréglages par métier (BTP et commerces de proximité) : palette, libellé, prestations types.
+// Pour les emails : `activite` (« vous dirigez … »), `photos` (« … photos de vos chantiers »), sinon valeurs BTP par défaut.
 // Les prestations par défaut sont des descriptions génériques du métier,
 // signalées « à valider » dans la maquette tant que l'entreprise ne les a pas confirmées.
 // `naf` : codes NAF (rév. 2) rattachés au métier, utilisés par le sourcing.
@@ -106,7 +107,7 @@ export const METIERS = {
   // ── Commerces de proximité (famille « commerce ») : pas de devis ni de zone d'intervention, mais une
   // adresse, des horaires et un bouton d'action propre au métier (réserver, prendre rendez-vous, commander).
   restaurant: {
-    famille: 'commerce', schema: 'Restaurant',
+    famille: 'commerce', activite: 'un restaurant', photos: 'photos de vos plats et de la salle', schema: 'Restaurant',
     label: 'Restaurant', pros: 'des restaurants', naf: ['56.10A'],
     palette: { primary: '#9F1239', accent: '#FBBF24', dark: '#1C1917', soft: '#FFF1F2' },
     icon: 'plate',
@@ -121,7 +122,7 @@ export const METIERS = {
     ],
   },
   coiffure: {
-    famille: 'commerce', schema: 'HairSalon',
+    famille: 'commerce', activite: 'un salon de coiffure', photos: 'photos du salon et de vos réalisations', schema: 'HairSalon',
     label: 'Salon de coiffure', pros: 'des salons de coiffure', naf: ['96.02A'],
     palette: { primary: '#6D28D9', accent: '#F472B6', dark: '#1E1B4B', soft: '#F5F3FF' },
     icon: 'scissors',
@@ -136,7 +137,7 @@ export const METIERS = {
     ],
   },
   fleuriste: {
-    famille: 'commerce', schema: 'Florist',
+    famille: 'commerce', activite: 'une boutique de fleurs', photos: 'photos de vos bouquets', schema: 'Florist',
     label: 'Fleuriste', pros: 'des fleuristes', naf: ['47.76Z'],
     palette: { primary: '#BE185D', accent: '#84CC16', dark: '#1F2937', soft: '#FDF2F8' },
     icon: 'flower',
@@ -151,7 +152,7 @@ export const METIERS = {
     ],
   },
   boulangerie: {
-    famille: 'commerce', schema: 'Bakery',
+    famille: 'commerce', activite: 'une boulangerie', photos: 'photos de vos produits', schema: 'Bakery',
     label: 'Boulangerie-pâtisserie', pros: 'des boulangeries', naf: ['10.71C', '10.71D'],
     palette: { primary: '#92400E', accent: '#FCD34D', dark: '#1C1917', soft: '#FFFBEB' },
     icon: 'bread',
@@ -188,6 +189,19 @@ export const ICONS = {
   mail: '<path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
   clock: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
 };
+
+// Champs utilisés par les emails de prospection, avec les valeurs BTP par défaut.
+export function prospection(metier) {
+  const m = METIERS[metier] || METIERS.general;
+  const commerce = m.famille === 'commerce';
+  return {
+    pros: m.pros,
+    activite: m.activite || 'une entreprise du bâtiment',
+    clientele: commerce ? 'des commerces lyonnais' : 'des entreprises du bâtiment',
+    photos: m.photos || 'photos de vos chantiers',
+    contenu: commerce ? `vos horaires, votre adresse, et un bouton pour ${m.cta.charAt(0).toLowerCase() + m.cta.slice(1)}` : 'vos prestations, votre zone, et un bouton pour vous appeler directement',
+  };
+}
 
 export function metierFromNaf(naf) {
   for (const [key, m] of Object.entries(METIERS)) if (m.naf.includes(naf)) return key;

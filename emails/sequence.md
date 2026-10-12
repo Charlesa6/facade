@@ -1,8 +1,9 @@
-# Séquence de prospection — sites internet BTP (modèles)
+# Séquence de prospection — sites internet (modèles)
 
-Variables : `{site_de}` (« Le site de X » / « Le site d'X »), `{pros}` (« des couvreurs »…), `{prenom_nom}` (dirigeant publié, sinon « Bonjour, »), `{entreprise}`, `{de_entreprise}` (« de X » / « d'X »), `{ville}`, `{lien_maquette}`, `{probleme}` (premier problème de l'audit, ou « je n'ai pas trouvé de site à votre nom »), `{pied}` (pied de désinscription, voir `.claude/agents/site-seller.md`).
+Variables : `{site_de}` (« Le site de X » / « Le site d'X »), `{de_entreprise}` (« de X » / « d'X »), `{entreprise}`, `{prenom_nom}` (dirigeant publié, sinon « Bonjour, »), `{ville}`, `{lien_maquette}`, `{probleme}` (premier problème de l'audit, ou « je n'ai pas trouvé de site internet pour X »), `{pied}` (signature + désinscription, voir `.claude/agents/site-seller.md`).
+Variables par métier (`prospection(metier)` dans `generator/metiers.mjs`) : `{pros}` (« des couvreurs », « des restaurants »…), `{clientele}` (« des entreprises du bâtiment » / « des commerces lyonnais »), `{photos}` (« photos de vos chantiers », « photos de vos plats »…), `{contenu}` (ce que montre la maquette).
 
-Toujours personnaliser au moins une phrase. Texte brut, pas d'image, pas de pièce jointe.
+Toujours personnaliser au moins une phrase. Texte brut, pas d'image, pas de pièce jointe. Tarifs : 39 € HT/mois (Essentiel, création offerte).
 
 ---
 
@@ -12,16 +13,16 @@ Toujours personnaliser au moins une phrase. Texte brut, pas d'image, pas de piè
 
 Bonjour {prenom_nom},
 
-En cherchant {pros} à {ville}, {probleme}.
+Je m'appelle Charles Allouard : après plus de 5 ans de conseil en informatique, je crée à Lyon les sites internet {clientele}. En cherchant {pros} à {ville}, {probleme}.
 
-Plutôt que de vous proposer un devis, j'ai préparé une maquette du site {de_entreprise}, à partir des informations publiques de votre entreprise :
+J'ai donc préparé une maquette du site {de_entreprise}, à partir de vos informations publiques :
 {lien_maquette}
 
-Elle est privée (invisible sur Google). Si elle vous plaît, on la corrige ensemble et elle est en ligne sous votre nom en 48 h, pour 49 € HT par mois, domaine et hébergement compris.
+Elle est privée (invisible sur Google). Si elle vous plaît, on la corrige ensemble et elle est en ligne sous votre nom en 48 h, pour 39 € HT par mois, domaine et hébergement compris.
 
 Je vous propose d'en parler 10 minutes cette semaine : dites-moi quand vous êtes disponible, ou appelez-moi directement au 06 71 58 20 74.
 
-Charles
+Charles Allouard
 
 {pied}
 
@@ -33,14 +34,14 @@ Charles
 
 Bonjour {prenom_nom},
 
-Vos futurs clients, même quand ils vous ont été recommandés, vérifient souvent votre entreprise sur leur téléphone avant d'appeler.
+Vos futurs clients, même quand ils vous ont été recommandés, vérifient souvent votre entreprise sur leur téléphone avant de venir ou d'appeler.
 
-Votre maquette est faite pour ça : vos prestations, votre zone, et un bouton pour vous appeler directement.
+Votre maquette est faite pour ça : {contenu}.
 {lien_maquette}
 
-Voulez-vous que je l'adapte (textes, photos de vos chantiers) ? Le plus simple est d'en parler de vive voix : je suis joignable au 06 71 58 20 74.
+Voulez-vous que je l'adapte (textes, {photos}) ? Le plus simple est d'en parler de vive voix : je suis joignable au 06 71 58 20 74.
 
-Charles
+Charles Allouard
 
 {pied}
 
@@ -59,6 +60,6 @@ Je ne vous relancerai plus : je supprime la maquette {de_entreprise} à la fin d
 Si vous voulez en parler, je reste joignable au 06 71 58 20 74.
 
 Bonne continuation,
-Charles
+Charles Allouard
 
 {pied}
