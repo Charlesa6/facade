@@ -111,10 +111,10 @@ function contact(d) {
 </div></section>`;
 }
 
-function footer(d) {
+function footer(d, liens = {}) {
   return `<footer class="ftr"><div class="wrap ftr-in">
   <span>© ${new Date().getFullYear()} ${esc(d.raison_sociale || d.name)}</span>
-  <a href="mentions-legales.html">Mentions légales</a>
+  <a href="${esc(liens.mentions || 'mentions-legales.html')}">Mentions légales</a>
   <span class="made">Site réalisé par Konsilys</span>
 </div></footer>`;
 }
@@ -144,15 +144,16 @@ function jsonLd(d) {
   return `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`;
 }
 
-export function renderIndex(profile, { preview = false } = {}) {
+// `liens` : URLs des pages annexes quand le site n'est pas servi comme fichiers statiques (maquettes en ligne).
+export function renderIndex(profile, { preview = false, liens = {} } = {}) {
   const d = normalize(profile);
   const title = `${d.name} — ${d.metier_label}${d.ville ? ' à ' + d.ville : ''}`;
   return `${head(d, { preview, title, description: d.accroche })}${preview ? '' : jsonLd(d)}</head>
-<body class="${preview ? 'is-preview' : ''}">${preview ? previewBanner(d) : ''}${header(d)}<main>${hero(d)}${services(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d)}</body></html>
+<body class="${preview ? 'is-preview' : ''}">${preview ? previewBanner(d) : ''}${header(d)}<main>${hero(d)}${services(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d, liens)}</body></html>
 `;
 }
 
-export function renderMentions(profile, { preview = false } = {}) {
+export function renderMentions(profile, { preview = false, liens = {} } = {}) {
   const d = normalize(profile);
   const row = (k, v) => (v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : '');
   return `${head(d, { preview, title: `Mentions légales — ${d.name}`, description: `Mentions légales du site ${d.name}` })}</head>
@@ -164,7 +165,7 @@ ${row('Raison sociale', d.raison_sociale)}${row('Forme juridique', d.forme_jurid
 ${d.assurance_decennale ? `<h2>Assurance décennale</h2><p>${esc(d.assurance_decennale)}</p>` : ''}
 <h2>Hébergement</h2><p>Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis — vercel.com</p>
 <h2>Données personnelles</h2><p>Ce site ne dépose aucun cookie et ne collecte aucune donnée personnelle. Les demandes envoyées par email ou par téléphone sont utilisées uniquement pour répondre à votre demande de devis.</p>
-<p><a class="link" href="index.html">← Retour au site</a></p>
-</div></main>${footer(d)}</body></html>
+<p><a class="link" href="${esc(liens.accueil || 'index.html')}">← Retour au site</a></p>
+</div></main>${footer(d, liens)}</body></html>
 `;
 }

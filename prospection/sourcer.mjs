@@ -89,7 +89,7 @@ for (const e of data.results || []) {
     code_postal: s.code_postal,
     ville: titleCase(s.libelle_commune),
     // Dirigeants : uniquement le nom et la qualité publiés au RNE, pour adresser le message.
-    dirigeants: (e.dirigeants || []).filter((d) => d.type_dirigeant === 'personne physique').map((d) => ({ prenom: titleCase(String(d.prenoms || '').split(/\s+/)[0]), nom: titleCase(String(d.nom || '').replace(/\s*\(.*?\)/g, '')), qualite: d.qualite })),
+    dirigeants: (e.dirigeants || []).filter((d) => d.type_dirigeant === 'personne physique' && !/commissaire|suppl[ée]ant/i.test(d.qualite || '')).map((d) => ({ prenom: titleCase(String(d.prenoms || '').split(/\s+/)[0]), nom: titleCase(String(d.nom || '').replace(/\s*\(.*?\)/g, '')), qualite: d.qualite })),
     source: `https://annuaire-entreprises.data.gouv.fr/entreprise/${e.siren}`,
     slug,
   };

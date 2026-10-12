@@ -113,7 +113,7 @@ for (const a of lignes) {
     siren, raison_sociale: e.nom_raison_sociale || e.nom_complet, nom_commercial: nom, naf: e.activite_principale, metier,
     forme_juridique: FORMES[e.nature_juridique] || null, date_creation: e.date_creation, effectif: TRANCHES[e.tranche_effectif_salarie] || null,
     est_rge: true, adresse: sg.adresse, code_postal: sg.code_postal, ville: titleCase(sg.libelle_commune),
-    dirigeants: (e.dirigeants || []).filter((d) => d.type_dirigeant === 'personne physique').map((d) => ({ prenom: titleCase(String(d.prenoms || '').split(/\s+/)[0]), nom: titleCase(String(d.nom || '').replace(/\s*\(.*?\)/g, '')), qualite: d.qualite })),
+    dirigeants: (e.dirigeants || []).filter((d) => d.type_dirigeant === 'personne physique' && !/commissaire|suppl[ée]ant/i.test(d.qualite || '')).map((d) => ({ prenom: titleCase(String(d.prenoms || '').split(/\s+/)[0]), nom: titleCase(String(d.nom || '').replace(/\s*\(.*?\)/g, '')), qualite: d.qualite })),
     source: `https://annuaire-entreprises.data.gouv.fr/entreprise/${siren}`, slug,
   };
   appendFileSync(join(ROOT, 'data', 'candidats', `${dep}-rge.jsonl`), JSON.stringify(candidat) + '\n');

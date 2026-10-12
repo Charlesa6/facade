@@ -14,17 +14,19 @@ Offre **« sites internet BTP » de Konsilys** : des sites internet clés en mai
 
 - **Node 22, zéro dépendance, aucun build, pas de npm.** Modules ES (`.mjs`).
 - Sites générés = HTML statique autonome (CSS inline, SVG inline) → hébergés sur Vercel.
-- Données (prospects, clients) : **projet Supabase dédié `facade` (id `hxxbhbfueqwsvwqrojea`, Paris)** — jamais `rwmstlesxnglpblrurqj` (Konsilys). Migrations dans `supabase/migrations/` (déjà appliquées), via les outils MCP. Fonction `unsubscribe` déployée (`verify_jwt=false`) : `https://hxxbhbfueqwsvwqrojea.supabase.co/functions/v1/unsubscribe?t=<unsub_token>`.
+- Données (prospects, clients) : **projet Supabase dédié `facade` (id `hxxbhbfueqwsvwqrojea`, Paris)** — jamais `rwmstlesxnglpblrurqj` (Konsilys). Migrations dans `supabase/migrations/` (déjà appliquées), via les outils MCP. Lien de désinscription des emails : `https://www.konsilys.com/desinscription?t=<unsub_token>` ; en-tête `List-Unsubscribe` (clic en un geste) : `https://hxxbhbfueqwsvwqrojea.supabase.co/functions/v1/unsubscribe?t=<unsub_token>`.
 - Le résolveur DNS des conteneurs ne sert pas les MX : utiliser DNS-over-HTTPS (`dns.google/resolve`).
 - Emails : Resend, domaine d'envoi `konsilys.com` (DNS chez OVH ; la messagerie OVH existante de konsilys.com reste en place).
 
 ## Arborescence
 
 - `generator/` : `metiers.mjs` (préréglages par métier du BTP : palette, pictogramme, prestations types, codes NAF), `style.mjs` (CSS), `render.mjs` (profil → HTML), `build.mjs` (CLI).
-- `prospection/` : `rge.mjs` (**source principale** : annuaire RGE de l'ADEME, email déclaré par l'entreprise, croisé avec SIRENE, MX vérifié via DNS-over-HTTPS), `sourcer.mjs` (SIRENE seul → recherche web), `audit.mjs` (verdict sur un site existant), `revue.mjs` (page de relecture maquettes + emails avant envoi), `courrier.mjs` (lettres A4 avec QR code pour les cibles sans email ; `config/expediteur.json` sinon BROUILLON), `noms.mjs` (casse/accents des registres, salutation).
-- `vendor/qrcode.js` : générateur de QR codes (MIT, Kazuhiko Arase), seul code tiers.
+- `prospection/` : `rge.mjs` (**source principale** : annuaire RGE de l'ADEME, email déclaré par l'entreprise, croisé avec SIRENE, MX vérifié via DNS-over-HTTPS), `sourcer.mjs` (SIRENE seul → recherche web), `audit.mjs` (verdict sur un site existant), `revue.mjs` (page de relecture maquettes + emails avant envoi), `appels.mjs` (fiche d'appels de Charles pour le canal téléphone, voir `docs/appels.md`), `noms.mjs` (casse/accents des registres, salutation).
 - `previews/vercel.json` : configuration du domaine des maquettes (noindex sur tout le domaine).
-- `supabase/` : schéma `fc_*` et fonction `unsubscribe` (**déployer avec `verify_jwt=false`**).
+- `supabase/` : schéma `fc_*` et deux fonctions, **toutes deux déployées avec `verify_jwt=false`** :
+  - `apercu` : `?t=<preview_token>` → `{ html }` de la maquette, rendue à la volée depuis `profile`. **Déployer avec `generator/render.mjs`, `metiers.mjs` et `style.mjs` à côté de `index.ts`**, à chaque modification du générateur (sinon les maquettes en ligne divergent).
+  - `unsubscribe` : JSON (GET = lecture, POST = désinscription, `List-Unsubscribe=One-Click` → 204).
+  - Supabase sert le HTML des fonctions en `text/plain` : les pages publiques (`/apercu/<jeton>`, `/desinscription`, site de l'offre) sont donc dans le dépôt **`esn-manager`, dossier `com/`**, servies par Vercel sur konsilys.com, et appellent ces fonctions en JSON.
 - `.claude/agents/` : `site-builder` (sourcing + maquettes + production) et `site-seller` (emails, réponses, closing).
 - `emails/sequence.md` : modèles de la séquence de prospection.
 - `profiles/exemples/` : profils **fictifs** uniquement.

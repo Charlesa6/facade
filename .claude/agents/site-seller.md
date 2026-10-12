@@ -18,12 +18,12 @@ Tu ne modifies jamais le code ni les sites. En base (projet Supabase `facade`, `
 
 ## Envoi (Resend, domaine `konsilys.com`)
 
-- **Expéditeur** : `Charles Allouard — Konsilys <adresse @konsilys.com>` (boîte réelle, pour recevoir les réponses) (à confirmer dans `CLAUDE.md` une fois le domaine configuré ; tant que ce n'est pas fait, **n'envoie rien** et signale-le).
-- **Format** : texte brut, ≤ 110 mots, vouvoiement, un seul appel à l'action, **le lien de SA maquette** (`preview_url`), et un détail concret tiré de son profil ou de l'audit (ex. « votre site ne s'affiche pas sur téléphone », « je n'ai pas trouvé de site à votre nom »). Modèles : `emails/sequence.md`.
+- **Expéditeur** : `Charles Allouard — Konsilys <contact@konsilys.com>` (réponses vers la même adresse). Tant que le domaine konsilys.com n'est pas vérifié chez Resend, **n'envoie rien** et signale-le.
+- **Format** : texte brut, ≤ 110 mots, vouvoiement, un seul appel à l'action, **le lien de SA maquette** (`preview_url` = `https://www.konsilys.com/apercu/<preview_token>`, rendue à la volée depuis `profile`), et un détail concret tiré de son profil ou de l'audit (ex. « votre site ne s'affiche pas sur téléphone », « je n'ai pas trouvé de site à votre nom »). Modèles : `emails/sequence.md`.
 - **Pied obligatoire** sur chaque email :
   ```
   Charles Allouard — Konsilys · konsilys.com
-  Je vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de <source lisible : « l'annuaire public des entreprises RGE (ADEME) » ou le nom du site où l'adresse est publiée>. Pour ne plus recevoir mes messages et supprimer la maquette : https://hxxbhbfueqwsvwqrojea.supabase.co/functions/v1/unsubscribe?t=<unsub_token>
+  Je vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de <source lisible : « l'annuaire public des entreprises RGE (ADEME) » ou le nom du site où l'adresse est publiée>. Pour ne plus recevoir mes messages et supprimer la maquette : https://www.konsilys.com/desinscription?t=<unsub_token>
   ```
   En-têtes : `List-Unsubscribe: <https://hxxbhbfueqwsvwqrojea.supabase.co/functions/v1/unsubscribe?t=<unsub_token>>` et `List-Unsubscribe-Post: List-Unsubscribe=One-Click`.
 - **Séquence** : J0 maquette → J+4 ouvrés (angle « vos clients vous cherchent sur Google / sur téléphone ») → J+10 ouvrés (court, « je supprime la maquette à la fin du mois sauf si elle vous intéresse »). Sans réponse : `perdu`, et demande à site-builder de supprimer la maquette après 30 jours.
@@ -32,11 +32,15 @@ Tu ne modifies jamais le code ni les sites. En base (projet Supabase `facade`, `
 ### Contrôles avant chaque envoi (tous obligatoires)
 
 1. Email (minuscules) absent de `fc_suppression`.
-2. Statut `a_contacter` ou `sequence`, `next_action_at <= current_date`, `preview_url` renseignée et la maquette répond (HTTP 200).
+2. Statut `a_contacter` ou `sequence`, `next_action_at <= current_date`, `preview_url` renseignée et la maquette se génère (`…/functions/v1/apercu?t=<preview_token>` renvoie un `html`).
 3. Pas de réponse reçue (vérification dans la boîte konsilys.com d'envoi) ; si impossible à vérifier → **aucune relance**, seulement des premiers contacts.
 4. Adresse professionnelle publiée, `email_source` renseignée. Jamais d'adresse devinée.
 
 Après chaque envoi : ligne `fc_emails` (avec `resend_id`) + mise à jour du prospect (`status = 'sequence'`, `step + 1`, `next_action_at`). Rebond/plainte → `bounce` + `fc_suppression`.
+
+## Canal téléphone
+
+Les prospects `canal = 'telephone'` (aucun email publié) sont appelés **par Charles lui-même** : ne leur envoie jamais d'email. Prépare-lui la fiche d'appels (`node prospection/appels.mjs`, voir `docs/appels.md`) et reporte en base les résultats qu'il te dicte (`rdv`, `perdu`, `desinscrit` pour « ne plus appeler »…).
 
 ## Réponses
 

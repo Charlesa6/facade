@@ -1,37 +1,40 @@
 // Désinscription des emails de prospection Konsilys (offre sites internet BTP).
-// GET  ?t=<unsub_token>  → page avec un bouton de confirmation (les antivirus de messagerie
-//                          ouvrent les liens automatiquement : un GET ne doit rien modifier)
-// POST ?t=<unsub_token>  → désinscription : bouton de la page, ou clic « Se désabonner » du client
-//                          mail via l'en-tête List-Unsubscribe-Post (RFC 8058) → 204
-// ⚠ Déployer avec verify_jwt=false : le lien est cliqué depuis un email, sans session.
+// Supabase sert les pages de fonctions en text/plain : l'interface est la page
+// https://www.konsilys.com/desinscription?t=<jeton> (dépôt esn-manager, com/desinscription.html),
+// qui appelle cette fonction en JSON.
+// GET  ?t=<unsub_token>  → { company, deja } (lecture seule : les antivirus de messagerie ouvrent les liens)
+// POST ?t=<unsub_token>  → désinscription. Corps « List-Unsubscribe=One-Click » (clic « Se désabonner » du
+//                          client mail, RFC 8058, en-tête List-Unsubscribe pointant ici) → 204 ; sinon → JSON.
+// ⚠ Déployer avec verify_jwt=false : appelée depuis un email ou une page publique, sans session.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
 
 const sb = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
-
-const page = (body: string, status = 200) =>
-  new Response(
-    `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Désinscription — Konsilys</title><style>body{font-family:system-ui,sans-serif;max-width:520px;margin:15vh auto;padding:0 20px;color:#1f2937;line-height:1.6}h1{font-size:22px}button{font:inherit;font-weight:700;padding:12px 22px;border:0;border-radius:10px;background:#111827;color:#fff;cursor:pointer}</style></head><body><h1>Konsilys</h1>${body}</body></html>`,
-    { status, headers: { 'content-type': 'text/html; charset=utf-8' } },
-  );
+const ORIGINES = ['https://www.konsilys.com', 'https://konsilys.com'];
 
 Deno.serve(async (req) => {
+  const origin = req.headers.get('origin') ?? '';
+  const cors = {
+    'access-control-allow-origin': ORIGINES.includes(origin) ? origin : ORIGINES[0],
+    'access-control-allow-methods': 'GET, POST, OPTIONS',
+    'access-control-allow-headers': 'content-type',
+    vary: 'Origin',
+  };
+  if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+  const json = (body: unknown, status = 200) =>
+    new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
+
   const token = new URL(req.url).searchParams.get('t') ?? '';
-  if (!/^[a-f0-9]{36}$/.test(token)) return page('<p>Lien de désinscription invalide.</p>', 400);
+  if (!/^[a-f0-9]{36}$/.test(token)) return json({ error: 'lien invalide' }, 400);
 
-  const { data: p } = await sb.from('fc_prospects').select('id,email,status').eq('unsub_token', token).maybeSingle();
-  if (!p) return page('<p>Lien de désinscription invalide ou expiré.</p>', 404);
+  const { data: p } = await sb.from('fc_prospects').select('id,company,email,status').eq('unsub_token', token).maybeSingle();
+  if (!p) return json({ error: 'lien invalide ou expiré' }, 404);
 
-  if (req.method === 'GET') {
-    if (p.status === 'desinscrit') return page('<p>Vous êtes déjà désinscrit : vous ne recevrez plus aucun email de notre part.</p>');
-    return page(`<p>Vous ne souhaitez plus recevoir nos messages ? Un clic suffit, et la maquette préparée pour votre entreprise sera supprimée.</p><form method="post" action="?t=${token}"><button type="submit">Me désinscrire</button></form>`);
-  }
-  if (req.method !== 'POST') return new Response(null, { status: 405 });
+  if (req.method === 'GET') return json({ company: p.company, deja: p.status === 'desinscrit' });
+  if (req.method !== 'POST') return json({ error: 'méthode non autorisée' }, 405);
 
   await sb.from('fc_prospects').update({ status: 'desinscrit', next_action_at: null, updated_at: new Date().toISOString() }).eq('id', p.id);
   if (p.email) await sb.from('fc_suppression').upsert({ email: p.email.toLowerCase(), reason: 'lien de désinscription' });
 
   const oneClick = (await req.text()).includes('List-Unsubscribe=One-Click');
-  return oneClick
-    ? new Response(null, { status: 204 })
-    : page('<p>C\'est fait : vous ne recevrez plus aucun email de notre part. Votre maquette sera supprimée sous 7 jours.</p>');
+  return oneClick ? new Response(null, { status: 204, headers: cors }) : json({ ok: true, company: p.company });
 });
