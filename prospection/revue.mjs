@@ -57,6 +57,7 @@ function email(d, e, url) {
   const vars = {
     prenom_nom: dirigeant ? dirigeant : '',
     entreprise: d.name,
+    de_entreprise: de(d.name),
     ville: titleCase(d.ville || '') || 'votre secteur',
     pros: (METIERS[d.metier] || METIERS.general).pros,
     site_de: `Le site ${de(d.name)}`,

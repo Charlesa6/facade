@@ -1,6 +1,6 @@
 # Séquence de prospection — sites internet BTP (modèles)
 
-Variables : `{site_de}` (« Le site de X » / « Le site d'X »), `{pros}` (« des couvreurs »…), `{prenom_nom}` (dirigeant publié, sinon « Bonjour, »), `{entreprise}`, `{ville}`, `{lien_maquette}`, `{probleme}` (premier problème de l'audit, ou « je n'ai pas trouvé de site à votre nom »), `{pied}` (pied de désinscription, voir `.claude/agents/site-seller.md`).
+Variables : `{site_de}` (« Le site de X » / « Le site d'X »), `{pros}` (« des couvreurs »…), `{prenom_nom}` (dirigeant publié, sinon « Bonjour, »), `{entreprise}`, `{de_entreprise}` (« de X » / « d'X »), `{ville}`, `{lien_maquette}`, `{probleme}` (premier problème de l'audit, ou « je n'ai pas trouvé de site à votre nom »), `{pied}` (pied de désinscription, voir `.claude/agents/site-seller.md`).
 
 Toujours personnaliser au moins une phrase. Texte brut, pas d'image, pas de pièce jointe.
 
@@ -14,7 +14,7 @@ Bonjour {prenom_nom},
 
 En cherchant {pros} à {ville}, {probleme}.
 
-Plutôt que de vous proposer un devis, j'ai préparé une maquette du site de {entreprise}, à partir des informations publiques de votre entreprise :
+Plutôt que de vous proposer un devis, j'ai préparé une maquette du site {de_entreprise}, à partir des informations publiques de votre entreprise :
 {lien_maquette}
 
 Elle est privée (invisible sur Google). Si elle vous plaît, on la corrige ensemble et elle est en ligne sous votre nom en 48 h, pour 49 € HT par mois, domaine et hébergement compris.
@@ -52,7 +52,7 @@ Charles
 
 Bonjour {prenom_nom},
 
-Je ne vous relancerai plus : je supprime la maquette de {entreprise} à la fin du mois, sauf si elle vous intéresse.
+Je ne vous relancerai plus : je supprime la maquette {de_entreprise} à la fin du mois, sauf si elle vous intéresse.
 
 {lien_maquette}
 
