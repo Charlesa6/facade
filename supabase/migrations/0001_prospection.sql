@@ -1,5 +1,5 @@
--- Façade — base de prospection et de suivi clients.
--- À appliquer sur le projet Supabase DÉDIÉ à Façade (jamais sur le projet Konsilys).
+-- Konsilys, offre sites internet BTP — base de prospection et de suivi clients.
+-- À appliquer sur le projet Supabase dédié `facade` (hxxbhbfueqwsvwqrojea), jamais sur la base du SaaS (rwmstlesxnglpblrurqj).
 -- Tables lues/écrites uniquement en SQL d'administration (agents) : RLS activée, aucun accès client.
 
 create extension if not exists pgcrypto;

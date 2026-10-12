@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Prépare la relecture humaine d'une vague de prospection, AVANT tout envoi.
 //
-//   FACADE_PREVIEW_SECRET=… node prospection/revue.mjs [--out <dossier>] [--base https://apercu.votrefacade.fr]
+//   FACADE_PREVIEW_SECRET=… node prospection/revue.mjs [--out <dossier>] [--base https://apercu.konsilys.com]
 //
 // Lit data/enrichi/*.jsonl (sortie des recherches), garde les lignes `retenu: true`, et pour chacune :
 //   - génère la maquette (<out>/p/<jeton>/) avec le profil enrichi data/profils/<slug>.json ;
@@ -21,7 +21,7 @@ const de = (w) => (/^[aeiouyhàâéèêëîïôûü]/i.test(w) ? `d'${w}` : `de 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (n, d) => { const i = process.argv.indexOf('--' + n); return i >= 0 ? process.argv[i + 1] : d; };
 const OUT = resolve(arg('out', join(ROOT, 'out')));
-const BASE = arg('base', 'https://apercu.votrefacade.fr').replace(/\/$/, '');
+const BASE = arg('base', 'https://apercu.konsilys.com').replace(/\/$/, '');
 const SECRET = process.env.FACADE_PREVIEW_SECRET;
 if (!SECRET) { console.error('FACADE_PREVIEW_SECRET manquant'); process.exit(2); }
 
@@ -62,7 +62,7 @@ function email(d, e, url) {
     site_de: `Le site ${de(d.name)}`,
     lien_maquette: url,
     probleme: (PROBLEMES[e.verdict] || PROBLEMES.aucun_site)(d, e),
-    pied: `Charles Allouard — Façade · votrefacade.fr\nJe vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de ${sourceLisible(e.email_source)}. Pour ne plus recevoir mes messages et supprimer la maquette : <lien de désinscription>`,
+    pied: `Charles Allouard — Konsilys · konsilys.com\nJe vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de ${sourceLisible(e.email_source)}. Pour ne plus recevoir mes messages et supprimer la maquette : <lien de désinscription>`,
   };
   const fill = (t) => t.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? `{${k}}`);
   let body = fill(m1[2]).replace(/^Bonjour ,/m, 'Bonjour,');
@@ -123,7 +123,7 @@ const stats = {
 };
 
 const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
-<title>Revue pilote Façade</title><style>
+<title>Revue du pilote</title><style>
 :root{--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--bg:#f9fafb;--card:#fff;--acc:#b45309}
 @media (prefers-color-scheme:dark){:root{--ink:#f3f4f6;--muted:#9ca3af;--line:#374151;--bg:#0b0f19;--card:#111827;--acc:#f59e0b}}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
@@ -138,7 +138,7 @@ iframe{width:100%;height:560px;border:0;border-right:1px solid var(--line);backg
 .src{font-size:12px;word-break:break-all}.warn{background:#fef3c7;color:#92400e;border-radius:8px;padding:8px 10px;font-weight:600;margin:0 0 10px}.src a{color:var(--acc)}
 @media (max-width:860px){.body{grid-template-columns:1fr}iframe{height:420px;border-right:0;border-bottom:1px solid var(--line)}}
 </style></head><body><div class="wrap">
-<h1>Revue du pilote Façade</h1><p class="muted">Rien n'a été envoyé. Chaque fiche : la maquette générée et le premier email proposé. Lien de maquette provisoire (domaine non encore configuré).</p>
+<h1>Revue du pilote — sites BTP</h1><p class="muted">Rien n'a été envoyé. Chaque fiche : la maquette générée et le premier email proposé. Lien de maquette provisoire (domaine non encore configuré).</p>
 <div class="stats"><span>${stats.examines} entreprises examinées</span><span><b>${stats.retenus} retenues</b></span>${Object.entries(stats.motifs).map(([k, v]) => `<span>${v} × ${esc(k)}</span>`).join('')}</div>
 ${cards.map((c) => { const { e, d, mail } = c; return `<section class="card"><div class="head"><b>${esc(d.name)}</b><span class="muted">${esc(d.metier_label)} · ${esc(d.ville || '')} · ${esc(d.effectif || '')}</span><span class="tag">${e.verdict === 'aucun_site' ? 'aucun site' : 'site obsolète'}</span>${e.website ? `<a class="src" href="${esc(e.website)}" target="_blank" rel="noopener">${esc(e.website)}</a>` : ''}</div>
 <div class="body"><iframe srcdoc="${esc(renderIndex(profilOf(e.slug), { preview: true }))}" loading="lazy" title="Maquette ${esc(d.name)}"></iframe>

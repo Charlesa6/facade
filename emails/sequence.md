@@ -1,4 +1,4 @@
-# Séquence de prospection Façade (modèles)
+# Séquence de prospection — sites internet BTP (modèles)
 
 Variables : `{site_de}` (« Le site de X » / « Le site d'X »), `{pros}` (« des couvreurs »…), `{prenom_nom}` (dirigeant publié, sinon « Bonjour, »), `{entreprise}`, `{ville}`, `{lien_maquette}`, `{probleme}` (premier problème de l'audit, ou « je n'ai pas trouvé de site à votre nom »), `{pied}` (pied de désinscription, voir `.claude/agents/site-seller.md`).
 

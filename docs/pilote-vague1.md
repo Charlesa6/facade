@@ -26,4 +26,4 @@ Chiffres agrégés uniquement : le détail par entreprise reste hors de Git (`da
 
 ## Bloquant avant le premier envoi
 
-Domaine, domaine d'envoi Resend, projet Supabase Façade (désinscription), entité juridique émettrice, et **validation par Charles des 21 fiches de la revue**.
+Domaine d'envoi Resend (konsilys.com), sous-domaine des maquettes, page de l'offre sur konsilys.com, coordonnées de l'émetteur (Konsilys), et **validation par Charles des 21 fiches de la revue**.

@@ -4,9 +4,11 @@ Ce fichier guide Claude Code (claude.ai/code) dans ce dépôt.
 
 ## Ce que c'est
 
-**Façade** : des sites internet clés en main, sur abonnement, pour les PME du BTP qui n'ont pas de site ou dont le site est obsolète. Le modèle commercial : **on génère la maquette de leur site avant de les contacter**, et on leur envoie le lien. Business plan, offre et cadre légal : `docs/business-plan.md`.
+Offre **« sites internet BTP » de Konsilys** : des sites internet clés en main, sur abonnement, pour les PME du BTP qui n'ont pas de site ou dont le site est obsolète. Le modèle commercial : **on génère la maquette de leur site avant de les contacter**, et on leur envoie le lien. Business plan, offre et cadre légal : `docs/business-plan.md`.
 
-**Business totalement isolé de Konsilys** (dépôt `esn-manager`, konsilys.fr, projet Supabase `rwmstlesxnglpblrurqj`) : n'utilise jamais ses domaines, sa base, son compte Stripe ou ses adresses email, et ne mentionne jamais Konsilys.
+**Marque : Konsilys** (société de conseil de Charles Allouard, qui édite aussi le SaaS Konsilys pour ESN — dépôt `esn-manager`). Cette offre « sites internet BTP » est une activité de Konsilys, mais **ses flux techniques restent séparés de ceux du SaaS** :
+- prospection et site de l'offre sur **`konsilys.com`** (maquettes : `apercu.konsilys.com`) ; **jamais `konsilys.fr`** ni `contact@konsilys.fr`, réservés au SaaS (une plainte pour spam ne doit pas toucher les emails du produit) ;
+- données dans le projet Supabase dédié `facade` (`hxxbhbfueqwsvwqrojea`), **jamais** dans la base du SaaS (`rwmstlesxnglpblrurqj`).
 
 ## Stack
 
@@ -14,7 +16,7 @@ Ce fichier guide Claude Code (claude.ai/code) dans ce dépôt.
 - Sites générés = HTML statique autonome (CSS inline, SVG inline) → hébergés sur Vercel.
 - Données (prospects, clients) : **projet Supabase dédié `facade` (id `hxxbhbfueqwsvwqrojea`, Paris)** — jamais `rwmstlesxnglpblrurqj` (Konsilys). Migrations dans `supabase/migrations/` (déjà appliquées), via les outils MCP. Fonction `unsubscribe` déployée (`verify_jwt=false`) : `https://hxxbhbfueqwsvwqrojea.supabase.co/functions/v1/unsubscribe?t=<unsub_token>`.
 - Le résolveur DNS des conteneurs ne sert pas les MX : utiliser DNS-over-HTTPS (`dns.google/resolve`).
-- Emails : Resend, sur un domaine d'envoi dédié Façade.
+- Emails : Resend, domaine d'envoi `konsilys.com` (DNS chez OVH ; la messagerie OVH existante de konsilys.com reste en place).
 
 ## Arborescence
 

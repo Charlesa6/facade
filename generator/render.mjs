@@ -115,12 +115,12 @@ function footer(d) {
   return `<footer class="ftr"><div class="wrap ftr-in">
   <span>© ${new Date().getFullYear()} ${esc(d.raison_sociale || d.name)}</span>
   <a href="mentions-legales.html">Mentions légales</a>
-  <span class="made">Site réalisé par Façade</span>
+  <span class="made">Site réalisé par Konsilys</span>
 </div></footer>`;
 }
 
 function previewBanner(d) {
-  return `<div class="pv" role="note"><b>Maquette</b> proposée par Façade à ${esc(d.name)} — non publiée, non référencée. Les textes <span class="tbv-key">surlignés</span> sont à valider avec vous.</div>`;
+  return `<div class="pv" role="note"><b>Maquette</b> proposée par Konsilys à ${esc(d.name)} — non publiée, non référencée. Les textes <span class="tbv-key">surlignés</span> sont à valider avec vous.</div>`;
 }
 
 function head(d, { preview, title, description }) {

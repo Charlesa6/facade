@@ -1,4 +1,4 @@
-# Façade — business plan (v0, pilote)
+# Konsilys — offre sites internet BTP : business plan (v0, pilote)
 
 > Des sites internet clés en main pour les entreprises du BTP qui n'en ont pas, ou dont le site dessert l'image.
 > On ne vend pas un outil, on vend le travail fait : **le site est déjà prêt quand on les contacte.**
@@ -48,19 +48,21 @@ SIRENE (API publique) ──► sourcer.mjs ──► recherche du site web ─�
 - **`site-builder`** : complète le profil (sources publiques uniquement), génère la maquette et la publie sur le domaine de prévisualisation. Il **n'invente rien** : pas d'avis clients, pas de certification non vérifiée, pas de photo de chantier qui ne soit pas la leur. Ce qui est générique est surligné « à valider » dans la maquette.
 - **`site-seller`** : envoie la séquence d'emails (3 messages), détecte les réponses, gère les désinscriptions, prépare les appels, et passe le relais à Charles pour la signature.
 
-## 5. Isolation vis-à-vis de Konsilys (non négociable)
+## 5. Marque et séparation technique (décision du 12/10/2026)
 
-| Élément | Façade | Konsilys |
+L'offre est vendue **sous la marque Konsilys** (société de conseil de Charles, qui édite aussi le SaaS pour ESN). Les flux restent séparés pour protéger le produit :
+
+| Élément | Offre sites BTP | SaaS Konsilys |
 |---|---|---|
 | Dépôt Git | `facade` (privé) | `esn-manager` |
-| Domaine du site commercial | `votrefacade.fr` (disponible au 12/10/2026, à acheter) | konsilys.fr |
-| Domaine d'envoi des emails | sous-domaine dédié, ex. `contact.votrefacade.fr` (Resend) | konsilys.fr |
-| Domaine des maquettes | `apercu.votrefacade.fr` (Vercel, noindex) | — |
-| Base de données | **projet Supabase séparé** | `rwmstlesxnglpblrurqj` |
-| Stripe | compte (ou au minimum produits) séparé | compte Konsilys |
-| Boîte mail | adresse Façade dédiée | contact@konsilys.fr |
+| Domaine | **konsilys.com** | konsilys.fr |
+| Emails de prospection (Resend) | konsilys.com | — (konsilys.fr = emails du produit) |
+| Maquettes | `apercu.konsilys.com` (noindex) | — |
+| Base de données | projet Supabase `facade` | `rwmstlesxnglpblrurqj` |
 
-Aucune mention de Konsilys dans les emails ou sur les maquettes. Si un envoi Façade est mal reçu (plaintes, spam), la réputation de konsilys.fr n'est pas touchée.
+Une plainte ou un rebond sur la prospection n'affecte que la réputation de konsilys.com, jamais les invitations et factures du SaaS envoyées depuis konsilys.fr.
+
+**À prévoir** : konsilys.com affiche aujourd'hui le site du SaaS pour ESN. Un artisan qui le visite après un email doit trouver l'offre sites internet (page dédiée ou page d'accueil « Konsilys, conseil » qui présente les deux activités).
 
 ## 6. Pilote : valider avant d'industrialiser
 
@@ -84,14 +86,14 @@ Aucune mention de Konsilys dans les emails ou sur les maquettes. Si un envoi Fa�
 
 - **Prospection B2B par email** : autorisée sans consentement préalable si le message concerne l'activité professionnelle du destinataire, avec un expéditeur identifié et une désinscription simple dans chaque email (doctrine CNIL). Adresses professionnelles publiées uniquement ; jamais d'adresse devinée.
 - **Entrepreneurs individuels** : traiter leurs coordonnées comme des données personnelles (RGPD) : information à la première prise de contact (qui, pourquoi, source, droit d'opposition), conservation limitée (3 ans maximum après le dernier contact, maquette supprimée après 30 jours sans réponse).
-- **Maquettes non sollicitées** : jamais référencées (noindex + robots.txt + URL non devinable), jamais présentées comme le site officiel de l'entreprise, bandeau « Maquette proposée par Façade », suppression sur simple demande.
-- **Façade doit être une entité identifiée** (société ou activité déclarée) avec mentions légales et CGV avant le premier email.
+- **Maquettes non sollicitées** : jamais référencées (noindex + robots.txt + URL non devinable), jamais présentées comme le site officiel de l'entreprise, bandeau « Maquette proposée par Konsilys », suppression sur simple demande.
+- **L'émetteur (Konsilys) doit être identifié** (société ou activité déclarée) avec mentions légales et CGV avant le premier email.
 - **Démarchage téléphonique** : réglementation en évolution (loi du 30 juin 2025 sur le démarchage non consenti) ; vérifier son application aux professionnels et aux entrepreneurs individuels avant tout appel à froid.
 
 ## 9. Points ouverts pour Charles
 
-- [ ] **Le nom « Façade »** : dans le BTP, « façade » désigne aussi le ravalement. Risques : confusion chez le prospect (« je ne fais pas de façade ») et concurrence sur Google avec des milliers d'entreprises de ravalement. Garder la marque avec une signature explicite (« Façade — sites internet pour artisans ») ou choisir un autre nom avant d'acheter le domaine.
-- [ ] Créer le dépôt GitHub privé `facade` (l'intégration Claude n'a pas le droit de le créer).
-- [ ] Acheter le domaine, créer le projet Supabase et le domaine d'envoi Resend.
+- [x] Marque : Konsilys, domaine konsilys.com (décidé le 12/10/2026).
+- [x] Dépôt GitHub privé `facade`, projet Supabase `facade`.
+- [ ] Domaine d'envoi Resend konsilys.com (enregistrements DNS chez OVH) et sous-domaine `apercu.konsilys.com`.
 - [ ] Choisir l'entité juridique qui facture.
 - [ ] Valider les prix du pilote.

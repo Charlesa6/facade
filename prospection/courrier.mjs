@@ -2,7 +2,7 @@
 // Variante courrier : pour les cibles sans email publié (souvent les meilleures — aucun site, juste un téléphone).
 // Une lettre A4 (fenêtre DL à droite) avec un QR code vers LEUR maquette.
 //
-//   FACADE_PREVIEW_SECRET=… node prospection/courrier.mjs [--out <dossier>] [--base https://apercu.votrefacade.fr]
+//   FACADE_PREVIEW_SECRET=… node prospection/courrier.mjs [--out <dossier>] [--base https://apercu.konsilys.com]
 //
 // Lit data/enrichi/*.jsonl : lignes non retenues pour l'email, verdict aucun_site / site_obsolete, sans email,
 // et non écartées pour une autre raison (hors cible, fermée, homonyme). Génère <out>/courriers/<slug>.html,
@@ -22,13 +22,13 @@ const require = createRequire(import.meta.url);
 const qrcode = require('../vendor/qrcode.js');
 const arg = (n, d) => { const i = process.argv.indexOf('--' + n); return i >= 0 ? process.argv[i + 1] : d; };
 const OUT = resolve(arg('out', join(ROOT, 'out')));
-const BASE = arg('base', 'https://apercu.votrefacade.fr').replace(/\/$/, '');
+const BASE = arg('base', 'https://apercu.konsilys.com').replace(/\/$/, '');
 const SECRET = process.env.FACADE_PREVIEW_SECRET;
 if (!SECRET) { console.error('FACADE_PREVIEW_SECRET manquant'); process.exit(2); }
 
 const cfgPath = join(ROOT, 'config', 'expediteur.json');
 const EXP = existsSync(cfgPath) ? JSON.parse(readFileSync(cfgPath, 'utf8')) : null;
-const exp = EXP || { nom: 'Charles Allouard', societe: '[Entité juridique Façade — à compléter]', adresse: ['[Adresse]', '[Code postal Ville]'], telephone: '[Téléphone]', email: '[email]@votrefacade.fr', site: 'votrefacade.fr', ville_lettre: 'Lyon', mentions: '[Forme, capital, RCS, SIREN — à compléter]' };
+const exp = EXP || { nom: 'Charles Allouard', societe: '[Société Konsilys — forme, adresse à compléter]', adresse: ['[Adresse]', '[Code postal Ville]'], telephone: '[Téléphone]', email: '[email]@konsilys.com', site: 'konsilys.com', ville_lettre: 'Lyon', mentions: '[Forme, capital, RCS, SIREN — à compléter]' };
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const token = (slug) => createHmac('sha256', SECRET).update(slug).digest('base64url').slice(0, 16);
@@ -80,7 +80,7 @@ for (const r of cibles) {
 
   const html = `<section class="lettre">
   ${EXP ? '' : '<div class="brouillon">BROUILLON</div>'}
-  <div class="exp"><b>${esc(exp.nom)} — Façade</b><br>${esc(exp.societe)}<br>${exp.adresse.map(esc).join('<br>')}<br>${esc(exp.telephone)} · ${esc(exp.email)}</div>
+  <div class="exp"><b>${esc(exp.nom)} — Konsilys</b><br>${esc(exp.societe)}<br>${exp.adresse.map(esc).join('<br>')}<br>${esc(exp.telephone)} · ${esc(exp.email)}</div>
   <div class="dest"><b>${esc((c?.raison_sociale || d.raison_sociale || d.name).toUpperCase())}</b><br>${esc(attention)}<br>${lignesAdresse(c?.adresse || profil.adresse).map(esc).join('<br>')}</div>
   <p class="date">${esc(exp.ville_lettre)}, le ${dateLettre}</p>
   <p class="objet"><b>Objet : le site internet ${esc(de(d.name))}, déjà prêt</b></p>
@@ -91,7 +91,7 @@ for (const r of cibles) {
   <p>Si elle vous plaît, nous l'ajustons ensemble (textes, photos de vos chantiers) et elle est en ligne sous votre nom en 48 heures, pour 49 € HT par mois, nom de domaine et hébergement compris. Sinon, elle sera supprimée d'ici la fin du mois.</p>
   <p>Le plus simple : un appel de 10 minutes au ${esc(exp.telephone)}.</p>
   <p>Bien cordialement,</p>
-  <p class="sign">${esc(exp.nom)}<br><span class="petit">Fondateur, Façade</span></p>
+  <p class="sign">${esc(exp.nom)}<br><span class="petit">Fondateur, Konsilys</span></p>
   <footer>${esc(exp.societe)} · ${esc(exp.mentions)} · ${esc(exp.site)}<br>Vos coordonnées proviennent des registres publics des entreprises (INSEE/SIRENE). Pour ne plus recevoir nos courriers et supprimer la maquette : ${esc(exp.email)} ou ${esc(exp.telephone)}.</footer>
 </section>`;
   writeFileSync(join(OUT, 'courriers', `${r.slug}.html`), page(html));
@@ -99,7 +99,7 @@ for (const r of cibles) {
 }
 
 function page(body) {
-  return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Courriers Façade</title><style>
+  return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Courriers Konsilys</title><style>
 @page{size:A4;margin:0}*{box-sizing:border-box}body{margin:0;font-family:Inter,'Segoe UI',Roboto,Arial,sans-serif;color:#111827;font-size:10.5pt;line-height:1.5;background:#e5e7eb}
 .lettre{position:relative;width:210mm;height:297mm;padding:18mm 20mm 16mm;background:#fff;margin:0 auto 10mm;page-break-after:always;overflow:hidden}
 .exp{font-size:9pt;color:#374151;width:80mm}

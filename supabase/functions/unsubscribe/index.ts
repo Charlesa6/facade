@@ -1,4 +1,4 @@
-// Désinscription des emails de prospection Façade.
+// Désinscription des emails de prospection Konsilys (offre sites internet BTP).
 // GET  ?t=<unsub_token>  → page avec un bouton de confirmation (les antivirus de messagerie
 //                          ouvrent les liens automatiquement : un GET ne doit rien modifier)
 // POST ?t=<unsub_token>  → désinscription : bouton de la page, ou clic « Se désabonner » du client
@@ -10,7 +10,7 @@ const sb = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SE
 
 const page = (body: string, status = 200) =>
   new Response(
-    `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Désinscription — Façade</title><style>body{font-family:system-ui,sans-serif;max-width:520px;margin:15vh auto;padding:0 20px;color:#1f2937;line-height:1.6}h1{font-size:22px}button{font:inherit;font-weight:700;padding:12px 22px;border:0;border-radius:10px;background:#111827;color:#fff;cursor:pointer}</style></head><body><h1>Façade</h1>${body}</body></html>`,
+    `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Désinscription — Konsilys</title><style>body{font-family:system-ui,sans-serif;max-width:520px;margin:15vh auto;padding:0 20px;color:#1f2937;line-height:1.6}h1{font-size:22px}button{font:inherit;font-weight:700;padding:12px 22px;border:0;border-radius:10px;background:#111827;color:#fff;cursor:pointer}</style></head><body><h1>Konsilys</h1>${body}</body></html>`,
     { status, headers: { 'content-type': 'text/html; charset=utf-8' } },
   );
 

@@ -1,6 +1,6 @@
-# Façade
+# Konsilys — sites internet BTP
 
-Sites internet clés en main pour les PME du BTP, vendus avec la maquette déjà faite.
+Offre de Konsilys : sites internet clés en main pour les PME du BTP, vendus avec la maquette déjà faite. (Le SaaS Konsilys pour ESN vit dans le dépôt `esn-manager`.)
 
 1. `prospection/sourcer.mjs` trouve les entreprises (données publiques SIRENE).
 2. `prospection/audit.mjs` garde celles sans site ou avec un site obsolète.
