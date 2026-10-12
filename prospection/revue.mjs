@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { createHmac } from 'node:crypto';
 import { renderIndex, renderMentions, normalize } from '../generator/render.mjs';
 import { METIERS } from '../generator/metiers.mjs';
-import { titleCase } from './noms.mjs';
+import { titleCase, salutation } from './noms.mjs';
 
 // « de » + élision : « le site d'AB Habitations », « le site de Spalu ».
 const de = (w) => (/^[aeiouyhàâéèêëîïôûü]/i.test(w) ? `d'${w}` : `de ${w}`);
@@ -92,7 +92,7 @@ for (const e of retenus) {
   const d = normalize(profil);
   // Dirigeant personne physique publié au RNE → « Bonjour Prénom Nom, » ; sinon « Bonjour, ».
   const dir0 = candidats.get(e.slug)?.dirigeants?.[0];
-  d._dirigeant = dir0?.prenom && dir0?.nom ? `${titleCase(dir0.prenom)} ${titleCase(dir0.nom)}` : '';
+  d._dirigeant = salutation(e.email, dir0);
   const mail = email(d, e, `${BASE}/p/${t}/`);
   cards.push({ e, d, t, mail });
 }

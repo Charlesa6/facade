@@ -12,13 +12,15 @@ Ce fichier guide Claude Code (claude.ai/code) dans ce dépôt.
 
 - **Node 22, zéro dépendance, aucun build, pas de npm.** Modules ES (`.mjs`).
 - Sites générés = HTML statique autonome (CSS inline, SVG inline) → hébergés sur Vercel.
-- Données (prospects, clients) : **projet Supabase dédié à Façade** (`supabase/migrations/`), via les outils MCP (`apply_migration`, `execute_sql`).
+- Données (prospects, clients) : **projet Supabase dédié `facade` (id `hxxbhbfueqwsvwqrojea`, Paris)** — jamais `rwmstlesxnglpblrurqj` (Konsilys). Migrations dans `supabase/migrations/` (déjà appliquées), via les outils MCP. Fonction `unsubscribe` déployée (`verify_jwt=false`) : `https://hxxbhbfueqwsvwqrojea.supabase.co/functions/v1/unsubscribe?t=<unsub_token>`.
+- Le résolveur DNS des conteneurs ne sert pas les MX : utiliser DNS-over-HTTPS (`dns.google/resolve`).
 - Emails : Resend, sur un domaine d'envoi dédié Façade.
 
 ## Arborescence
 
 - `generator/` : `metiers.mjs` (préréglages par métier du BTP : palette, pictogramme, prestations types, codes NAF), `style.mjs` (CSS), `render.mjs` (profil → HTML), `build.mjs` (CLI).
-- `prospection/` : `sourcer.mjs` (API publique Recherche d'entreprises → candidats + brouillons de profil), `audit.mjs` (verdict sur un site existant).
+- `prospection/` : `rge.mjs` (**source principale** : annuaire RGE de l'ADEME, email déclaré par l'entreprise, croisé avec SIRENE, MX vérifié via DNS-over-HTTPS), `sourcer.mjs` (SIRENE seul → recherche web), `audit.mjs` (verdict sur un site existant), `revue.mjs` (page de relecture maquettes + emails avant envoi), `courrier.mjs` (lettres A4 avec QR code pour les cibles sans email ; `config/expediteur.json` sinon BROUILLON), `noms.mjs` (casse/accents des registres, salutation).
+- `vendor/qrcode.js` : générateur de QR codes (MIT, Kazuhiko Arase), seul code tiers.
 - `previews/vercel.json` : configuration du domaine des maquettes (noindex sur tout le domaine).
 - `supabase/` : schéma `fc_*` et fonction `unsubscribe` (**déployer avec `verify_jwt=false`**).
 - `.claude/agents/` : `site-builder` (sourcing + maquettes + production) et `site-seller` (emails, réponses, closing).

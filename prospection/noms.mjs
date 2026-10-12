@@ -25,3 +25,15 @@ export function titleCase(s) {
 
 // Enseigne exploitable comme nom commercial ? (les registres contiennent parfois des listes ou des abréviations)
 export const enseigneUtilisable = (e) => !!e && e.length <= 40 && !/\.\s*\S+\./.test(e);
+
+// Doit-on saluer le dirigeant par son nom ? Oui si l'adresse est générique (contact@, sarlxxx@…) ou porte
+// son nom ; non si elle semble appartenir à une autre personne (« c.debot@ » quand le dirigeant est M. Dadci).
+const sansAccent = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+export function salutation(email, dirigeant) {
+  if (!dirigeant?.nom) return '';
+  const local = sansAccent(String(email).split('@')[0]);
+  const nom = sansAccent(dirigeant.nom).replace(/[^a-z]/g, '');
+  const nominative = /^[a-z]{1,15}[._-][a-z]{2,20}$/.test(local) && !/contact|info|accueil|direction|devis|travaux|sarl|sas|ets|entreprise|batiment|renov/.test(local);
+  if (nominative && !local.replace(/[^a-z]/g, '').includes(nom)) return '';
+  return `${titleCase(dirigeant.prenom)} ${titleCase(dirigeant.nom)}`;
+}

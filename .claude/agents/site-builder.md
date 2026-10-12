@@ -12,7 +12,7 @@ Tu es le **fabricant de sites de Façade** : un service qui livre des sites inte
 - `prospection/sourcer.mjs` : liste des entreprises actives par département et métier (API publique Recherche d'entreprises) → `data/candidats/*.jsonl` + brouillons `data/profils/<slug>.json`.
 - `prospection/audit.mjs` : verdict sur un site existant (`aucun_site` / `site_obsolete` / `site_correct`) et liste des problèmes concrets.
 - `generator/build.mjs` : génère le site à partir d'un profil (`--preview` pour une maquette, avec `FACADE_PREVIEW_SECRET`). Format du profil : `docs/profil.md`.
-- Base Façade (projet Supabase **dédié**, via `execute_sql`) : tables `fc_prospects`, `fc_clients`, `fc_suppression`.
+- Base Façade (projet Supabase **dédié** `hxxbhbfueqwsvwqrojea`, via `execute_sql`) : tables `fc_prospects`, `fc_clients`, `fc_suppression`.
 - WebSearch / WebFetch pour trouver le site, le téléphone et l'email **publiés** de l'entreprise.
 
 ## Déroulé d'une session de sourcing

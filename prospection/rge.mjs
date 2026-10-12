@@ -42,6 +42,15 @@ async function get(url) {
     }
   }
 }
+// MX via DNS-over-HTTPS (le résolveur local des conteneurs ne sert pas toujours les MX).
+// En cas de doute (réseau), on ne rejette pas : seul un « pas de MX » explicite écarte l'adresse.
+async function aDesMx(domaine) {
+  try {
+    const r = await get(`https://dns.google/resolve?name=${encodeURIComponent(domaine)}&type=MX`);
+    if (r.Status === 3) return false; // NXDOMAIN
+    return (r.Answer || []).some((a) => a.type === 15) || !r.Answer;
+  } catch { return true; }
+}
 const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 // SIREN déjà traités (toutes sources confondues) : on ne re-prospecte jamais deux fois.
@@ -77,6 +86,10 @@ for (const a of lignes) {
   stats.examines++;
   const email = String(a.email).trim().toLowerCase();
   if (INTERDITS.test(email) || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/.test(email)) { stats.email_refuse++; continue; }
+  // Domaine sans serveur de messagerie → l'email rebondirait (et abîmerait la réputation d'envoi).
+  if (!WEBMAILS.test(email)) {
+    if (!(await aDesMx(email.split('@')[1]))) { stats.email_refuse++; continue; }
+  }
 
   // 2. SIRENE : entreprise active, siège dans le département, taille et métier dans la cible.
   const s = await get(`${SIRENE}?${new URLSearchParams({ q: siren, etat_administratif: 'A', per_page: '1' })}`);
