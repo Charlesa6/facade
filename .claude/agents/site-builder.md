@@ -26,6 +26,14 @@ Cette offre est une activité de **Konsilys**, mais séparée techniquement du S
 7. Insérer le prospect dans `fc_prospects` (`profile`, `website`, `site_verdict`, `site_problems`, `email`, `email_source`, `canal` = `email` ou `telephone`, `status = 'a_contacter'`, `next_action_at = null` tant que Charles n'a pas validé). La maquette est alors **en ligne automatiquement** sur `https://www.konsilys.com/apercu/<preview_token>` (fonction `apercu`) : renseigner `preview_url` avec cette adresse.
 8. Récap à Charles : entreprises examinées / retenues / exclues (avec motif), maquettes publiées (liens).
 
+## Sourcing automatique (routine quotidienne)
+
+Source email : l'annuaire RGE de l'ADEME (emails déclarés par les entreprises). Chaque jour, si le stock de premiers contacts prêts est inférieur à 20 :
+1. Exporter les SIREN déjà examinés : `select string_agg(siren, E'\n') from fc_sourcing_vus` → fichier temporaire.
+2. `node prospection/rge.mjs --departement <dep> --max <manque> --exclure <fichier> --sql <sortie.sql>` (la recherche des 5-6 premiers résultats est intégrée).
+3. Exécuter `<sortie.sql>` sur le projet `facade` (insère les retenus en `a_contacter` + mémorise tous les SIREN examinés).
+4. Départements dans l'ordre : 69, puis 01, 38, 42 (autour de Lyon) quand le précédent ne donne plus rien.
+
 ## Règles de contenu (non négociables)
 
 - **Zéro invention.** Pas d'avis clients, pas de témoignages, pas de chiffres (« 500 chantiers réalisés »), pas de logo de client, pas de photo présentée comme un chantier de l'entreprise. Pas de certification (RGE, Qualibat, décennale) sans source officielle : RGE vient de l'API (`est_rge`), le reste doit être publié par l'entreprise elle-même.

@@ -2,7 +2,12 @@
 // Sourcing via l'annuaire officiel des entreprises RGE (ADEME, open data) : la source la plus rentable.
 // Chaque entreprise y DÉCLARE elle-même son email, son téléphone et son site → coordonnées publiées et sourcées.
 //
-//   node prospection/rge.mjs --departement 69 [--max 60] [--effectif 02,03,11,12]
+//   node prospection/rge.mjs --departement 69 [--max 60] [--effectif NN,00,01,02,03,11,12] [--exclure <sirens.txt>] [--sql <sortie.sql>]
+//
+// --exclure : SIREN déjà examinés (un par ligne, ex. export de fc_sourcing_vus) → jamais réexaminés.
+// --sql     : écrit le SQL à exécuter sur le projet `facade` : insertion des retenus dans fc_prospects
+//             (canal email, status a_contacter) + de TOUS les SIREN examinés dans fc_sourcing_vus.
+//             C'est ce qu'utilise la routine quotidienne (aucun fichier local ne survit entre deux jours).
 //
 // Étapes : ADEME (email déclaré) → SIRENE (active, siège local, taille, NAF d'un métier couvert)
 //          → audit du site déclaré, ou du domaine de l'email s'il est propre à l'entreprise.
@@ -14,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { titleCase, enseigneUtilisable } from './noms.mjs';
 import { METIERS, metierFromNaf } from '../generator/metiers.mjs';
+import { trouverSite } from './trouver-site.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ADEME = 'https://data.ademe.fr/data-fair/api/v1/datasets/liste-des-entreprises-rge-2';
@@ -21,7 +27,9 @@ const SIRENE = 'https://recherche-entreprises.api.gouv.fr/search';
 const arg = (n, d) => { const i = process.argv.indexOf('--' + n); return i >= 0 ? process.argv[i + 1] : d; };
 const dep = arg('departement');
 const max = Number(arg('max', '60'));
-const tranches = arg('effectif', '02,03,11,12').split(',');
+const tranches = arg('effectif', 'NN,00,01,02,03,11,12').split(','); // NN = non renseigné, 00 = sans salarié : les plus petits artisans sont la cible principale
+const exclure = arg('exclure');
+const sqlOut = arg('sql');
 if (!dep) { console.error('usage : --departement <code> [--max N] [--effectif 02,03,...]'); process.exit(2); }
 
 const TRANCHES = { '01': '1 à 2 salariés', '02': '3 à 5 salariés', '03': '6 à 9 salariés', '11': '10 à 19 salariés', '12': '20 à 49 salariés', '21': '50 à 99 salariés' };
@@ -59,6 +67,9 @@ for (const d of ['candidats']) {
   const p = join(ROOT, 'data', d);
   if (existsSync(p)) for (const f of readdirSync(p)) for (const l of readFileSync(join(p, f), 'utf8').split('\n').filter(Boolean)) dejaVus.add(JSON.parse(l).siren);
 }
+if (exclure) for (const l of readFileSync(exclure, 'utf8').split(/\s+/)) if (/^\d{9}$/.test(l)) dejaVus.add(l);
+const vus = [];        // tous les SIREN examinés → fc_sourcing_vus
+const prospects = [];  // retenus → fc_prospects
 
 // 1. ADEME : toutes les lignes du département avec un email (une ligne par qualification → regroupement par SIRET).
 const select = 'siret,nom_entreprise,adresse,code_postal,commune,telephone,email,site_internet';
@@ -85,25 +96,23 @@ for (const a of lignes) {
   dejaVus.add(siren);
   stats.examines++;
   const email = String(a.email).trim().toLowerCase();
-  if (INTERDITS.test(email) || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/.test(email)) { stats.email_refuse++; continue; }
+  if (INTERDITS.test(email) || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/.test(email)) { stats.email_refuse++; vus.push({ siren, verdict: 'email_refuse', motif: email }); continue; }
   // Domaine sans serveur de messagerie → l'email rebondirait (et abîmerait la réputation d'envoi).
   if (!WEBMAILS.test(email)) {
-    if (!(await aDesMx(email.split('@')[1]))) { stats.email_refuse++; continue; }
+    if (!(await aDesMx(email.split('@')[1]))) { stats.email_refuse++; vus.push({ siren, verdict: 'email_refuse', motif: 'pas de MX' }); continue; }
   }
 
   // 2. SIRENE : entreprise active, siège dans le département, taille et métier dans la cible.
   const s = await get(`${SIRENE}?${new URLSearchParams({ q: siren, etat_administratif: 'A', per_page: '1' })}`);
   const e = (s.results || []).find((r) => r.siren === siren);
   const metier = e && metierFromNaf(e.activite_principale);
-  if (!e || !metier || e.siege?.departement !== dep || !tranches.includes(e.tranche_effectif_salarie)) { stats.hors_cible++; continue; }
+  if (!e || !metier || e.siege?.departement !== dep || !tranches.includes(e.tranche_effectif_salarie)) { stats.hors_cible++; vus.push({ siren, verdict: 'hors_cible', motif: e ? e.activite_principale : 'inactive' }); continue; }
 
   // 3. Site : celui déclaré à l'ADEME, sinon le domaine de l'email s'il est propre à l'entreprise.
   const declare = a.site_internet && !/facebook\.com|instagram\.com|linkedin\.com|pagesjaunes/i.test(a.site_internet) ? a.site_internet : null;
   const cible = declare || (!WEBMAILS.test(email) ? email.split('@')[1] : null);
   let audit = { url: null, verdict: 'aucun_site', problemes: [a.site_internet ? 'Seulement une page de réseau social' : 'Aucun site déclaré'] };
   if (cible) audit = JSON.parse(execFileSync(process.execPath, [join(ROOT, 'prospection', 'audit.mjs'), cible], { encoding: 'utf8' }).trim());
-  if (audit.verdict === 'site_correct') stats.site_correct++;
-  if (audit.verdict === 'a_verifier') stats.a_verifier++;
 
   const sg = e.siege;
   const nom = titleCase([(sg.liste_enseignes || [])[0], sg.nom_commercial].find(enseigneUtilisable) || e.nom_raison_sociale || a.nom_entreprise);
@@ -119,15 +128,37 @@ for (const a of lignes) {
   appendFileSync(join(ROOT, 'data', 'candidats', `${dep}-rge.jsonl`), JSON.stringify(candidat) + '\n');
 
   const profilPath = join(ROOT, 'data', 'profils', `${slug}.json`);
-  if (!existsSync(profilPath)) writeFileSync(profilPath, JSON.stringify({
+  const profil = {
     slug, raison_sociale: candidat.raison_sociale, nom_commercial: nom, forme_juridique: candidat.forme_juridique, siren, metier,
     annee_creation: e.date_creation ? Number(e.date_creation.slice(0, 4)) : null, effectif: candidat.effectif,
     ville: candidat.ville, code_postal: sg.code_postal, adresse: titleCase(sg.adresse), zone_intervention: [candidat.ville],
     certifications: ['Entreprise RGE'], telephone: a.telephone || null, email, sources: [candidat.source, source],
-  }, null, 2) + '\n');
+  };
+  if (!existsSync(profilPath)) writeFileSync(profilPath, JSON.stringify(profil, null, 2) + '\n');
+
+  // 4. Pas de site (ou domaine vide) selon l'ADEME → recherche obligatoire du nom + ville (5-6 premiers résultats).
+  let recherche = null;
+  if (audit.verdict === 'aucun_site') {
+    recherche = await trouverSite(profil);
+    if (recherche.site) audit = { url: recherche.site, verdict: recherche.verdict, problemes: recherche.problemes };
+    else if (recherche.resultats.some((r) => r.a_verifier)) audit = { ...audit, verdict: 'a_verifier', problemes: [...audit.problemes, 'Page à vérifier : ' + recherche.resultats.filter((r) => r.a_verifier).map((r) => r.host).join(', ')] };
+  }
+  if (audit.verdict === 'site_correct') stats.site_correct++;
+  if (audit.verdict === 'a_verifier') stats.a_verifier++;
 
   const retenu = ['aucun_site', 'site_obsolete'].includes(audit.verdict);
   if (retenu) stats.retenus++;
+  vus.push({ siren, verdict: audit.verdict, motif: audit.url || null });
+  if (retenu && !prospects.some((p) => p.email === email)) {
+    const d0 = candidat.dirigeants[0];
+    prospects.push({
+      siren, company: nom, metier, city: candidat.ville, postal_code: sg.code_postal, departement: dep,
+      website: audit.url, site_verdict: audit.verdict, site_problems: audit.problemes || [],
+      contact_name: d0 ? `${d0.prenom} ${d0.nom}`.trim() : null, contact_role: d0?.qualite || null,
+      email, email_source: source, phone: a.telephone || null, profile: profil, canal: 'email',
+      notes: `Sourcing automatique RGE ${dep} (${new Date().toISOString().slice(0, 10)}). Recherche du site : ${recherche ? (recherche.requetes.join(' | ') + ' → ' + (recherche.site || 'aucun site propre dans les premiers résultats')) : 'site déclaré audité'}.`,
+    });
+  }
   appendFileSync(join(ROOT, 'data', 'enrichi', 'rge.jsonl'), JSON.stringify({
     slug, website: audit.url, verdict: audit.verdict, problemes: audit.problemes, email, email_source: source,
     telephone: a.telephone || null, retenu,
@@ -136,3 +167,19 @@ for (const a of lignes) {
   console.log(`${retenu ? '✓' : '·'} ${nom} (${candidat.ville}, ${METIERS[metier].label}, ${candidat.effectif}) — ${audit.verdict}`);
 }
 console.log(JSON.stringify(stats));
+
+if (sqlOut) {
+  const lit = (o) => { const j = JSON.stringify(o); if (j.includes('$fc$')) throw new Error('délimiteur dans les données'); return `$fc$${j}$fc$::jsonb`; };
+  let sql = `insert into fc_sourcing_vus (siren, source, verdict, motif)
+select siren, 'rge-${dep}', verdict, motif from jsonb_to_recordset(${lit(vus)}) as x(siren text, verdict text, motif text)
+on conflict (siren) do nothing;\n`;
+  if (prospects.length) sql += `insert into fc_prospects (siren, company, metier, city, postal_code, departement, website, site_verdict, site_problems, contact_name, contact_role, email, email_source, phone, profile, notes, canal, next_action_at)
+select siren, company, metier, city, postal_code, departement, website, site_verdict, site_problems, contact_name, contact_role, email, email_source, phone, profile, notes, canal, null
+from jsonb_to_recordset(${lit(prospects)}) as x(siren text, company text, metier text, city text, postal_code text, departement text, website text, site_verdict text, site_problems jsonb, contact_name text, contact_role text, email text, email_source text, phone text, profile jsonb, notes text, canal text)
+where not exists (select 1 from fc_suppression s where s.email = lower(x.email))
+  and not exists (select 1 from fc_prospects p where lower(p.email) = lower(x.email))
+on conflict (siren) do nothing;
+update fc_prospects set preview_url = 'https://www.konsilys.com/apercu/' || preview_token where preview_url is null and profile is not null;\n`;
+  writeFileSync(sqlOut, sql);
+  console.log(`SQL écrit : ${sqlOut} (${vus.length} SIREN examinés, ${prospects.length} prospects)`);
+}
