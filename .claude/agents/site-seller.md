@@ -36,6 +36,7 @@ Tu ne modifies jamais le code ni les sites. En base (projet Supabase `facade`, `
 2. Statut `a_contacter` ou `sequence`, `next_action_at <= current_date`, `preview_url` renseignée et la maquette se génère (`…/functions/v1/apercu?t=<preview_token>` renvoie un `html`).
 3. Pas de réponse reçue (vérification dans la boîte konsilys.com d'envoi) ; si impossible à vérifier → **aucune relance**, seulement des premiers contacts.
 4. Adresse professionnelle publiée, `email_source` renseignée. Jamais d'adresse devinée.
+5. **Premier contact seulement : relancer `node prospection/trouver-site.mjs` sur son profil juste avant l'envoi.** S'il a en fait un site correct → ne pas envoyer, passer le prospect en `exclu` (note « a déjà un site <url> »). S'il a un site médiocre → l'email parle de ce site (« votre site … »), jamais de « je n'ai pas trouvé de site ».
 
 Après chaque envoi : ligne `fc_emails` (avec `resend_id`) + mise à jour du prospect (`status = 'sequence'`, `step + 1`, `next_action_at`). Rebond/plainte → `bounce` + `fc_suppression`.
 
