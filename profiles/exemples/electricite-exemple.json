@@ -1,0 +1,22 @@
+{
+  "_note": "Profil FICTIF de démonstration — aucune entreprise réelle.",
+  "slug": "exemple-elec-services",
+  "raison_sociale": "EXEMPLE ÉLEC SERVICES SAS",
+  "nom_commercial": "Élec Services",
+  "forme_juridique": "SAS",
+  "metier": "electricite",
+  "annee_creation": 2018,
+  "effectif": "3 à 5 salariés",
+  "ville": "Bourg-en-Bresse",
+  "code_postal": "01000",
+  "zone_intervention": ["Bourg-en-Bresse", "Bresse", "Revermont"],
+  "telephone": "04 00 00 00 01",
+  "email": "contact@exemple.fr",
+  "services": [
+    { "titre": "Rénovation électrique", "description": "Remise aux normes complète de maisons et appartements." },
+    { "titre": "Bornes de recharge", "description": "Installation de bornes IRVE pour particuliers et entreprises." },
+    { "titre": "Domotique", "description": "Volets, chauffage et éclairage pilotés depuis votre téléphone." }
+  ],
+  "atouts": ["Intervention sous 48 h", "Devis gratuit sous 72 h"],
+  "sources": ["Profil fictif"]
+}

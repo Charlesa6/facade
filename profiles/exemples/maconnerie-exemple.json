@@ -1,0 +1,21 @@
+{
+  "_note": "Profil FICTIF de démonstration — aucune entreprise réelle.",
+  "slug": "exemple-maconnerie-durand",
+  "raison_sociale": "EXEMPLE MAÇONNERIE DURAND SARL",
+  "nom_commercial": "Maçonnerie Durand",
+  "forme_juridique": "SARL",
+  "siren": "000000000",
+  "metier": "maconnerie",
+  "annee_creation": 2009,
+  "effectif": "6 à 9 salariés",
+  "ville": "Villefranche-sur-Saône",
+  "code_postal": "69400",
+  "adresse": "12 rue de l'Exemple, 69400 Villefranche-sur-Saône",
+  "zone_intervention": ["Villefranche-sur-Saône", "Beaujolais", "Val de Saône", "Nord de Lyon"],
+  "telephone": "04 00 00 00 00",
+  "email": "contact@exemple.fr",
+  "horaires": "Du lundi au vendredi, 7 h 30 – 18 h",
+  "certifications": ["Assurance décennale"],
+  "directeur_publication": "Le gérant",
+  "sources": ["Profil fictif"]
+}
