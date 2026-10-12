@@ -20,7 +20,7 @@ const PAUSE_MS = 2500; // entre deux requêtes au moteur (éviter le blocage)
 const N_RESULTATS = 6;
 
 // Domaines qui ne sont jamais « le site de l'entreprise » : annuaires, réseaux sociaux, registres, agrégateurs.
-const ANNUAIRES = /(^|\.)(pagesjaunes|societe|pappers|infogreffe|annuaire-entreprises\.data\.gouv|data\.gouv|verif|infonet|lesentreprises|manageo|corporama|kompass|europages|societeinfo|entreprises\.lefigaro|bodacc|facebook|instagram|linkedin|twitter|x|tiktok|youtube|pinterest|google|goo\.gl|maps\.app|apple|tripadvisor|thefork|lafourchette|restaurantguru|petitfute|yelp|planity|treatwell|fresha|kiute|wecasa|houzz|habitatpresto|travaux|quotatis|starofservice|hellopro|batiweb|touscouvreurs|tousartisans|artisans-du-batiment|annuaire-du-batiment|kelbillet|mappy|118712|118000|annuaire|justacote|cylex|hoodspot|horaires|ouvert|lacartedesrestos|mafleuriste|allezlesfleurs|123fleurs|boutiquefleurs-lyon|fleuristes-et-fleurs|interflora|florajet|aquarelle|epicery|ubereats|deliveroo|just-eat|boulangeriespatisseries|chocolat\.guide|wikipedia|indeed|welcometothejungle|hellowork|qualibat|ademe|faire\.gouv|france-renov|rge|autour-de-moi|pages-annuaire|annuaire-mairie|infobel|tupalo|brownbook|place-du-commerce|ma-ville|eat-list|restopolitan|lebonbon|sortiraparis|lyon-france|onlyon|petitpaume|guide-du-routard)\.[a-z.]+$/i;
+const ANNUAIRES = /(^|\.)(pagesjaunes|societe|pappers|infogreffe|annuaire-entreprises\.data\.gouv|data\.gouv|verif|infonet|lesentreprises|manageo|corporama|kompass|europages|societeinfo|entreprises\.lefigaro|bodacc|facebook|instagram|linkedin|twitter|x|tiktok|youtube|pinterest|google|goo\.gl|maps\.app|apple|tripadvisor|thefork|lafourchette|restaurantguru|petitfute|yelp|planity|treatwell|fresha|kiute|wecasa|houzz|habitatpresto|travaux|quotatis|starofservice|hellopro|batiweb|touscouvreurs|tousartisans|artisans-du-batiment|annuaire-du-batiment|kelbillet|mappy|118712|118000|annuaire|justacote|cylex|hoodspot|horaires|ouvert|lacartedesrestos|mafleuriste|allezlesfleurs|123fleurs|boutiquefleurs-lyon|fleuristes-et-fleurs|interflora|florajet|aquarelle|epicery|ubereats|deliveroo|just-eat|boulangeriespatisseries|chocolat\.guide|wikipedia|indeed|welcometothejungle|hellowork|qualibat|ademe|faire\.gouv|france-renov|rge|autour-de-moi|here-restaurants|e-pro|monartisan|lagazettefrance|fichesociete|nosavis|prosmaison|meilleur-artisan|le-site-de|mapagepro|france-artisan|myboulange|icoiffeur|mavilleenpoche|pages-annuaire|annuaire-mairie|infobel|tupalo|brownbook|place-du-commerce|ma-ville|eat-list|restopolitan|lebonbon|sortiraparis|lyon-france|onlyon|petitpaume|guide-du-routard)\.[a-z.]+$/i;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const chiffres = (s) => String(s || '').replace(/\D/g, '');
@@ -63,10 +63,14 @@ async function page(url) {
   }
 }
 
+// Mots génériques (forme juridique, métier, ville) : un annuaire « trouver-boulangerie.fr » ou « touselectriciens.fr »
+// ne doit pas passer pour le site de « Boulangerie Les 3 V » ou « Elec Plus ».
+const GENERIQUES = /^(sarl|sas|sasu|eurl|ets|les|des|aux|une|chez|pere|fils|freres|entreprise|societe|maison|atelier|lyon|rhone|france|plus|elec|electricite|electricien|iso|isolation|plomberie|plombier|chauffage|charpente|menuiserie|maconnerie|macon|couverture|toiture|batiment|renov|renovation|travaux|construction|constructions|services?|boulangerie|boulanger|boulange|fournil|patisserie|pain|coiffure|coiffeur|salon|fleurs|fleuriste|restaurant|cafe|bistrot|brasserie)$/;
+
 // Mots significatifs du nom (pour reconnaître le domaine propre de l'entreprise).
 function motsNom(p) {
   return [...new Set(sansAccents(`${p.nom_commercial || ''} ${p.raison_sociale || ''}`).split(/[^a-z0-9]+/)
-    .filter((w) => w.length >= 3 && !/^(sarl|sas|sasu|eurl|ets|les|des|aux|une|chez|entreprise|societe|maison|lyon)$/.test(w)))];
+    .filter((w) => w.length >= 3 && !GENERIQUES.test(w)))];
 }
 // Un annuaire local affiche aussi le téléphone : le site n'est « le sien » que si son domaine reprend un mot du nom.
 const domainePropre = (host, p) => { const h = host.replace(/[^a-z0-9]/g, ''); return motsNom(p).some((w) => h.includes(w)); };
