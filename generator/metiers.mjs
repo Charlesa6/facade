@@ -1,4 +1,4 @@
-// Préréglages par métier du BTP : palette, libellé, prestations types.
+// Préréglages par métier (BTP et commerces de proximité) : palette, libellé, prestations types.
 // Les prestations par défaut sont des descriptions génériques du métier,
 // signalées « à valider » dans la maquette tant que l'entreprise ne les a pas confirmées.
 // `naf` : codes NAF (rév. 2) rattachés au métier, utilisés par le sourcing.
@@ -103,6 +103,68 @@ export const METIERS = {
       ['Coordination de travaux', 'Un interlocuteur unique pour tous les corps d\'état.'],
     ],
   },
+  // ── Commerces de proximité (famille « commerce ») : pas de devis ni de zone d'intervention, mais une
+  // adresse, des horaires et un bouton d'action propre au métier (réserver, prendre rendez-vous, commander).
+  restaurant: {
+    famille: 'commerce', schema: 'Restaurant',
+    label: 'Restaurant', pros: 'des restaurants', naf: ['56.10A'],
+    palette: { primary: '#9F1239', accent: '#FBBF24', dark: '#1C1917', soft: '#FFF1F2' },
+    icon: 'plate',
+    cta: 'Réserver une table', titreServices: 'Notre maison',
+    description: '{name} vous accueille {a_ville} pour le déjeuner et le dîner : une cuisine faite maison, des produits frais et un accueil chaleureux.',
+    atouts: ['Cuisine faite maison', 'Produits frais et de saison', 'Réservation par téléphone'],
+    services: [
+      ['Sur place', 'Une salle chaleureuse pour vos déjeuners et dîners.'],
+      ['La carte', 'Des plats faits maison qui changent au fil des saisons.'],
+      ['À emporter', 'Vos plats préférés à emporter, sur commande.'],
+      ['Groupes & privatisation', 'Repas d\'entreprise, anniversaires et événements.'],
+    ],
+  },
+  coiffure: {
+    famille: 'commerce', schema: 'HairSalon',
+    label: 'Salon de coiffure', pros: 'des salons de coiffure', naf: ['96.02A'],
+    palette: { primary: '#6D28D9', accent: '#F472B6', dark: '#1E1B4B', soft: '#F5F3FF' },
+    icon: 'scissors',
+    cta: 'Prendre rendez-vous', titreServices: 'Nos prestations',
+    description: '{name} vous accueille {a_ville} : coupe, couleur et soins, pour femmes, hommes et enfants, dans une ambiance détendue.',
+    atouts: ['Sur rendez-vous ou sans rendez-vous', 'Conseils personnalisés', 'Produits professionnels'],
+    services: [
+      ['Coupe femme', 'Coupe, shampoing et coiffage adaptés à votre style.'],
+      ['Coupe homme & barbe', 'Coupes classiques ou tendance, taille de barbe.'],
+      ['Couleur & mèches', 'Coloration, balayage, mèches et patines.'],
+      ['Soins & brushing', 'Soins profonds, brushing et coiffures d\'événement.'],
+    ],
+  },
+  fleuriste: {
+    famille: 'commerce', schema: 'Florist',
+    label: 'Fleuriste', pros: 'des fleuristes', naf: ['47.76Z'],
+    palette: { primary: '#BE185D', accent: '#84CC16', dark: '#1F2937', soft: '#FDF2F8' },
+    icon: 'flower',
+    cta: 'Commander un bouquet', titreServices: 'Nos créations',
+    description: '{name}, votre fleuriste {a_ville} : bouquets de saison, compositions sur mesure et plantes, pour toutes les occasions.',
+    atouts: ['Fleurs fraîches de saison', 'Compositions sur mesure', 'Commande par téléphone'],
+    services: [
+      ['Bouquets', 'Bouquets de saison composés à la demande.'],
+      ['Mariages & événements', 'Décoration florale de vos cérémonies et réceptions.'],
+      ['Deuil', 'Compositions et couronnes, dans le respect et la discrétion.'],
+      ['Plantes', 'Plantes d\'intérieur et d\'extérieur, conseils d\'entretien.'],
+    ],
+  },
+  boulangerie: {
+    famille: 'commerce', schema: 'Bakery',
+    label: 'Boulangerie-pâtisserie', pros: 'des boulangeries', naf: ['10.71C', '10.71D'],
+    palette: { primary: '#92400E', accent: '#FCD34D', dark: '#1C1917', soft: '#FFFBEB' },
+    icon: 'bread',
+    cta: 'Passer commande', titreServices: 'Nos produits',
+    description: '{name}, votre boulangerie {a_ville} : pains, viennoiseries et pâtisseries, préparés chaque jour.',
+    atouts: ['Pains et viennoiseries du jour', 'Gâteaux sur commande', 'Commande par téléphone'],
+    services: [
+      ['Pains', 'Baguettes, pains de campagne et pains spéciaux.'],
+      ['Viennoiseries', 'Croissants, pains au chocolat et brioches.'],
+      ['Pâtisseries', 'Tartes, entremets et gâteaux de saison.'],
+      ['Commandes', 'Gâteaux d\'anniversaire et pièces pour vos événements.'],
+    ],
+  },
 };
 
 // Pictogrammes en SVG inline (aucune image externe à charger).
@@ -116,6 +178,10 @@ export const ICONS = {
   leaf: '<path d="M5 19C5 9 11 4 20 4c0 9-5 15-15 15zM5 19l8-8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
   digger: '<path d="M2 18h12v3H2zM4 18v-5h7l2 5M11 13l5-8 5 4-2 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
   crane: '<path d="M6 21V4h2v17M3 21h10M8 5h13M17 5v6M15 11h4v3h-4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+  plate: '<circle cx="12" cy="12" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 4v6a2 2 0 0 0 2 2M2.5 4v16M21.5 4c-1.5 1-2 3-2 5v3h2v8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  scissors: '<circle cx="6" cy="6" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 7.5 20 19M8.5 16.5 20 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  flower: '<circle cx="12" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 6.5C12 4 13.5 3 15 3.5c1.5.5 1.5 2.5 0 4M14.5 9c2.5 0 3.5 1.5 3 3s-2.5 1.5-4 0M12 11.5c0 2.5-1.5 3.5-3 3s-1.5-2.5 0-4M9.5 9C7 9 6 7.5 6.5 6S9 4.5 10.5 6M12 11.5V21M12 17c-2-2-4-2-5-1M12 18c2-2 4-2 5-1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  bread: '<path d="M4 11a5 5 0 0 1 3-9h10a5 5 0 0 1 3 9v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 9l2 3M13 8l2 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
   phone: '<path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
   pin: '<path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>',
   check: '<path d="M4 12l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',

@@ -27,10 +27,17 @@ export function normalize(p) {
     services,
     zone,
     annee,
+    commerce: m.famille === 'commerce',
+    schema: m.schema || 'HomeAndConstructionBusiness',
+    cta: m.cta || 'Demander un devis gratuit',
+    titreServices: m.titreServices || 'Ce que nous faisons pour vous',
     accroche: p.accroche || `${p.metier_label || m.label} à ${p.ville || 'votre service'}${zone.length > 1 ? ' et alentours' : ''}`,
-    description: p.description || `${name} réalise vos travaux ${de((p.metier_label || m.label).toLowerCase())} pour les particuliers, les entreprises et les collectivités${p.ville ? ` à ${p.ville} et dans ses environs` : ''}. Un interlocuteur unique, des devis clairs et des chantiers tenus dans les délais.`,
+    description: p.description || (m.description
+      ? m.description.replace('{name}', name).replace('{a_ville}', p.ville ? `à ${p.ville}` : 'près de chez vous')
+      : `${name} réalise vos travaux ${de((p.metier_label || m.label).toLowerCase())} pour les particuliers, les entreprises et les collectivités${p.ville ? ` à ${p.ville} et dans ses environs` : ''}. Un interlocuteur unique, des devis clairs et des chantiers tenus dans les délais.`),
     description_a_valider: !p.description,
     atouts: p.atouts || [],
+    atouts_defaut: m.atouts || null,
     certifications: p.certifications || [],
   };
 }
@@ -38,8 +45,8 @@ export function normalize(p) {
 function header(d) {
   return `<header class="hdr"><div class="wrap hdr-in">
   <a class="logo" href="#top"><span class="logo-mark">${icon(d.icon, 22)}</span><span>${esc(d.name)}</span></a>
-  <nav class="nav"><a href="#services">Prestations</a><a href="#atouts">L'entreprise</a><a href="#zone">Zone</a><a href="#contact">Contact</a></nav>
-  ${d.telephone ? `<a class="btn btn-accent hdr-cta" href="${telHref(d.telephone)}">${icon('phone', 18)}<span>${esc(d.telephone)}</span></a>` : `<a class="btn btn-accent hdr-cta" href="#contact">Devis gratuit</a>`}
+  <nav class="nav"><a href="#services">${d.commerce ? 'Découvrir' : 'Prestations'}</a><a href="#atouts">${d.commerce ? 'La maison' : 'L\'entreprise'}</a><a href="#zone">${d.commerce ? 'Nous trouver' : 'Zone'}</a><a href="#contact">Contact</a></nav>
+  ${d.telephone ? `<a class="btn btn-accent hdr-cta" href="${telHref(d.telephone)}">${icon('phone', 18)}<span>${esc(d.telephone)}</span></a>` : d.commerce ? `<a class="btn btn-accent hdr-cta" href="#zone">Nous trouver</a>` : `<a class="btn btn-accent hdr-cta" href="#contact">Devis gratuit</a>`}
 </div></header>`;
 }
 
@@ -48,34 +55,37 @@ function hero(d) {
   const age = d.annee ? new Date().getFullYear() - d.annee : 0;
   if (d.annee) facts.push(age >= 2 ? `<li><b>${age} ans</b><span>d'expérience</span></li>` : `<li><b>${d.annee}</b><span>année de création</span></li>`);
   if (d.effectif) facts.push(`<li><b>${esc(d.effectif)}</b><span>à votre service</span></li>`);
-  if (d.zone.length) facts.push(`<li><b>${esc(d.zone[0])}</b><span>${d.zone.length > 1 ? `et ${d.zone.length - 1} autre${d.zone.length > 2 ? 's' : ''} secteur${d.zone.length > 2 ? 's' : ''}` : 'zone d\'intervention'}</span></li>`);
+  if (d.commerce && d.ville) facts.push(`<li><b>${esc(d.ville)}</b><span>${d.adresse ? 'nous trouver' : 'votre adresse de quartier'}</span></li>`);
+  else if (d.zone.length) facts.push(`<li><b>${esc(d.zone[0])}</b><span>${d.zone.length > 1 ? `et ${d.zone.length - 1} autre${d.zone.length > 2 ? 's' : ''} secteur${d.zone.length > 2 ? 's' : ''}` : 'zone d\'intervention'}</span></li>`);
   return `<section class="hero" id="top"><div class="wrap hero-in">
   <div class="hero-txt">
     <p class="eyebrow">${esc(d.metier_label)}${d.ville ? ' · ' + esc(d.ville) : ''}</p>
     <h1>${esc(d.accroche)}</h1>
     <p class="lead${d.description_a_valider ? ' tbv' : ''}">${esc(d.description)}</p>
-    <div class="hero-cta"><a class="btn btn-accent btn-lg" href="#contact">Demander un devis gratuit</a>${d.telephone ? `<a class="btn btn-ghost btn-lg" href="${telHref(d.telephone)}">${icon('phone', 18)} Appeler</a>` : ''}</div>
+    <div class="hero-cta">${d.commerce
+      ? `<a class="btn btn-accent btn-lg" href="${d.telephone ? telHref(d.telephone) : '#contact'}">${d.telephone ? icon('phone', 18) + ' ' : ''}${esc(d.cta)}</a><a class="btn btn-ghost btn-lg" href="#zone">${icon('pin', 18)} Nous trouver</a>`
+      : `<a class="btn btn-accent btn-lg" href="#contact">${esc(d.cta)}</a>${d.telephone ? `<a class="btn btn-ghost btn-lg" href="${telHref(d.telephone)}">${icon('phone', 18)} Appeler</a>` : ''}`}</div>
     ${d.certifications.length ? `<ul class="badges">${d.certifications.map((c) => `<li>${icon('check', 16)} ${esc(c)}</li>`).join('')}</ul>` : ''}
   </div>
-  <div class="hero-art" aria-hidden="true"><div class="art-card">${icon(d.icon, 120)}</div><div class="art-stripes"></div></div>
+  <div class="hero-art" aria-hidden="true"><div class="art-card">${icon(d.icon, 120)}</div><div class="art-stripes${d.commerce ? ' art-dots' : ''}"></div></div>
 </div>${facts.length ? `<div class="wrap"><ul class="facts">${facts.join('')}</ul></div>` : ''}</section>`;
 }
 
 function services(d) {
   return `<section class="sec" id="services"><div class="wrap">
-  <p class="eyebrow">Nos prestations</p><h2>Ce que nous faisons pour vous</h2>
+  <p class="eyebrow">${d.commerce ? esc(d.metier_label) : 'Nos prestations'}</p><h2>${esc(d.titreServices)}</h2>
   <div class="grid">${d.services.map((s) => `<article class="card${s.a_valider ? ' tbv' : ''}"><span class="card-ic">${icon(d.icon, 26)}</span><h3>${esc(s.titre)}</h3><p>${esc(s.description)}</p></article>`).join('')}</div>
 </div></section>`;
 }
 
 function atouts(d) {
-  const items = d.atouts.length ? d.atouts.map((a) => ({ t: a, tbv: false })) : [
+  const items = d.atouts.length ? d.atouts.map((a) => ({ t: a, tbv: false })) : d.atouts_defaut ? d.atouts_defaut.map((t) => ({ t, tbv: true })) : [
     { t: 'Devis détaillé et gratuit, sans engagement', tbv: true },
     { t: 'Un interlocuteur unique du devis à la réception du chantier', tbv: true },
     { t: 'Chantiers propres, délais annoncés et tenus', tbv: true },
   ];
   return `<section class="sec sec-soft" id="atouts"><div class="wrap two">
-  <div><p class="eyebrow">L'entreprise</p><h2>Pourquoi choisir ${esc(d.name)}&nbsp;?</h2>
+  <div><p class="eyebrow">${d.commerce ? 'La maison' : 'L\'entreprise'}</p><h2>${d.commerce ? `Bienvenue chez ${esc(d.name)}` : `Pourquoi choisir ${esc(d.name)}&nbsp;?`}</h2>
   ${d.histoire ? `<p>${esc(d.histoire)}</p>` : ''}
   <ul class="checks">${items.map((i) => `<li class="${i.tbv ? 'tbv' : ''}">${icon('check', 20)}<span>${esc(i.t)}</span></li>`).join('')}</ul></div>
   <div class="panel"><h3>En bref</h3><dl>
@@ -89,6 +99,19 @@ function atouts(d) {
 }
 
 function zone(d) {
+  if (d.commerce) {
+    const maps = d.adresse ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.adresse)}` : null;
+    return `<section class="sec" id="zone"><div class="wrap two">
+  <div><p class="eyebrow">Nous trouver</p><h2>Venez nous voir</h2>
+  <ul class="coords coords-light">
+    ${d.adresse ? `<li>${icon('pin')}<div><b>Adresse</b><span>${esc(d.adresse)}</span></div></li>` : ''}
+    <li class="${d.horaires ? '' : 'tbv'}">${icon('clock')}<div><b>Horaires</b><span>${esc(d.horaires || 'Horaires d\'ouverture à compléter')}</span></div></li>
+    ${d.telephone ? `<li>${icon('phone')}<div><b>Téléphone</b><a href="${telHref(d.telephone)}">${esc(d.telephone)}</a></div></li>` : ''}
+  </ul>
+  ${maps ? `<div class="hero-cta"><a class="btn btn-ghost btn-lg" href="${esc(maps)}" target="_blank" rel="noopener">${icon('pin', 18)} Itinéraire</a></div>` : ''}</div>
+  <div class="panel"><h3>${esc(d.cta)}</h3><p>${d.telephone ? `Appelez-nous au <a class="link" href="${telHref(d.telephone)}">${esc(d.telephone)}</a>.` : 'Contactez-nous par email.'}</p></div>
+</div></section>`;
+  }
   return `<section class="sec" id="zone"><div class="wrap">
   <p class="eyebrow">Zone d'intervention</p><h2>Nous intervenons près de chez vous</h2>
   <ul class="zone">${d.zone.map((z) => `<li>${icon('pin', 18)} ${esc(z)}</li>`).join('')}</ul>
@@ -96,12 +119,12 @@ function zone(d) {
 }
 
 function contact(d) {
-  const subject = encodeURIComponent(`Demande de devis — ${d.name}`);
-  const body = encodeURIComponent('Bonjour,\n\nJe souhaite un devis pour les travaux suivants :\n\nAdresse du chantier :\nDélai souhaité :\nTéléphone :\n\nMerci.');
+  const subject = encodeURIComponent(d.commerce ? `Demande — ${d.name}` : `Demande de devis — ${d.name}`);
+  const body = encodeURIComponent(d.commerce ? 'Bonjour,\n\n' : 'Bonjour,\n\nJe souhaite un devis pour les travaux suivants :\n\nAdresse du chantier :\nDélai souhaité :\nTéléphone :\n\nMerci.');
   return `<section class="sec sec-dark" id="contact"><div class="wrap two">
-  <div><p class="eyebrow">Contact</p><h2>Parlons de votre projet</h2>
-  <p>Décrivez-nous vos travaux : nous revenons vers vous rapidement avec un devis clair.</p>
-  <div class="hero-cta">${d.email ? `<a class="btn btn-accent btn-lg" href="mailto:${esc(d.email)}?subject=${subject}&amp;body=${body}">Demander un devis par email</a>` : ''}${d.telephone ? `<a class="btn btn-ghost-w btn-lg" href="${telHref(d.telephone)}">${icon('phone', 18)} ${esc(d.telephone)}</a>` : ''}</div></div>
+  <div><p class="eyebrow">Contact</p><h2>${d.commerce ? 'Une question ?' : 'Parlons de votre projet'}</h2>
+  <p>${d.commerce ? 'Appelez-nous ou écrivez-nous : nous vous répondons rapidement.' : 'Décrivez-nous vos travaux : nous revenons vers vous rapidement avec un devis clair.'}</p>
+  <div class="hero-cta">${d.email ? `<a class="btn btn-accent btn-lg" href="mailto:${esc(d.email)}?subject=${subject}&amp;body=${body}">${d.commerce ? 'Nous écrire' : 'Demander un devis par email'}</a>` : ''}${d.telephone ? `<a class="btn btn-ghost-w btn-lg" href="${telHref(d.telephone)}">${icon('phone', 18)} ${esc(d.telephone)}</a>` : ''}</div></div>
   <ul class="coords">
     ${d.telephone ? `<li>${icon('phone')}<div><b>Téléphone</b><a href="${telHref(d.telephone)}">${esc(d.telephone)}</a></div></li>` : ''}
     ${d.email ? `<li>${icon('mail')}<div><b>Email</b><a href="mailto:${esc(d.email)}">${esc(d.email)}</a></div></li>` : ''}
@@ -136,7 +159,7 @@ ${preview ? '<meta name="robots" content="noindex,nofollow,noarchive">' : ''}
 
 function jsonLd(d) {
   const ld = {
-    '@context': 'https://schema.org', '@type': 'HomeAndConstructionBusiness', name: d.name,
+    '@context': 'https://schema.org', '@type': d.schema, name: d.name,
     ...(d.telephone && { telephone: d.telephone }), ...(d.email && { email: d.email }),
     ...(d.adresse && { address: { '@type': 'PostalAddress', streetAddress: d.adresse, addressLocality: d.ville, postalCode: d.code_postal, addressCountry: 'FR' } }),
     areaServed: d.zone,

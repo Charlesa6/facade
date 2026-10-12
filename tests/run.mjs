@@ -69,6 +69,23 @@ test('élision devant un métier commençant par une voyelle', () => {
   assert.match(normalize({ raison_sociale: 'X', metier: 'maconnerie' }).description, /travaux de maçonnerie/);
 });
 
+test('commerces : bouton d\'action du métier, « Nous trouver », pas de devis', () => {
+  for (const [metier, cta] of [['restaurant', 'Réserver une table'], ['coiffure', 'Prendre rendez-vous'], ['fleuriste', 'Commander un bouquet'], ['boulangerie', 'Passer commande']]) {
+    const html = renderIndex({ raison_sociale: 'X', metier, ville: 'Lyon 3e', adresse: '1 rue A, 69003 Lyon', telephone: '04 00 00 00 00' }, { preview: false });
+    assert.match(html, new RegExp(cta));
+    assert.match(html, /Nous trouver/);
+    assert.match(html, /google\.com\/maps/);
+    assert.doesNotMatch(html, /devis/i);
+    assert.doesNotMatch(renderIndex({ raison_sociale: 'X', metier }, { preview: false }), /devis/i);
+  }
+  const ld = renderIndex({ raison_sociale: 'X', metier: 'coiffure' }).match(/"@type":"(\w+)"/)[1];
+  assert.equal(ld, 'HairSalon');
+});
+
+test('horaires manquants d\'un commerce marqués « à valider »', () => {
+  assert.match(renderIndex({ raison_sociale: 'X', metier: 'boulangerie' }, { preview: true }), /class="tbv">[\s\S]*?Horaires d&#39;ouverture à compléter/);
+});
+
 test('profil sans nom refusé', () => {
   assert.throws(() => normalize({ metier: 'maconnerie' }));
 });

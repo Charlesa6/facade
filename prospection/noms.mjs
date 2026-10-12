@@ -20,7 +20,9 @@ export function titleCase(s) {
       if (/^[ld]['’]\p{L}/u.test(w)) return (i === 0 ? w[0].toUpperCase() : w[0]) + w[1] + w[2].toUpperCase() + w.slice(3);
       return w.replace(/^(\p{L})/u, (c) => c.toUpperCase());
     })
-    .join('');
+    .join('')
+    // Arrondissements : « Lyon 3eme » → « Lyon 3e », « Lyon 1er » reste.
+    .replace(/\b(\d{1,2})(?:eme|ème)\b/gi, '$1e');
 }
 
 // Enseigne exploitable comme nom commercial ? (les registres contiennent parfois des listes ou des abréviations)

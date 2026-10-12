@@ -38,6 +38,7 @@ h3{font-size:18px;color:var(--dark);margin-bottom:8px}
 .hero-art{position:relative;aspect-ratio:1;max-width:420px;justify-self:center;width:100%}
 .art-card{position:absolute;inset:8% 8% 8% 8%;border-radius:28px;background:var(--primary);color:var(--accent);display:grid;place-items:center;box-shadow:0 30px 60px rgba(0,0,0,.18);transform:rotate(-3deg)}
 .art-stripes{position:absolute;right:0;bottom:0;width:45%;height:30%;border-radius:18px;background:repeating-linear-gradient(-45deg,var(--accent) 0 14px,var(--dark) 14px 28px);opacity:.9}
+.art-dots{background:radial-gradient(circle,var(--accent) 0 5px,transparent 6px) 0 0/22px 22px,var(--dark);opacity:1}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;list-style:none;margin-top:48px}
 .facts li{background:#fff;border:1px solid #eef0f3;border-radius:16px;padding:18px 20px;box-shadow:0 6px 18px rgba(0,0,0,.04)}
 .facts b{display:block;font-size:22px;color:var(--dark)}
@@ -66,6 +67,7 @@ h3{font-size:18px;color:var(--dark);margin-bottom:8px}
 .coords svg{color:var(--accent);margin-top:2px}
 .coords b{display:block;color:#fff;font-size:14px}
 .coords a,.coords span{color:#d1d5db}
+.coords-light b{color:var(--dark)}.coords-light a,.coords-light span{color:#4b5563}.coords-light svg{color:var(--primary)}
 .ftr{background:#0b0f19;color:#9ca3af;font-size:14px;padding:22px 0}
 .ftr-in{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center}
 .ftr a:hover{color:#fff}.made{margin-left:auto;opacity:.6}

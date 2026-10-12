@@ -2,6 +2,7 @@
 // Sourcing de prospects BTP via l'API publique Recherche d'entreprises (SIRENE/RNE, gratuite, sans clé).
 //
 //   node prospection/sourcer.mjs --departement 69 --metier maconnerie [--page 1] [--effectif 01,02,03,11,12]
+//   node prospection/sourcer.mjs --lyon --metier restaurant [--page 1]   (Lyon intra-muros, 69001 → 69009)
 //
 // Écrit, pour chaque entreprise active trouvée :
 //   data/candidats/<dep>-<metier>-p<page>.jsonl  (une ligne par entreprise)
@@ -26,7 +27,8 @@ function arg(name, def) {
   return i >= 0 ? process.argv[i + 1] : def;
 }
 
-const dep = arg('departement');
+const LYON = process.argv.includes('--lyon') ? ['69001', '69002', '69003', '69004', '69005', '69006', '69007', '69008', '69009'] : null;
+const dep = LYON ? '69' : arg('departement');
 const metier = arg('metier');
 const page = Number(arg('page', '1'));
 const effectif = arg('effectif', '01,02,03,11,12');
@@ -54,7 +56,7 @@ const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().
 
 const params = new URLSearchParams({
   activite_principale: METIERS[metier].naf.join(','),
-  departement: dep,
+  ...(LYON ? { code_postal: LYON.join(',') } : { departement: dep }),
   tranche_effectif_salarie: effectif,
   etat_administratif: 'A',
   per_page: '25',
@@ -71,7 +73,7 @@ let horsZone = 0;
 for (const e of data.results || []) {
   const s = e.siege || {};
   // L'API retient une entreprise dès qu'UN établissement est dans le département : on ne garde que les sièges locaux.
-  if (s.departement !== dep) { horsZone++; continue; }
+  if (LYON ? !LYON.includes(s.code_postal) : s.departement !== dep) { horsZone++; continue; }
   const enseigne = [(s.liste_enseignes || [])[0], s.nom_commercial].find(enseigneUtilisable);
   const nom = titleCase(enseigne || e.nom_raison_sociale || e.nom_complet);
   const slug = slugify(`${nom}-${s.code_postal || dep}`);
@@ -121,7 +123,7 @@ for (const e of data.results || []) {
   }
 }
 
-const out = join(ROOT, 'data', 'candidats', `${dep}-${metier}-p${page}.jsonl`);
+const out = join(ROOT, 'data', 'candidats', `${LYON ? 'lyon' : dep}-${metier}-p${page}.jsonl`);
 writeFileSync(out, lines.join('\n') + (lines.length ? '\n' : ''));
 console.log(`${lines.length} entreprises (page ${page}/${data.total_pages ?? '?'}, ${data.total_results ?? '?'} au total) → ${out}`);
-console.log(`${horsZone} écartées (siège hors du ${dep}), ${created} nouveaux brouillons de profil dans data/profils/`);
+console.log(`${horsZone} écartées (siège hors ${LYON ? 'de Lyon' : 'du ' + dep}), ${created} nouveaux brouillons de profil dans data/profils/`);
