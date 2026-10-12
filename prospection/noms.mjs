@@ -1,7 +1,9 @@
 // Mise en forme des noms issus des registres (tout en majuscules) : « VILLEFRANCHE-SUR-SAONE » → « Villefranche-sur-Saone ».
 const PETITS = new Set(['de', 'du', 'des', 'la', 'le', 'les', 'et', 'en', 'sur', 'sous', 'aux', 'au', 'lès', 'les', 'l', 'd']);
 // Accents perdus dans les registres, pour les mots les plus fréquents du BTP et des communes.
-const ACCENTS = { batiment: 'bâtiment', batiments: 'bâtiments', electricite: 'électricité', electrique: 'électrique', renovation: 'rénovation', renov: 'rénov', pere: 'père', freres: 'frères', frere: 'frère', saone: 'saône', etancheite: 'étanchéité', energie: 'énergie', energies: 'énergies', metallerie: 'métallerie', habitat: 'habitat', genie: 'génie', thermique: 'thermique', ecole: 'école', eglise: 'église', venissieux: 'vénissieux', decines: 'décines', ecully: 'écully', brindas: 'brindas', ollieres: 'ollières', pres: 'près', federation: 'fédération' };
+const ACCENTS = { batiment: 'bâtiment', batiments: 'bâtiments', electricite: 'électricité', electrique: 'électrique', renovation: 'rénovation', renov: 'rénov', pere: 'père', freres: 'frères', frere: 'frère', saone: 'saône', etancheite: 'étanchéité', energie: 'énergie', energies: 'énergies', metallerie: 'métallerie', habitat: 'habitat', genie: 'génie', thermique: 'thermique', ecole: 'école', eglise: 'église', venissieux: 'vénissieux', decines: 'décines', ecully: 'écully', brindas: 'brindas', ollieres: 'ollières', pres: 'près', federation: 'fédération',
+  // Prénoms fréquents (les registres les stockent sans accent)
+  rene: 'rené', frederic: 'frédéric', raphael: 'raphaël', jerome: 'jérôme', stephane: 'stéphane', sebastien: 'sébastien', gerard: 'gérard', helene: 'hélène', jeremy: 'jérémy', cedric: 'cédric', gregory: 'grégory', valerie: 'valérie', emilie: 'émilie', francois: 'françois', herve: 'hervé', andre: 'andré', joel: 'joël', noel: 'noël', michael: 'michaël', mickael: 'mickaël', gael: 'gaël', anais: 'anaïs', celine: 'céline', aurelien: 'aurélien', theo: 'théo', leo: 'léo', jose: 'josé', regis: 'régis', remi: 'rémi', remy: 'rémy', benoit: 'benoît', jerémy: 'jérémy', eric: 'éric', emile: 'émile', etienne: 'étienne', amelie: 'amélie', elodie: 'élodie' };
 const SIGLES = /^(sarl|sas|sasu|eurl|snc|sci|ets|sa)$/i;
 
 export function titleCase(s) {
@@ -14,7 +16,9 @@ export function titleCase(s) {
       if (SIGLES.test(w) || (w.length <= 4 && !/[aeiouyàâéèêîôû]/.test(w) && /^\p{L}+$/u.test(w))) return w.toUpperCase();
       if (i > 0 && PETITS.has(w)) return w;
       // Pas de majuscule après une apostrophe (« Ram's »), sauf élision en tête (« L'Atelier », « D'Arcy »).
-      return w.replace(/^(\p{L})/u, (c) => c.toUpperCase()).replace(/^([ld]['’])(\p{L})/iu, (m, a, b) => a.toUpperCase() + b.toUpperCase());
+      // Élision : « L'Atelier » en tête, « Chazay-d'Azergues » ailleurs.
+      if (/^[ld]['’]\p{L}/u.test(w)) return (i === 0 ? w[0].toUpperCase() : w[0]) + w[1] + w[2].toUpperCase() + w.slice(3);
+      return w.replace(/^(\p{L})/u, (c) => c.toUpperCase());
     })
     .join('');
 }

@@ -57,6 +57,9 @@ async function audit(target) {
   const text = h.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
   if (text.length < 3000 && /site en construction|en cours de construction|under construction|coming soon|bientôt disponible|en maintenance|mode maintenance|maintenance mode|undergoing maintenance|available soon|site not installed|page par défaut|default page|domaine (?:a été )?réservé|this domain|parked/i.test(text))
     return { url: res.finalUrl, verdict: 'aucun_site', score: 0, problemes: ['Le site n\'affiche qu\'une page d\'attente (« en construction » ou maintenance)'] };
+  // Page par défaut d'un hébergeur / domaine parqué (OVH, IONOS, Sedo…) : le domaine existe, pas le site.
+  if (/\/__ovh\/|Copyright 1999 OVH|url=defaultsite|sedoparking|parkingcrew|bodis\.com|this domain (?:is|may be) for sale|ce domaine est à vendre/i.test(h))
+    return { url: res.finalUrl, verdict: 'aucun_site', score: 0, problemes: ['Le nom de domaine n\'affiche que la page par défaut de l\'hébergeur : aucun site en ligne'] };
   if (/There has been a critical error|Erreur critique|Fatal error|Database Error/i.test(text) && text.length < 3000)
     return { url: res.finalUrl, verdict: 'site_obsolete', score: 0, problemes: ['Le site affiche un message d\'erreur au lieu de son contenu'] };
   if (/\.(wixsite\.com|e-monsite\.com|jimdofree\.com|jimdosite\.com|site123\.me|wordpress\.com|webnode\.fr|blogspot\.com)\b/i.test(new URL(res.finalUrl).hostname))

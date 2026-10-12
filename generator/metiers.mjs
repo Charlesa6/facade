@@ -5,7 +5,7 @@
 
 export const METIERS = {
   maconnerie: {
-    label: 'Maçonnerie générale', naf: ['43.99C'],
+    label: 'Maçonnerie générale', pros: 'des maçons', naf: ['43.99C'],
     palette: { primary: '#9A3412', accent: '#F59E0B', dark: '#1C1917', soft: '#FFF7ED' },
     icon: 'brick',
     services: [
@@ -16,7 +16,7 @@ export const METIERS = {
     ],
   },
   couverture: {
-    label: 'Couverture & zinguerie', naf: ['43.91A', '43.91B'],
+    label: 'Couverture & zinguerie', pros: 'des couvreurs', naf: ['43.91A', '43.91B'],
     palette: { primary: '#334155', accent: '#DC2626', dark: '#0F172A', soft: '#F1F5F9' },
     icon: 'roof',
     services: [
@@ -27,7 +27,7 @@ export const METIERS = {
     ],
   },
   electricite: {
-    label: 'Électricité générale', naf: ['43.21A', '43.21B'],
+    label: 'Électricité générale', pros: 'des électriciens', naf: ['43.21A', '43.21B'],
     palette: { primary: '#1E3A8A', accent: '#FACC15', dark: '#0B1220', soft: '#EFF6FF' },
     icon: 'bolt',
     services: [
@@ -38,7 +38,7 @@ export const METIERS = {
     ],
   },
   plomberie: {
-    label: 'Plomberie & chauffage', naf: ['43.22A', '43.22B'],
+    label: 'Plomberie & chauffage', pros: 'des plombiers-chauffagistes', naf: ['43.22A', '43.22B'],
     palette: { primary: '#0369A1', accent: '#F97316', dark: '#082F49', soft: '#F0F9FF' },
     icon: 'drop',
     services: [
@@ -49,7 +49,7 @@ export const METIERS = {
     ],
   },
   menuiserie: {
-    label: 'Menuiserie', naf: ['43.32A', '43.32B', '16.23Z'],
+    label: 'Menuiserie', pros: 'des menuisiers', naf: ['43.32A', '43.32B', '16.23Z'],
     palette: { primary: '#78350F', accent: '#65A30D', dark: '#1C1917', soft: '#FEFCE8' },
     icon: 'window',
     services: [
@@ -60,7 +60,7 @@ export const METIERS = {
     ],
   },
   peinture: {
-    label: 'Peinture & revêtements', naf: ['43.34Z', '43.33Z'],
+    label: 'Peinture & revêtements', pros: 'des peintres en bâtiment', naf: ['43.34Z', '43.33Z'],
     palette: { primary: '#0F766E', accent: '#F472B6', dark: '#042F2E', soft: '#F0FDFA' },
     icon: 'brush',
     services: [
@@ -71,7 +71,7 @@ export const METIERS = {
     ],
   },
   paysage: {
-    label: 'Aménagement paysager', naf: ['81.30Z'],
+    label: 'Aménagement paysager', pros: 'des paysagistes', naf: ['81.30Z'],
     palette: { primary: '#166534', accent: '#CA8A04', dark: '#052E16', soft: '#F0FDF4' },
     icon: 'leaf',
     services: [
@@ -82,7 +82,7 @@ export const METIERS = {
     ],
   },
   terrassement: {
-    label: 'Terrassement & VRD', naf: ['43.12A', '43.12B', '42.11Z'],
+    label: 'Terrassement & VRD', pros: 'des entreprises de terrassement', naf: ['43.12A', '43.12B', '42.11Z'],
     palette: { primary: '#854D0E', accent: '#EAB308', dark: '#1C1917', soft: '#FEFCE8' },
     icon: 'digger',
     services: [
@@ -93,7 +93,7 @@ export const METIERS = {
     ],
   },
   general: {
-    label: 'Bâtiment tous corps d\'état', naf: ['43.99A', '43.99B', '43.99D', '43.99E', '43.29A', '43.29B', '43.31Z', '43.39Z'],
+    label: 'Bâtiment tous corps d\'état', pros: 'des entreprises du bâtiment', naf: ['43.99A', '43.99B', '43.99D', '43.99E', '43.29A', '43.29B', '43.31Z', '43.39Z'],
     palette: { primary: '#1F2937', accent: '#F59E0B', dark: '#111827', soft: '#F9FAFB' },
     icon: 'crane',
     services: [

@@ -1,6 +1,6 @@
 # Séquence de prospection Façade (modèles)
 
-Variables : `{prenom_nom}` (dirigeant publié, sinon « Bonjour, »), `{entreprise}`, `{ville}`, `{metier}`, `{lien_maquette}`, `{probleme}` (premier problème de l'audit, ou « je n'ai pas trouvé de site à votre nom »), `{pied}` (pied de désinscription, voir `.claude/agents/site-seller.md`).
+Variables : `{site_de}` (« Le site de X » / « Le site d'X »), `{pros}` (« des couvreurs »…), `{prenom_nom}` (dirigeant publié, sinon « Bonjour, »), `{entreprise}`, `{ville}`, `{lien_maquette}`, `{probleme}` (premier problème de l'audit, ou « je n'ai pas trouvé de site à votre nom »), `{pied}` (pied de désinscription, voir `.claude/agents/site-seller.md`).
 
 Toujours personnaliser au moins une phrase. Texte brut, pas d'image, pas de pièce jointe.
 
@@ -8,11 +8,11 @@ Toujours personnaliser au moins une phrase. Texte brut, pas d'image, pas de piè
 
 ## Email 1 (J0) — la maquette
 
-**Objet** : Le site de {entreprise} (déjà prêt)
+**Objet** : {site_de} (déjà prêt)
 
 Bonjour {prenom_nom},
 
-En cherchant des entreprises de {metier} à {ville}, {probleme}.
+En cherchant {pros} à {ville}, {probleme}.
 
 Plutôt que de vous proposer un devis, j'ai préparé une maquette du site de {entreprise}, à partir des informations publiques de votre entreprise :
 {lien_maquette}
@@ -29,7 +29,7 @@ Charles
 
 ## Relance 1 (J+4 ouvrés) — l'usage
 
-**Objet** : Re: Le site de {entreprise} (déjà prêt)
+**Objet** : Re: {site_de} (déjà prêt)
 
 Bonjour {prenom_nom},
 
@@ -48,7 +48,7 @@ Charles
 
 ## Relance 2 (J+10 ouvrés) — la clôture
 
-**Objet** : Re: Le site de {entreprise} (déjà prêt)
+**Objet** : Re: {site_de} (déjà prêt)
 
 Bonjour {prenom_nom},
 

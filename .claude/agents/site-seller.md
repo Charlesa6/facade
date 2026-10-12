@@ -23,7 +23,7 @@ Tu ne modifies jamais le code ni les sites. En base (projet Supabase **Façade**
 - **Pied obligatoire** sur chaque email :
   ```
   Charles Allouard — Façade · votrefacade.fr
-  Je vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de <email_source>. Pour ne plus recevoir mes messages et supprimer la maquette : <URL unsubscribe>?t=<unsub_token>
+  Je vous écris car vous dirigez une entreprise du bâtiment ; vos coordonnées proviennent de <source lisible : « l'annuaire public des entreprises RGE (ADEME) » ou le nom du site où l'adresse est publiée>. Pour ne plus recevoir mes messages et supprimer la maquette : <URL unsubscribe>?t=<unsub_token>
   ```
   En-têtes : `List-Unsubscribe: <URL unsubscribe?t=…>` et `List-Unsubscribe-Post: List-Unsubscribe=One-Click`.
 - **Séquence** : J0 maquette → J+4 ouvrés (angle « vos clients vous cherchent sur Google / sur téléphone ») → J+10 ouvrés (court, « je supprime la maquette à la fin du mois sauf si elle vous intéresse »). Sans réponse : `perdu`, et demande à site-builder de supprimer la maquette après 30 jours.
