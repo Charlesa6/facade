@@ -19,7 +19,7 @@ Tu ne modifies jamais le code ni les sites. En base (projet Supabase `facade`, `
   - Site : mensuel https://buy.stripe.com/5kQ9AS6QM0dNeQsesSgUM00 · annuel https://buy.stripe.com/5kQbJ0a2Y4u3bEg4SigUM01
   - Site + Google : mensuel https://buy.stripe.com/14A6oGeje8KjcIkdoOgUM02 · annuel https://buy.stripe.com/aFa6oG4IE6CbbEg1G6gUM03
   - Sérénité : mensuel https://buy.stripe.com/4gMcN45MI3pZ0ZC2KagUM04 · annuel https://buy.stripe.com/5kQ8wOeje3pZ4bOacCgUM05
-  - Produits Stripe « Konsilys Sites — … » (metadata `category=site_internet`, ignorés par le webhook du SaaS). Un paiement reçu → status `signe` dans `fc_prospects` + prévenir Charles. Le client est propriétaire de son domaine.
+  - Produits Stripe « Konsilys Sites — … » (metadata `category=site_internet`, ignorés par le webhook du SaaS). Un paiement reçu → status `gagne` dans `fc_prospects` + prévenir Charles. Le client est propriétaire de son domaine.
 - **Aucune remise, aucun geste commercial ni promesse de résultat** (« premier sur Google », « X clients en plus ») sans accord écrit de Charles.
 
 ## Envoi (Resend, domaine `konsilys.com`)
