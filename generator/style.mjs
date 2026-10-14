@@ -83,6 +83,63 @@ h3{font-size:18px;color:var(--dark);margin-bottom:8px}
 .ftr a:hover{color:#fff}.made{margin-left:auto;opacity:.6}
 .legal{max-width:760px}.legal h1{font-size:36px}.legal h2{font-size:20px;margin:32px 0 12px}.legal p{color:#4b5563}
 .link{color:var(--primary);font-weight:700}
+/* ── Thème « terroir » (fromagerie) : serif brique, crème et sable, photo plein écran, liens soulignés ── */
+.th-terroir{--sand:#E4E1D6;font-family:Mulish,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--soft);color:#4A2A18}
+.th-terroir h1,.th-terroir h2,.th-terroir h3,.th-terroir .logo,.th-terroir .lien,.th-terroir .facts b{font-family:Merriweather,Georgia,serif;letter-spacing:0}
+.th-terroir h1,.th-terroir h2,.th-terroir h3{color:var(--primary);font-weight:700}
+.th-terroir h2{font-size:clamp(26px,3vw,34px)}
+.th-terroir .eyebrow{color:var(--accent);letter-spacing:.14em}
+.th-terroir .hdr{background:rgba(244,242,236,.96);border-bottom-color:var(--sand)}
+.th-terroir .logo{color:var(--primary)}.th-terroir .logo-mark{border-radius:50%}
+.th-terroir .btn{border-radius:2px}
+.th-terroir .btn-accent{background:var(--primary);color:#fff}
+.th-terroir .btn-ghost{background:transparent}
+.th-terroir .lien{display:inline-block;color:var(--primary);font-weight:700;font-size:15px;border-bottom:1.5px solid currentColor;padding-bottom:2px}
+.th-terroir .lien:hover{opacity:.75}
+.hero-t{position:relative;overflow:hidden;background:var(--sand);padding:110px 0 96px;text-align:center}
+.hero-t-photo{padding:150px 0 130px}
+.hero-t-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-t-photo::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(rgba(30,16,8,.45),rgba(30,16,8,.62))}
+.hero-t .credit{z-index:3;left:auto;right:12px;bottom:12px}
+.hero-t-ic{position:absolute;right:-60px;bottom:-90px;color:var(--primary);opacity:.07;pointer-events:none}
+.hero-t-in{position:relative;z-index:2;max-width:820px}
+.hero-t .lead{margin:0 auto;font-size:18px}
+.hero-t .hero-cta{justify-content:center;align-items:center;gap:26px}
+.hero-t-photo h1,.hero-t-photo .lead{color:#fff}.hero-t-photo .eyebrow{color:#F3DDB0}
+.hero-t-photo .lien{color:#fff}
+.th-terroir .facts{margin-top:-40px;position:relative;z-index:3;display:flex;flex-wrap:wrap;justify-content:center}
+.th-terroir .facts li{flex:0 1 300px}
+.th-terroir .facts li{border-radius:2px;border-color:var(--sand);text-align:center}
+.th-terroir .facts b{color:var(--primary)}
+.intro-t{text-align:center;max-width:640px;margin:0 auto 40px}
+.rang{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin:0 0 64px}
+.rang-inv .rang-vis{order:2}
+.rang-vis{position:relative;aspect-ratio:3/2;background:var(--sand);overflow:hidden}
+.rang-vis img{width:100%;height:100%;object-fit:cover;display:block}
+.blocs-t{display:grid;grid-template-columns:repeat(2,1fr);gap:28px 56px;max-width:980px;margin:0 auto}
+.bloc-t{border-top:1px solid var(--sand);padding-top:22px}
+.num-t{display:block;font-family:Merriweather,Georgia,serif;font-size:30px;color:var(--accent);margin-bottom:6px}
+.bloc-t p{color:#6B4A36;margin:6px 0 16px}
+.bloc-t.tbv{background:none;outline:none}.is-preview .bloc-t.tbv{outline:2px dashed rgba(234,179,8,.6);outline-offset:6px}
+.rang-txt p{color:#6B4A36;margin:8px 0 20px;text-align:justify}
+.rang.tbv{background:none;outline:none}.is-preview .rang.tbv .rang-txt{outline:2px dashed rgba(234,179,8,.6);outline-offset:8px}
+.th-terroir .sec-soft{background:var(--sand);position:relative;overflow:hidden}
+.th-terroir .sec-soft .wrap{position:relative;z-index:1}
+.filigrane{position:absolute;right:-80px;top:-60px;color:var(--primary);opacity:.06;pointer-events:none}
+.th-terroir .panel,.th-terroir .card{border-radius:2px;border-color:var(--sand)}
+.th-terroir .checks svg,.th-terroir .coords-light svg,.th-terroir .zone svg{color:var(--primary)}
+.th-terroir .sec-dark{background:var(--dark)}
+.th-terroir .sec-dark h2{color:#F3DDB0}.th-terroir .sec-dark .eyebrow{color:var(--accent)}
+.th-terroir .ftr{background:var(--sand);color:var(--primary)}
+.th-terroir .ftr a:hover{color:var(--dark)}
+.th-terroir .gal figure{border-radius:2px}
+@media (max-width:860px){
+  .hero-t{padding:72px 0 80px}.hero-t-photo{padding:96px 0 104px}
+  .rang{grid-template-columns:1fr;gap:18px;margin-bottom:44px}.rang-inv .rang-vis{order:0}
+  .blocs-t{grid-template-columns:1fr;gap:22px}
+  .rang-txt p{text-align:left}
+  .th-terroir .facts{margin-top:-28px}
+}
 @media (max-width:860px){
   .nav{display:none}.hdr-cta{margin-left:auto}
   .hero{padding:40px 0 24px}.hero-in,.two{grid-template-columns:1fr;gap:28px}

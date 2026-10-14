@@ -186,7 +186,9 @@ export const METIERS = {
     // 47.29Z regroupe aussi d'autres commerces alimentaires (épiceries fines) : métier à vérifier au sourcing.
     famille: 'commerce', activite: 'une fromagerie', photos: 'photos de vos fromages', schema: 'Store',
     label: 'Fromagerie', pros: 'des fromagers', naf: ['47.29Z'],
-    palette: { primary: '#A16207', accent: '#FDE68A', dark: '#1C1917', soft: '#FEFCE8' },
+    // Thème « terroir » (style maison de fromager-affineur) : titres serif, tons crème et brique, photo plein écran.
+    theme: 'terroir',
+    palette: { primary: '#8A3A14', accent: '#C8A15A', dark: '#3A2414', soft: '#F4F2EC' },
     icon: 'cheese',
     cta: 'Passer commande', titreServices: 'Nos produits',
     description: '{name}, votre fromager {a_ville} : fromages affinés, crèmerie et conseils pour vos plateaux.',

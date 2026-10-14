@@ -28,6 +28,7 @@ export function normalize(p) {
     zone,
     annee,
     commerce: m.famille === 'commerce',
+    theme: m.theme || null,
     schema: m.schema || 'HomeAndConstructionBusiness',
     cta: m.cta || 'Demander un devis gratuit',
     titreServices: m.titreServices || 'Ce que nous faisons pour vous',
@@ -83,7 +84,7 @@ function hero(d) {
 const credit = (ph) => (ph.origine === 'google' ? '<span class="credit">Photo : fiche Google</span>' : '');
 
 function galerie(d) {
-  const autres = d.photos.slice(1);
+  const autres = d.photos.slice(1 + (d.photosRangees || 0));
   if (!autres.length) return '';
   return `<section class="sec gal-sec" id="photos"><div class="wrap">
   <p class="eyebrow">En images</p><h2>${d.commerce ? `Découvrez ${esc(d.name)}` : 'Nos réalisations'}</h2>
@@ -102,13 +103,50 @@ function services(d) {
 </div></section>`;
 }
 
+// ── Thème « terroir » : photo plein écran (ou fond sable et grand pictogramme), titre serif centré.
+function heroTerroir(d) {
+  const ph = d.photos[0];
+  const facts = [];
+  const age = d.annee ? new Date().getFullYear() - d.annee : 0;
+  if (d.annee) facts.push(age >= 2 ? `<li><b>${age} ans</b><span>de savoir-faire</span></li>` : `<li><b>${d.annee}</b><span>année de création</span></li>`);
+  if (d.google_note) facts.push(`<li><b>${esc(String(d.google_note).replace('.', ','))} ★</b><span>${d.google_avis ? `${esc(d.google_avis)} avis Google` : 'note Google'}</span></li>`);
+  if (d.ville) facts.push(`<li><b>${esc(d.ville)}</b><span>${d.adresse ? esc(d.adresse) : 'votre adresse de quartier'}</span></li>`);
+  return `<section class="hero-t${ph ? ' hero-t-photo' : ''}" id="top">
+  ${ph ? `<img class="hero-t-img" src="${esc(ph.src)}" alt="${esc(ph.legende || d.name)}" loading="eager">${credit(ph)}` : `<span class="hero-t-ic" aria-hidden="true">${icon(d.icon, 420)}</span>`}
+  <div class="wrap hero-t-in">
+    <p class="eyebrow">${esc(d.metier_label)}${d.ville ? ' · ' + esc(d.ville) : ''}</p>
+    <h1>${esc(d.accroche)}</h1>
+    <p class="lead${d.description_a_valider ? ' tbv' : ''}">${esc(d.description)}</p>
+    <div class="hero-cta"><a class="btn btn-accent btn-lg" href="${d.telephone ? telHref(d.telephone) : '#contact'}">${esc(d.cta)}</a><a class="lien" href="#zone">Nous trouver</a></div>
+  </div>
+</section>${facts.length ? `<div class="wrap"><ul class="facts">${facts.join('')}</ul></div>` : ''}`;
+}
+
+// Prestations : rangées alternées image / texte pour celles qu'illustre une photo (photos 2 à 5),
+// les autres en blocs de texte numérotés (jamais de grand cadre vide).
+function servicesTerroir(d) {
+  const illus = d.photos.slice(1, 1 + d.services.length);
+  d.photosRangees = illus.length;
+  const lien = `<a class="lien" href="${d.telephone ? telHref(d.telephone) : '#contact'}">${esc(d.cta)}</a>`;
+  const rangs = d.services.slice(0, illus.length).map((s, i) => `<article class="rang${i % 2 ? ' rang-inv' : ''}${s.a_valider ? ' tbv' : ''}">
+    <div class="rang-vis"><img src="${esc(illus[i].src)}" alt="${esc(illus[i].legende || s.titre)}" loading="lazy">${credit(illus[i])}</div>
+    <div class="rang-txt"><h3>${esc(s.titre)}</h3><p>${esc(s.description)}</p>${lien}</div>
+  </article>`).join('');
+  const reste = d.services.slice(illus.length);
+  const blocs = reste.length ? `<div class="blocs-t">${reste.map((s, i) => `<article class="bloc-t${s.a_valider ? ' tbv' : ''}"><span class="num-t">${String(illus.length + i + 1).padStart(2, '0')}</span><h3>${esc(s.titre)}</h3><p>${esc(s.description)}</p>${lien}</article>`).join('')}</div>` : '';
+  return `<section class="sec" id="services"><div class="wrap">
+  <div class="intro-t"><p class="eyebrow">${esc(d.metier_label)}</p><h2>${esc(d.titreServices)}</h2></div>
+  ${rangs}${blocs}
+</div></section>`;
+}
+
 function atouts(d) {
   const items = d.atouts.length ? d.atouts.map((a) => ({ t: a, tbv: false })) : d.atouts_defaut ? d.atouts_defaut.map((t) => ({ t, tbv: true })) : [
     { t: 'Devis détaillé et gratuit, sans engagement', tbv: true },
     { t: 'Un interlocuteur unique du devis à la réception du chantier', tbv: true },
     { t: 'Chantiers propres, délais annoncés et tenus', tbv: true },
   ];
-  return `<section class="sec sec-soft" id="atouts"><div class="wrap two">
+  return `<section class="sec sec-soft" id="atouts">${d.theme === 'terroir' ? `<span class="filigrane" aria-hidden="true">${icon(d.icon, 560)}</span>` : ''}<div class="wrap two">
   <div><p class="eyebrow">${d.commerce ? 'La maison' : 'L\'entreprise'}</p><h2>${d.commerce ? `Bienvenue chez ${esc(d.name)}` : `Pourquoi choisir ${esc(d.name)}&nbsp;?`}</h2>
   ${d.histoire ? `<p>${esc(d.histoire)}</p>` : ''}
   <ul class="checks">${items.map((i) => `<li class="${i.tbv ? 'tbv' : ''}">${icon('check', 20)}<span>${esc(i.t)}</span></li>`).join('')}</ul></div>
@@ -178,7 +216,7 @@ function head(d, { preview, title, description }) {
 ${preview ? '<meta name="robots" content="noindex,nofollow,noarchive">' : ''}
 <meta name="theme-color" content="${esc(p.primary)}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=${d.theme === 'terroir' ? 'Merriweather:wght@400;700;900&family=Mulish:wght@400;600;700' : 'Inter:wght@400;600;700;800'}&display=swap" rel="stylesheet">
 <style>:root{--primary:${p.primary};--accent:${p.accent};--dark:${p.dark};--soft:${p.soft}}${CSS}</style>`;
 }
 
@@ -199,7 +237,7 @@ export function renderIndex(profile, { preview = false, liens = {} } = {}) {
   if (!preview) d.photos = d.photos.filter((ph) => ph.origine !== 'google');
   const title = `${d.name} — ${d.metier_label}${d.ville ? ' à ' + d.ville : ''}`;
   return `${head(d, { preview, title, description: d.accroche })}${preview ? '' : jsonLd(d)}</head>
-<body class="${preview ? 'is-preview' : ''}">${preview ? previewBanner(d) : ''}${header(d)}<main>${hero(d)}${services(d)}${galerie(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d, liens)}</body></html>
+<body class="${[preview && 'is-preview', d.theme && 'th-' + d.theme].filter(Boolean).join(' ')}">${preview ? previewBanner(d) : ''}${header(d)}<main>${d.theme === 'terroir' ? heroTerroir(d) + servicesTerroir(d) : hero(d) + services(d)}${galerie(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d, liens)}</body></html>
 `;
 }
 
@@ -207,7 +245,7 @@ export function renderMentions(profile, { preview = false, liens = {} } = {}) {
   const d = normalize(profile);
   const row = (k, v) => (v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : '');
   return `${head(d, { preview, title: `Mentions légales — ${d.name}`, description: `Mentions légales du site ${d.name}` })}</head>
-<body class="${preview ? 'is-preview' : ''}">${preview ? previewBanner(d) : ''}${header(d)}<main class="sec"><div class="wrap legal">
+<body class="${[preview && 'is-preview', d.theme && 'th-' + d.theme].filter(Boolean).join(' ')}">${preview ? previewBanner(d) : ''}${header(d)}<main class="sec"><div class="wrap legal">
 <h1>Mentions légales</h1>
 <h2>Éditeur du site</h2><dl>
 ${row('Raison sociale', d.raison_sociale)}${row('Forme juridique', d.forme_juridique)}${row('SIREN', d.siren)}${row('Siège', d.adresse)}${row('Téléphone', d.telephone)}${row('Email', d.email)}${row('Directeur de la publication', d.directeur_publication)}

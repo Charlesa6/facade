@@ -108,6 +108,25 @@ test('photos : principale + galerie ; photos Google seulement dans la maquette ;
   assert.doesNotMatch(renderIndex({ raison_sociale: 'X', metier: 'boulangerie', google_maps_url: 'https://evil.test/maps/' }), /avis Google/);
 });
 
+test('fromagerie : thème terroir (serif, photo plein écran, rangées alternées)', () => {
+  const base = { raison_sociale: 'FROMAGERIE TEST', metier: 'fromager', ville: 'Lyon 2e', telephone: '04 00 00 00 08' };
+  const sans = renderIndex(base, { preview: true });
+  assert.match(sans, /class="is-preview th-terroir"/);
+  assert.match(sans, /family=Merriweather/);
+  assert.match(sans, /class="hero-t"/);
+  assert.match(sans, /class="blocs-t"[\s\S]*class="num-t">01/);
+  assert.ok(!/class="rang/.test(sans), 'pas de cadre vide sans photo');
+  assert.match(sans, /class="filigrane"/);
+  const ph = (n) => ({ src: `https://x.supabase.co/storage/v1/object/public/maquettes-photos/${n}.jpg` });
+  const avec = renderIndex({ ...base, photos: [ph('a'), ph('b'), ph('c'), ph('d'), ph('e'), ph('f')] }, { preview: false });
+  assert.match(avec, /hero-t hero-t-photo[\s\S]*a\.jpg/);
+  assert.match(avec, /class="rang-vis"><img src="[^"]*b\.jpg/);
+  assert.ok(!/<figure><img src="[^"]*b\.jpg/.test(avec), 'photo des rangées non répétée dans la galerie');
+  assert.match(avec, /<figure><img src="[^"]*f\.jpg/);
+  const boulangerie = renderIndex({ ...base, metier: 'boulangerie' });
+  assert.ok(!/<body class="[^"]*th-terroir|family=Merriweather/.test(boulangerie), 'les autres métiers gardent le thème standard');
+});
+
 test('profil sans nom refusé', () => {
   assert.throws(() => normalize({ metier: 'maconnerie' }));
 });
