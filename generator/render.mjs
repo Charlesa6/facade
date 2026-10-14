@@ -28,7 +28,7 @@ export function normalize(p) {
     zone,
     annee,
     commerce: m.famille === 'commerce',
-    theme: m.theme || null,
+    theme: THEMES[m.theme] ? m.theme : null,
     schema: m.schema || 'HomeAndConstructionBusiness',
     cta: m.cta || 'Demander un devis gratuit',
     titreServices: m.titreServices || 'Ce que nous faisons pour vous',
@@ -174,6 +174,167 @@ function servicesMaison(d) {
 </div></section>`;
 }
 
+// ── Thèmes de commerces (boulangerie, fleuriste, coiffure, restaurant, poissonnerie) : mêmes données, mises en page propres.
+// Rien d'inventé : seuls les champs du profil sont affichés ; les textes par défaut restent marqués « à valider ».
+const ctaHref = (d) => (d.telephone ? telHref(d.telephone) : '#contact');
+const noteGoogle = (d) => (d.google_note ? `<p class="note-g">${icon('star', 16)} ${esc(String(d.google_note).replace('.', ','))} / 5${d.google_avis ? ` · ${esc(d.google_avis)} avis Google` : ' sur Google'}</p>` : '');
+const imgPhoto = (ph, alt, cls = '', eager = false) => `<img${cls ? ` class="${cls}"` : ''} src="${esc(ph.src)}" alt="${esc(ph.legende || alt)}" loading="${eager ? 'eager' : 'lazy'}">${credit(ph)}`;
+// Photos 2 à n réservées aux prestations (non répétées ensuite dans la galerie).
+const illustrer = (d, n = d.services.length) => { const illus = d.photos.slice(1, 1 + n); d.photosRangees = illus.length; return illus; };
+
+// « Fournil » (boulangerie) : encadré blanc sur photo, titres capitales espacées, or, frise en damier, univers sur fond sombre.
+function heroFournil(d) {
+  const ph = d.photos[0];
+  return `<section class="hero-f${ph ? ' hero-f-photo' : ''}" id="top">
+  ${ph ? imgPhoto(ph, d.name, 'hero-f-img', true) : ''}
+  <div class="wrap"><div class="hero-f-box">
+    <p class="script">${esc(d.name)}</p>
+    <h1>${esc(d.accroche)}</h1>
+    <p class="lead${d.description_a_valider ? ' tbv' : ''}">${esc(d.description)}</p>
+    ${noteGoogle(d)}
+    <div class="hero-cta"><a class="btn btn-accent btn-lg" href="${ctaHref(d)}">${esc(d.cta)}</a><a class="btn btn-ghost btn-lg" href="#zone">Nous trouver</a></div>
+  </div></div>
+</section><div class="damier" aria-hidden="true"></div>`;
+}
+
+function servicesFournil(d) {
+  const illus = illustrer(d);
+  return `<section class="sec univers" id="services"><div class="wrap">
+  <h2 class="titre-f">${esc(d.titreServices)}</h2>
+  <div class="univ-grid">${d.services.map((s, i) => `<a class="univ${s.a_valider ? ' tbv' : ''}" href="${ctaHref(d)}">
+    ${illus[i] ? imgPhoto(illus[i], s.titre) : ''}<span class="univ-ic">${icon(d.icon, 30)}</span>
+    <span class="univ-txt"><b>${esc(s.titre)}</b><small>${esc(s.description)}</small></span>
+  </a>`).join('')}</div>
+</div></section><div class="damier" aria-hidden="true"></div>`;
+}
+
+// « Atelier » (fleuriste) : grand titre serif sur photo fondue, bandeau pêche, cartes produits en portrait.
+function heroAtelier(d) {
+  const ph = d.photos[0];
+  return `<section class="hero-a${ph ? ' hero-a-photo' : ''}" id="top">
+  ${ph ? `<div class="hero-a-vis">${imgPhoto(ph, d.name, '', true)}</div>` : `<span class="hero-a-ic" aria-hidden="true">${icon(d.icon, 420)}</span>`}
+  <div class="wrap"><div class="hero-a-txt">
+    <h1>${esc(d.accroche)}</h1>
+    ${d.adresse || d.ville ? `<p>${esc(d.adresse || d.ville)}</p>` : ''}
+    <div class="hero-cta"><a class="btn btn-accent btn-lg" href="${ctaHref(d)}">${esc(d.cta)}</a></div>
+  </div></div>
+</section>
+<section class="band-a"><div class="wrap">
+  <p class="eyebrow">Notre maison</p><h2>${esc(d.name)}</h2>
+  <p class="${d.description_a_valider ? 'tbv' : ''}">${esc(d.description)}</p>
+  ${noteGoogle(d)}<a class="btn btn-blanc" href="#zone">Nous trouver</a>
+</div></section>`;
+}
+
+function servicesAtelier(d) {
+  const illus = illustrer(d);
+  return `<section class="sec" id="services"><div class="wrap">
+  <div class="intro-t"><p class="eyebrow">La boutique</p><h2>${esc(d.titreServices)}</h2></div>
+  <div class="prods">${d.services.map((s, i) => `<a class="prod${s.a_valider ? ' tbv' : ''}" href="${ctaHref(d)}">
+    <span class="prod-vis">${illus[i] ? imgPhoto(illus[i], s.titre) : icon(d.icon, 72)}</span>
+    <b>${esc(s.titre)}</b><small>${esc(s.description)}</small>
+  </a>`).join('')}</div>
+  <div class="centre"><a class="btn btn-ghost btn-lg" href="${ctaHref(d)}">${esc(d.cta)}</a></div>
+</div></section>`;
+}
+
+// « Boucle » (coiffure) : grande photo arrondie, crème et corail, boutons pilule, cartes de prestations à pictogramme.
+function heroBoucle(d) {
+  const ph = d.photos[0];
+  return `<section class="hero-c${ph ? ' hero-c-photo' : ''}" id="top"><div class="wrap">
+  <div class="hero-c-box">
+    ${ph ? imgPhoto(ph, d.name, 'hero-c-img', true) : `<span class="hero-c-ic" aria-hidden="true">${icon(d.icon, 380)}</span>`}
+    <div class="hero-c-txt">
+      <p class="eyebrow">${esc(d.metier_label)}${d.ville ? ' · ' + esc(d.ville) : ''}</p>
+      <h1>${esc(d.accroche)}</h1>
+      <p class="lead${d.description_a_valider ? ' tbv' : ''}">${esc(d.description)}</p>
+      <div class="hero-cta"><a class="btn btn-accent btn-lg" href="${ctaHref(d)}">${esc(d.cta)}</a><a class="btn btn-ghost btn-lg" href="#zone">Nous trouver</a></div>
+    </div>
+  </div>
+  ${noteGoogle(d)}
+</div></section>`;
+}
+
+function servicesBoucle(d) {
+  const illus = illustrer(d);
+  return `<section class="sec" id="services"><div class="wrap">
+  <h2>${esc(d.titreServices)}</h2>
+  <div class="presta">${d.services.map((s, i) => `<article class="presta-c${s.a_valider ? ' tbv' : ''}">
+    ${illus[i] ? `<span class="presta-vis">${imgPhoto(illus[i], s.titre)}</span>` : `<span class="presta-ic">${icon(d.icon, 34)}</span>`}
+    <h3>${esc(s.titre)}</h3><p>${esc(s.description)}</p>
+  </article>`).join('')}</div>
+  <div class="centre"><a class="btn btn-accent btn-lg" href="${ctaHref(d)}">${esc(d.cta)}</a></div>
+</div></section>`;
+}
+
+// « Trattoria » (restaurant) : photo plein écran et nom en grandes capitales italiques, crème et brun, cartes à bordure fine.
+function heroTrattoria(d) {
+  const ph = d.photos[0];
+  return `<section class="hero-r${ph ? ' hero-r-photo' : ''}" id="top">
+  ${ph ? imgPhoto(ph, d.name, 'hero-r-img', true) : `<span class="hero-r-ic" aria-hidden="true">${icon(d.icon, 520)}</span>`}
+  <div class="wrap hero-r-in">
+    <p class="hero-r-nom">${esc(d.name)}</p>
+    <h1>${esc(d.metier_label)}${d.ville ? ', ' + esc(d.ville) : ''}</h1>
+    <a class="btn btn-clair" href="${ctaHref(d)}">${esc(d.cta)}</a>
+  </div>
+</section>`;
+}
+
+function servicesTrattoria(d) {
+  const ph = d.photos[1];
+  d.photosRangees = ph ? 1 : 0;
+  return `<section class="sec intro-r" id="services"><div class="wrap${ph ? ' intro-r-two' : ''}">
+  <div><h2 class="titre-r">${esc(d.accroche)}</h2>
+  <p class="${d.description_a_valider ? 'tbv' : ''}">${esc(d.description)}</p>${d.histoire ? `<p>${esc(d.histoire)}</p>` : ''}${noteGoogle(d)}</div>
+  ${ph ? `<div class="intro-r-vis">${imgPhoto(ph, d.name)}</div>` : ''}
+</div></section>
+<section class="sec cartes-sec"><div class="wrap">
+  <h2>${esc(d.titreServices)}</h2>
+  <div class="cartes-r">${d.services.map((s) => `<article class="carte-r${s.a_valider ? ' tbv' : ''}"><h3>${esc(s.titre)}</h3><div><p>${esc(s.description)}</p><a class="btn btn-accent" href="${ctaHref(d)}">${d.telephone ? 'Nous appeler' : 'Nous écrire'}</a></div></article>`).join('')}</div>
+</div></section>`;
+}
+
+// « Marée » (poissonnerie) : en-tête saumon, grand titre en capitales espacées, colonne de coordonnées, cartes ombrées.
+function heroMaree(d) {
+  const ph = d.photos[0];
+  const coords = [
+    d.telephone && `<li>${icon('phone')}<a href="${telHref(d.telephone)}">${esc(d.telephone)}</a></li>`,
+    d.email && `<li>${icon('mail')}<a href="mailto:${esc(d.email)}">${esc(d.email)}</a></li>`,
+    d.adresse && `<li>${icon('pin')}<span>${esc(d.adresse)}</span></li>`,
+    d.horaires && `<li>${icon('clock')}<span>${esc(d.horaires)}</span></li>`,
+  ].filter(Boolean);
+  return `<section class="hero-o${ph ? ' hero-o-photo' : ''}" id="top">
+  ${ph ? imgPhoto(ph, d.name, 'hero-o-img', true) : `<span class="hero-o-ic" aria-hidden="true">${icon(d.icon, 520)}</span>`}
+  <div class="wrap hero-o-in"><h1>${esc(d.accroche)}</h1><a class="btn btn-accent btn-lg" href="${ctaHref(d)}">${esc(d.cta)}</a></div>
+</section>
+<section class="sec intro-o"><div class="wrap${coords.length ? ' intro-o-two' : ''}">
+  <div><h2>${esc(d.name)}</h2><p class="lead${d.description_a_valider ? ' tbv' : ''}">${esc(d.description)}</p>${noteGoogle(d)}</div>
+  ${coords.length ? `<ul class="coords-o">${coords.join('')}</ul>` : ''}
+</div></section>`;
+}
+
+function servicesMaree(d) {
+  const illus = illustrer(d);
+  return `<section class="sec" id="services"><div class="wrap">
+  <h2 class="titre-o">${esc(d.titreServices)}</h2>
+  <div class="cartes-o">${d.services.map((s, i) => `<article class="carte-o${illus[i] ? ' carte-o-photo' : ''}${s.a_valider ? ' tbv' : ''}">
+    ${illus[i] ? `<span class="carte-o-vis">${imgPhoto(illus[i], s.titre)}</span>` : `<span class="carte-o-ic">${icon(d.icon, 34)}</span>`}
+    <h3>${esc(s.titre)}</h3><p>${esc(s.description)}</p>
+  </article>`).join('')}</div>
+</div></section>`;
+}
+
+// Polices, bandeau et sections propres à chaque thème (le thème vient du métier, voir metiers.mjs).
+const THEMES = {
+  terroir: { polices: 'Merriweather:wght@400;700;900&family=Mulish:wght@400;600;700', corps: (d) => heroTerroir(d) + servicesTerroir(d) },
+  maison: { polices: 'Playfair+Display:wght@400;600;700&family=Jost:wght@400;500;600', bandeau: true, corps: (d) => heroMaison(d) + servicesMaison(d) },
+  fournil: { polices: 'Montserrat:wght@400;500;600;700&family=Great+Vibes', corps: (d) => heroFournil(d) + servicesFournil(d) },
+  atelier: { polices: 'Gloock&family=Inter:wght@300;400;500;600', bandeau: true, corps: (d) => heroAtelier(d) + servicesAtelier(d) },
+  boucle: { polices: 'Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700', bandeau: true, corps: (d) => heroBoucle(d) + servicesBoucle(d) },
+  trattoria: { polices: 'Lora:ital,wght@0,400;0,500;1,400&family=Red+Hat+Display:wght@500;700&family=Playfair+Display:ital,wght@1,900', corps: (d) => heroTrattoria(d) + servicesTrattoria(d) },
+  maree: { polices: 'Lato:wght@300;400;700;900', corps: (d) => heroMaree(d) + servicesMaree(d) },
+};
+
 function atouts(d) {
   const items = d.atouts.length ? d.atouts.map((a) => ({ t: a, tbv: false })) : d.atouts_defaut ? d.atouts_defaut.map((t) => ({ t, tbv: true })) : [
     { t: 'Devis détaillé et gratuit, sans engagement', tbv: true },
@@ -250,7 +411,7 @@ function head(d, { preview, title, description }) {
 ${preview ? '<meta name="robots" content="noindex,nofollow,noarchive">' : ''}
 <meta name="theme-color" content="${esc(p.primary)}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=${{ terroir: 'Merriweather:wght@400;700;900&family=Mulish:wght@400;600;700', maison: 'Playfair+Display:wght@400;600;700&family=Jost:wght@400;500;600' }[d.theme] || 'Inter:wght@400;600;700;800'}&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=${THEMES[d.theme]?.polices || 'Inter:wght@400;600;700;800'}&display=swap" rel="stylesheet">
 <style>:root{--primary:${p.primary};--accent:${p.accent};--dark:${p.dark};--soft:${p.soft}}${CSS}</style>`;
 }
 
@@ -271,7 +432,7 @@ export function renderIndex(profile, { preview = false, liens = {} } = {}) {
   if (!preview) d.photos = d.photos.filter((ph) => ph.origine !== 'google');
   const title = `${d.name} — ${d.metier_label}${d.ville ? ' à ' + d.ville : ''}`;
   return `${head(d, { preview, title, description: d.accroche })}${preview ? '' : jsonLd(d)}</head>
-<body class="${[preview && 'is-preview', d.theme && 'th-' + d.theme].filter(Boolean).join(' ')}">${preview ? previewBanner(d) : ''}${d.theme === 'maison' ? bandeau(d) : ''}${header(d)}<main>${d.theme === 'terroir' ? heroTerroir(d) + servicesTerroir(d) : d.theme === 'maison' ? heroMaison(d) + servicesMaison(d) : hero(d) + services(d)}${galerie(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d, liens)}</body></html>
+<body class="${[preview && 'is-preview', d.theme && 'th-' + d.theme].filter(Boolean).join(' ')}">${preview ? previewBanner(d) : ''}${THEMES[d.theme]?.bandeau ? bandeau(d) : ''}${header(d)}<main>${THEMES[d.theme] ? THEMES[d.theme].corps(d) : hero(d) + services(d)}${galerie(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d, liens)}</body></html>
 `;
 }
 

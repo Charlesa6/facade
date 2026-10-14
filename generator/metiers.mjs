@@ -109,7 +109,9 @@ export const METIERS = {
   restaurant: {
     famille: 'commerce', activite: 'un restaurant', photos: 'photos de vos plats et de la salle', schema: 'Restaurant',
     label: 'Restaurant', pros: 'des restaurants', naf: ['56.10A'],
-    palette: { primary: '#9F1239', accent: '#FBBF24', dark: '#1C1917', soft: '#FFF1F2' },
+    // Thème « trattoria » (style trattoria de quartier) : crème et brun, nom en grandes capitales italiques, cartes à bordure fine.
+    theme: 'trattoria',
+    palette: { primary: '#321108', accent: '#321108', dark: '#321108', soft: '#FFFDF4' },
     icon: 'plate',
     cta: 'Réserver une table', titreServices: 'Notre maison',
     description: '{name} vous accueille {a_ville} pour le déjeuner et le dîner : une cuisine faite maison, des produits frais et un accueil chaleureux.',
@@ -124,7 +126,9 @@ export const METIERS = {
   coiffure: {
     famille: 'commerce', activite: 'un salon de coiffure', photos: 'photos du salon et de vos réalisations', schema: 'HairSalon',
     label: 'Salon de coiffure', pros: 'des salons de coiffure', naf: ['96.02A'],
-    palette: { primary: '#6D28D9', accent: '#F472B6', dark: '#1E1B4B', soft: '#F5F3FF' },
+    // Thème « boucle » (style salon contemporain) : crème et corail, grotesque arrondie, boutons pilule.
+    theme: 'boucle',
+    palette: { primary: '#D9826B', accent: '#EBA38F', dark: '#1A1A1A', soft: '#FBF4EF' },
     icon: 'scissors',
     cta: 'Prendre rendez-vous', titreServices: 'Nos prestations',
     description: '{name} vous accueille {a_ville} : coupe, couleur et soins, pour femmes, hommes et enfants, dans une ambiance détendue.',
@@ -139,7 +143,9 @@ export const METIERS = {
   fleuriste: {
     famille: 'commerce', activite: 'une boutique de fleurs', photos: 'photos de vos bouquets', schema: 'Florist',
     label: 'Fleuriste', pros: 'des fleuristes', naf: ['47.76Z'],
-    palette: { primary: '#BE185D', accent: '#84CC16', dark: '#1F2937', soft: '#FDF2F8' },
+    // Thème « atelier » (style artisan fleuriste) : grand serif, pêche et vert olive, cartes produits en portrait.
+    theme: 'atelier',
+    palette: { primary: '#34352D', accent: '#EFB59B', dark: '#34352D', soft: '#F4F3EF' },
     icon: 'flower',
     cta: 'Commander un bouquet', titreServices: 'Nos créations',
     description: '{name}, votre fleuriste {a_ville} : bouquets de saison, compositions sur mesure et plantes, pour toutes les occasions.',
@@ -154,7 +160,9 @@ export const METIERS = {
   boulangerie: {
     famille: 'commerce', activite: 'une boulangerie', photos: 'photos de vos produits', schema: 'Bakery',
     label: 'Boulangerie-pâtisserie', pros: 'des boulangeries', naf: ['10.71C', '10.71D'],
-    palette: { primary: '#92400E', accent: '#FCD34D', dark: '#1C1917', soft: '#FFFBEB' },
+    // Thème « fournil » (style maison de boulangerie traditionnelle) : capitales espacées, or, damier noir et blanc.
+    theme: 'fournil',
+    palette: { primary: '#111111', accent: '#CEAB53', dark: '#161616', soft: '#F5F5F5' },
     icon: 'bread',
     cta: 'Passer commande', titreServices: 'Nos produits',
     description: '{name}, votre boulangerie {a_ville} : pains, viennoiseries et pâtisseries, préparés chaque jour.',
@@ -220,7 +228,9 @@ export const METIERS = {
   poissonnier: {
     famille: 'commerce', activite: 'une poissonnerie', photos: 'photos de vos étals', schema: 'Store',
     label: 'Poissonnerie', pros: 'des poissonneries', naf: ['47.23Z'],
-    palette: { primary: '#0E7490', accent: '#67E8F9', dark: '#083344', soft: '#ECFEFF' },
+    // Thème « marée » (style poissonnerie familiale) : en-tête saumon, capitales espacées, bleu nuit.
+    theme: 'maree',
+    palette: { primary: '#E0907F', accent: '#E8998A', dark: '#141B26', soft: '#F8E3DD' },
     icon: 'fish',
     cta: 'Passer commande', titreServices: 'Nos produits',
     description: "{name}, votre poissonnerie {a_ville} : poissons et fruits de mer frais, préparés à la demande.",

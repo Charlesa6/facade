@@ -95,7 +95,7 @@ test('chaque métier a son pictogramme ; pharmacie sans « commande » ni promes
 });
 
 test('photos : principale + galerie ; photos Google seulement dans la maquette ; URL non https refusées', () => {
-  const p = { raison_sociale: 'X', metier: 'boulangerie', google_maps_url: 'https://maps.app.goo.gl/abc', google_note: 4.7, google_avis: 120,
+  const p = { raison_sociale: 'X', metier: 'pharmacie', google_maps_url: 'https://maps.app.goo.gl/abc', google_note: 4.7, google_avis: 120,
     photos: [{ src: 'https://cdn.test/a.jpg', origine: 'commercant' }, { src: 'https://cdn.test/g.jpg', origine: 'google' }, { src: 'javascript:alert(1)' }, { src: 'https://cdn.test/b.jpg"><script>', origine: 'commercant' }] };
   const pv = renderIndex(p, { preview: true });
   assert.match(pv, /class="hero-art hero-photo"[\s\S]*src="https:\/\/cdn\.test\/a\.jpg"/);
@@ -141,6 +141,26 @@ test('boucherie : thème maison (Playfair, bandeau doré, tuiles)', () => {
   assert.match(avec, /<figure><img src="[^"]*f\.jpg/);
   const sansInfos = renderIndex({ raison_sociale: 'B', metier: 'boucher' });
   assert.ok(!/class="bandeau"/.test(sansInfos), 'pas de bandeau sans téléphone ni horaires (rien d\'inventé)');
+});
+
+test('commerces : thèmes fournil, atelier, boucle, trattoria, marée (photos non répétées, rien d\'inventé)', () => {
+  const ph = (n) => ({ src: `https://x.supabase.co/storage/v1/object/public/maquettes-photos/${n}.jpg` });
+  const attendus = { boulangerie: ['fournil', 'Montserrat', 'hero-f'], fleuriste: ['atelier', 'Gloock', 'hero-a'], coiffure: ['boucle', 'Bricolage', 'hero-c'], restaurant: ['trattoria', 'Lora', 'hero-r'], poissonnier: ['maree', 'Lato', 'hero-o'] };
+  for (const [metier, [theme, police, hero]] of Object.entries(attendus)) {
+    const base = { raison_sociale: 'COMMERCE TEST', metier, ville: 'Lyon 3e', telephone: '04 00 00 00 10' };
+    const sans = renderIndex(base, { preview: true });
+    assert.match(sans, new RegExp(`<body class="is-preview th-${theme}"`), metier);
+    assert.match(sans, new RegExp(`family=${police}`), metier);
+    assert.match(sans, new RegExp(`class="${hero}"`), metier);
+    assert.ok(!/<img/.test(sans), `${metier} : aucune image sans photo`);
+    const avec = renderIndex({ ...base, photos: ['a', 'b', 'c', 'd', 'e', 'f'].map(ph) });
+    assert.match(avec, new RegExp(`class="${hero} ${hero}-photo"[\\s\\S]*a\\.jpg`), metier);
+    assert.equal((avec.match(/b\.jpg/g) || []).length, 1, `${metier} : photo b affichée une seule fois`);
+    assert.match(avec, /<figure><img src="[^"]*f\.jpg/, metier);
+    assert.doesNotMatch(renderIndex({ raison_sociale: 'X', metier }), /class="bandeau"|class="note-g"/, `${metier} : ni bandeau ni note sans données`);
+  }
+  assert.match(renderIndex({ raison_sociale: 'X', metier: 'fleuriste', horaires: 'Lundi 9 h - 19 h' }), /class="bandeau"><span class="bandeau-h">Lundi/);
+  assert.match(renderIndex({ raison_sociale: 'X', metier: 'poissonnier', google_note: 4.8, google_avis: 52 }), /class="note-g">[\s\S]*4,8 \/ 5 · 52 avis Google/);
 });
 
 test('profil sans nom refusé', () => {

@@ -178,6 +178,242 @@ h3{font-size:18px;color:var(--dark);margin-bottom:8px}
 .th-maison .ftr{background:#FFEFDC;color:#111}
 .th-maison .ftr a:hover{color:var(--accent)}
 .th-maison .gal figure{border-radius:10px}
+/* ── Commun aux thèmes de commerces ── */
+[class*="th-"] .sec-soft{position:relative;overflow:hidden}
+[class*="th-"] .sec-soft .wrap{position:relative;z-index:1}
+.note-g{display:flex;align-items:center;gap:6px;font-weight:600;font-size:14px;margin-top:14px}
+.note-g svg{color:var(--accent)}
+[class*="th-"] .sec-dark h2{color:#fff}
+/* ── Thème « fournil » (boulangerie) : capitales espacées, or, encadré blanc, damier ── */
+.th-fournil{font-family:Montserrat,-apple-system,'Segoe UI',Roboto,sans-serif;color:#424242;background:#fff}
+.th-fournil h1,.th-fournil h2,.th-fournil h3{font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:#111}
+.th-fournil h1{font-size:clamp(22px,2.6vw,30px);line-height:1.35}
+.th-fournil h2{font-size:clamp(20px,2.2vw,26px);letter-spacing:.16em}
+.th-fournil h2::after{content:'';display:block;width:48px;height:2px;background:var(--accent);margin-top:14px}
+.th-fournil h3{font-size:15px}
+.th-fournil .eyebrow{color:var(--accent);letter-spacing:.2em}
+.script{font-family:'Great Vibes',cursive;color:var(--accent);font-size:44px;line-height:1;margin-bottom:6px}
+.th-fournil .logo{font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:15px}
+.th-fournil .logo-mark{border-radius:50%;background:#fff;color:#111;border:1.5px solid #111}
+.th-fournil .nav a{text-transform:uppercase;font-size:12px;letter-spacing:.08em;font-weight:600}
+.th-fournil .nav a:hover{background:none;color:var(--accent)}
+.th-fournil .btn{border-radius:2px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}
+.th-fournil .btn-accent{background:var(--accent);color:#fff}
+.th-fournil .btn-ghost{border-color:#111;color:#111;background:#fff}
+.hero-f{position:relative;overflow:hidden;background:var(--soft);padding:110px 0}
+.hero-f-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-f .credit{z-index:3;left:auto;right:12px;bottom:12px}
+.hero-f-box{position:relative;z-index:2;max-width:580px;margin:0 auto;background:rgba(255,255,255,.95);padding:46px 42px;text-align:center;outline:1px solid #d9d9d9;outline-offset:-12px;box-shadow:0 20px 50px rgba(0,0,0,.15)}
+.hero-f-box h2::after,.hero-f-box h1::after{display:none}
+.hero-f-box .lead{font-size:15px;margin:0 auto}
+.hero-f .hero-cta,.hero-f .note-g{justify-content:center}
+.damier{height:16px;background:conic-gradient(#111 25%,#fff 0 50%,#111 0 75%,#fff 0) 0 0/16px 16px}
+.univers{background:#1d1a17}
+.titre-f{text-align:center;color:#fff!important}.titre-f::after{margin:14px auto 0}
+.univ-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.univ{position:relative;display:flex;flex-direction:column;justify-content:flex-end;aspect-ratio:3/4;overflow:hidden;background:#2b2621;padding:18px}
+.univ img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.78;transition:transform .4s}
+.univ:hover img{transform:scale(1.04)}
+.univ::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(0,0,0,.7))}
+.univ .credit{z-index:3;top:8px;bottom:auto}
+.univ-ic{position:absolute;top:26px;left:50%;transform:translateX(-50%);z-index:2;display:grid;place-items:center;width:66px;height:66px;border-radius:50%;background:var(--accent);color:#fff}
+.univ-txt{position:relative;z-index:2;text-align:center}
+.univ-txt b{display:block;background:var(--accent);color:#fff;text-transform:uppercase;letter-spacing:.1em;font-size:13px;font-weight:600;padding:12px 8px}
+.univ-txt small{display:block;color:#f1ece4;font-size:13px;margin-top:10px;line-height:1.45;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.is-preview .univ.tbv{background:#2b2621;outline:3px dashed rgba(234,179,8,.8);outline-offset:3px}
+.th-fournil .filigrane{color:var(--accent);opacity:.12}
+.th-fournil .panel,.th-fournil .gal figure{border-radius:0}
+.th-fournil .checks svg,.th-fournil .coords-light svg,.th-fournil .zone svg{color:var(--accent)}
+.th-fournil .sec-dark{background:#161616}.th-fournil .sec-dark h2{color:#fff}
+.th-fournil .ftr{background:#111;color:#bbb}.th-fournil .ftr a:hover{color:var(--accent)}
+/* ── Thème « atelier » (fleuriste) : grand serif, pêche, vert olive, cartes portrait ── */
+.th-atelier{font-family:Inter,-apple-system,'Segoe UI',Roboto,sans-serif;font-weight:300;color:#34352D;background:#fff}
+.th-atelier h1,.th-atelier h2,.th-atelier h3,.th-atelier .logo,.prod b{font-family:Gloock,Georgia,serif;font-weight:400;letter-spacing:0;color:#34352D}
+.th-atelier h1{font-size:clamp(38px,5vw,64px);line-height:1.08}
+.th-atelier h2{font-size:clamp(28px,3.2vw,40px)}
+.th-atelier .eyebrow{color:#7a7b70;font-weight:500;font-size:11px;letter-spacing:.3em}
+.th-atelier .bandeau{color:#34352D;font-size:13px;font-weight:400}.th-atelier .bandeau a{color:#34352D}
+.th-atelier .nav a{text-transform:uppercase;font-size:12px;font-weight:500;letter-spacing:.06em}
+.th-atelier .nav a:hover{background:none;color:#000}
+.th-atelier .logo-mark{border-radius:50%;background:none;color:#34352D;border:1.5px solid #34352D}
+.th-atelier .btn{border-radius:999px;font-weight:500}
+.th-atelier .btn-accent{background:#fff;color:#34352D;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.th-atelier .hdr .btn-accent{background:var(--accent)}
+.th-atelier .btn-ghost{border:1px solid #34352D;color:#34352D;background:#fff}
+.btn-blanc{background:#fff;color:#34352D}
+.hero-a{position:relative;overflow:hidden;background:#EEEFEC;min-height:560px;display:flex;align-items:center}
+.hero-a-vis{position:absolute;top:0;right:0;bottom:0;width:64%}
+.hero-a-vis img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:linear-gradient(90deg,transparent,#000 40%);mask-image:linear-gradient(90deg,transparent,#000 40%)}
+.hero-a .credit{left:auto;right:12px;bottom:12px}
+.hero-a-ic{position:absolute;right:-20px;bottom:-70px;color:var(--accent);opacity:.55}
+.hero-a .wrap{position:relative;z-index:2;width:100%}
+.hero-a-txt{max-width:560px;padding:80px 0}
+.hero-a-txt p{font-size:16px}
+.band-a{background:var(--accent);text-align:center;padding:68px 0}
+.band-a .wrap{max-width:820px}
+.band-a .eyebrow{color:#fff}
+.band-a p{font-size:16px;line-height:1.7;margin-bottom:24px;font-weight:400}
+.band-a .note-g{justify-content:center;margin:-12px 0 24px}.band-a .note-g svg{color:#34352D}
+.prods{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.prod{display:block}
+.prod-vis{position:relative;display:grid;place-items:center;aspect-ratio:4/5;background:var(--soft);color:var(--accent);overflow:hidden;margin-bottom:12px}
+.prod-vis img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.prod:hover .prod-vis img{transform:scale(1.04)}
+.prod b{display:block;font-size:20px}
+.prod small{display:block;font-size:14px;color:#6b6c62;line-height:1.45;margin-top:4px}
+.is-preview .prod.tbv{background:none;outline:2px dashed rgba(234,179,8,.6);outline-offset:6px}
+.th-atelier .filigrane{color:var(--accent);opacity:.3}
+.th-atelier .checks li{font-weight:400}
+.th-atelier .checks svg,.th-atelier .coords-light svg,.th-atelier .zone svg{color:#34352D}
+.th-atelier .panel,.th-atelier .gal figure{border-radius:0}
+.th-atelier .sec-dark{background:#34352D}
+.th-atelier .ftr{background:var(--soft);color:#34352D}.th-atelier .ftr a:hover{color:#000}
+/* ── Thème « boucle » (coiffure) : crème et corail, grotesque, pilules, grande photo arrondie ── */
+.th-boucle{font-family:'Bricolage Grotesque',-apple-system,'Segoe UI',Roboto,sans-serif;color:#1a1a1a;background:var(--soft)}
+.th-boucle h1,.th-boucle h2,.th-boucle h3{font-weight:600;letter-spacing:-.02em;color:#000}
+.th-boucle h2{font-size:clamp(30px,3.6vw,44px)}
+.th-boucle .eyebrow{color:var(--primary)}
+.th-boucle .hdr{background:rgba(251,244,239,.96);border-bottom-color:#f0e2d8}
+.th-boucle .nav a:hover{background:#fff;color:#000}
+.th-boucle .logo-mark{border-radius:50%;background:var(--accent)}
+.th-boucle .btn{border-radius:30px;font-weight:600}
+.th-boucle .btn-accent{background:var(--accent);color:#fff}
+.th-boucle .btn-ghost{background:#fff;border-color:#fff;color:#000}
+.hero-c{padding:28px 0 8px}
+.hero-c-box{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(135deg,#F6D6C8,#FBEDE5);min-height:500px;display:flex;align-items:flex-end;padding:48px}
+.hero-c-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-c-photo .hero-c-box::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 30%,rgba(0,0,0,.62))}
+.hero-c .credit{z-index:3;left:auto;right:14px;top:14px;bottom:auto}
+.hero-c-ic{position:absolute;right:-30px;top:-40px;color:#fff;opacity:.75}
+.hero-c-txt{position:relative;z-index:2;max-width:640px}
+.hero-c h1{font-size:clamp(36px,5vw,60px)}
+.hero-c-photo h1,.hero-c-photo .lead,.hero-c-photo .eyebrow{color:#fff}
+.hero-c .lead{color:#333}.hero-c-photo .lead{color:#f3f3f3}
+.presta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.presta-c{background:#fff;border-radius:16px;padding:22px 18px;text-align:center}
+.presta-ic{display:grid;place-items:center;width:76px;height:76px;margin:0 auto 14px;border-radius:50%;background:var(--soft);color:var(--accent)}
+.presta-vis{position:relative;display:block;aspect-ratio:1;border-radius:12px;overflow:hidden;margin-bottom:14px}
+.presta-vis img{width:100%;height:100%;object-fit:cover;display:block}
+.presta-c h3{font-size:17px}
+.presta-c p{font-size:14px;color:#555}
+.is-preview .presta-c.tbv{background:#fff;outline:2px dashed rgba(234,179,8,.7);outline-offset:3px}
+.th-boucle .sec-soft{background:#F6E6DC}
+.th-boucle .filigrane{color:var(--accent);opacity:.25}
+.th-boucle .panel{border-radius:16px;border:0}
+.th-boucle .gal figure{border-radius:16px}
+.th-boucle .checks svg,.th-boucle .coords-light svg,.th-boucle .zone svg{color:var(--accent)}
+.th-boucle .sec-dark{background:#1a1a1a}
+.th-boucle .ftr{background:var(--accent);color:#fff}.th-boucle .ftr a:hover{color:#000}
+/* ── Thème « trattoria » (restaurant) : crème et brun, nom en capitales italiques, cartes à bordure fine ── */
+.th-trattoria{font-family:Lora,Georgia,serif;color:#321108;background:var(--soft)}
+.th-trattoria h1,.th-trattoria h2,.th-trattoria h3{font-family:Lora,Georgia,serif;font-weight:400;letter-spacing:-.02em;color:#321108}
+.th-trattoria h2{font-size:clamp(28px,3.2vw,40px)}
+.th-trattoria .eyebrow,.th-trattoria .nav a,.th-trattoria .btn,.titre-r,.th-trattoria .gal figcaption{font-family:'Red Hat Display',sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.th-trattoria .eyebrow{color:#321108;font-weight:700;font-size:12px}
+.th-trattoria .hdr{background:rgba(255,253,244,.96);border-bottom-color:#eadfcf}
+.th-trattoria .logo{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#321108}
+.th-trattoria .logo-mark{border-radius:4px;background:#321108;color:var(--soft)}
+.th-trattoria .nav a{font-size:13px;font-weight:500;color:#321108}
+.th-trattoria .nav a:hover{background:none;text-decoration:underline}
+.th-trattoria .btn{border-radius:2px;font-size:13px;font-weight:500;padding:9px 14px}
+.th-trattoria .btn-lg{padding:12px 20px}
+.th-trattoria .btn-accent{background:#321108;color:var(--soft)}
+.th-trattoria .btn-ghost{background:transparent;border:1px solid #321108;color:#321108}
+.btn-clair{background:var(--soft);color:#321108}
+.hero-r{position:relative;overflow:hidden;background:#321108;min-height:620px;display:flex;align-items:flex-end;padding:0 0 64px;text-align:center}
+.hero-r-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-r-photo::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(rgba(20,6,2,.1) 30%,rgba(20,6,2,.6))}
+.hero-r .credit{z-index:3;left:auto;right:12px;top:12px;bottom:auto}
+.hero-r-ic{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);color:var(--soft);opacity:.07}
+.hero-r-in{position:relative;z-index:2;width:100%}
+.hero-r-nom{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--soft);font-size:clamp(40px,7vw,92px);line-height:1.05;text-shadow:0 2px 20px rgba(0,0,0,.35);overflow-wrap:anywhere}
+.th-trattoria .hero-r h1{font-family:'Red Hat Display',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);margin:14px 0 20px}
+.titre-r{font-size:16px!important;font-weight:700!important;margin-bottom:16px}
+.intro-r p{font-size:17px;line-height:1.65;margin-bottom:14px}
+.intro-r .wrap{max-width:760px}
+.intro-r .intro-r-two{max-width:1140px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.intro-r-vis{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/3}
+.intro-r-vis img{width:100%;height:100%;object-fit:cover;display:block}
+.cartes-sec{padding-top:0}
+.cartes-r{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.carte-r{display:grid;grid-template-columns:.8fr 1.2fr;gap:18px;border:1px solid #d9cbb8;border-radius:16px;padding:24px}
+.carte-r h3{font-size:24px;line-height:1.15}
+.carte-r p{font-size:15px;margin-bottom:12px}
+.is-preview .carte-r.tbv{background:none;outline:2px dashed rgba(234,179,8,.7);outline-offset:3px}
+.th-trattoria .gal{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.th-trattoria .gal figure{aspect-ratio:3/4;border-radius:4px}
+.th-trattoria .sec-soft{background:#F6EFDC}
+.th-trattoria .filigrane{color:#321108;opacity:.05}
+.th-trattoria .panel{border-radius:16px;border-color:#d9cbb8;background:var(--soft)}
+.th-trattoria .checks li{font-weight:400}
+.th-trattoria .checks svg,.th-trattoria .coords-light svg,.th-trattoria .zone svg,.th-trattoria .note-g svg{color:#321108}
+.th-trattoria .sec-dark{background:#321108;color:#efe6d6}.th-trattoria .sec-dark h2{color:var(--soft)}.th-trattoria .sec-dark .eyebrow{color:#e9c9a0}
+.th-trattoria .sec-dark .btn-accent{background:var(--soft);color:#321108}
+.th-trattoria .ftr{background:#321108;color:#d8c9b5}
+/* ── Thème « marée » (poissonnerie) : en-tête saumon, capitales espacées, bleu nuit, cartes ombrées ── */
+.th-maree{font-family:Lato,Arial,sans-serif;color:#333;background:#fff}
+.th-maree h1,.th-maree h2,.th-maree h3{font-family:Lato,Arial,sans-serif;letter-spacing:0}
+.th-maree h2{font-weight:300;color:var(--primary);font-size:clamp(30px,3.6vw,44px);line-height:1.15}
+.th-maree h3{font-weight:900;text-transform:uppercase;letter-spacing:.1em;font-size:16px;color:var(--dark)}
+.th-maree .eyebrow{color:var(--primary)}
+.th-maree .hdr{background:var(--accent);border-bottom:0}
+.th-maree .logo{color:#fff}.th-maree .logo-mark{border-radius:50%;background:#fff;color:var(--primary)}
+.th-maree .nav a{color:#fff;text-transform:uppercase;font-size:13px;font-weight:700;letter-spacing:.08em}
+.th-maree .nav a:hover{background:rgba(255,255,255,.18);color:#fff}
+.th-maree .btn{border-radius:0;text-transform:uppercase;letter-spacing:.12em;font-size:13px;font-weight:900}
+.th-maree .btn-accent{background:var(--accent);color:#fff}
+.th-maree .hdr .btn-accent{background:#fff;color:var(--primary)}
+.th-maree .btn-ghost{border-color:var(--accent);color:var(--primary);background:#fff}
+.hero-o{position:relative;overflow:hidden;background:var(--dark);padding:150px 0 130px;text-align:center}
+.hero-o-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-o-photo::before{content:'';position:absolute;inset:0;z-index:1;background:rgba(10,14,20,.42)}
+.hero-o .credit{z-index:3;left:auto;right:12px;bottom:12px}
+.hero-o-ic{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;opacity:.05}
+.hero-o-in{position:relative;z-index:2}
+.th-maree .hero-o h1{color:#fff;font-weight:400;text-transform:uppercase;letter-spacing:.1em;font-size:clamp(28px,5vw,60px);line-height:1.15;margin-bottom:30px;text-shadow:0 2px 16px rgba(0,0,0,.35)}
+.intro-o .intro-o-two{display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:start}
+.intro-o .lead{font-size:17px;color:#444}
+.coords-o{list-style:none;border-left:1px solid #ddd;padding-left:32px;display:grid;gap:18px}
+.coords-o li{display:flex;gap:14px;align-items:flex-start;font-size:15px}
+.coords-o svg{color:var(--dark)}
+.coords-o a{text-decoration:underline}
+.titre-o{text-align:center}
+.cartes-o{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px}
+.carte-o{background:var(--soft);padding:28px 22px;text-align:center;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+.carte-o-photo{background:#fff;padding:12px 12px 22px}
+.carte-o-vis{position:relative;display:block;aspect-ratio:1;overflow:hidden;margin-bottom:16px}
+.carte-o-vis img{width:100%;height:100%;object-fit:cover;display:block}
+.carte-o-ic{display:inline-grid;place-items:center;color:var(--dark);margin-bottom:12px}
+.carte-o p{font-size:15px;color:#444}
+.is-preview .carte-o.tbv{background:var(--soft);outline:2px dashed rgba(234,179,8,.7);outline-offset:3px}
+.is-preview .carte-o-photo.tbv{background:#fff}
+.th-maree .sec-soft{background:var(--dark);color:#d6dbe3}
+.th-maree .sec-soft h2{color:#7C9BD0}.th-maree .sec-soft .eyebrow{color:var(--accent)}
+.th-maree .sec-soft p{color:#d6dbe3}
+.th-maree .sec-soft .checks li{font-weight:400}.th-maree .sec-soft .checks svg{color:var(--accent)}
+.th-maree .sec-soft .panel{background:#1c2533;border-color:#2a3546}
+.th-maree .sec-soft .panel h3,.th-maree .sec-soft .panel dd{color:#fff}.th-maree .sec-soft .panel dt{color:#9aa6b8}
+.th-maree .filigrane{color:#fff;opacity:.04}
+.th-maree .coords-light svg,.th-maree .zone svg{color:var(--primary)}
+.th-maree .sec-dark{background:#0d131c}
+.th-maree .gal figure{border-radius:0}
+.th-maree .ftr{background:var(--accent);color:#fff}.th-maree .ftr a:hover{color:var(--dark)}
+@media (max-width:860px){
+  .hero-f{padding:56px 0}.hero-f-box{padding:34px 22px}.script{font-size:36px}
+  .univ-grid{grid-template-columns:1fr 1fr;gap:10px}.univ{padding:10px}.univ small{display:none}.univ-ic{width:52px;height:52px;top:16px}.univ-txt b{font-size:11px;padding:10px 4px}
+  .hero-a{min-height:0;display:block}.hero-a-vis{position:relative;width:100%;height:300px}
+  .hero-a-vis img{-webkit-mask-image:linear-gradient(transparent,#000 30%);mask-image:linear-gradient(transparent,#000 30%)}
+  .hero-a-txt{padding:56px 0}.hero-a-photo .hero-a-txt{padding:20px 0 48px}.hero-a-ic{right:-120px}
+  .prods{grid-template-columns:1fr 1fr;gap:12px}.prod small{display:none}.prod b{font-size:17px}
+  .band-a{padding:48px 0}
+  .hero-c{padding-top:16px}.hero-c-box{min-height:440px;padding:26px 22px;border-radius:18px}
+  .presta{grid-template-columns:1fr 1fr;gap:10px}.presta-c{padding:16px 12px}
+  .hero-r{min-height:520px}
+  .intro-r .intro-r-two{grid-template-columns:1fr;gap:28px}
+  .cartes-r{grid-template-columns:1fr}.carte-r{grid-template-columns:1fr;gap:6px}
+  .hero-o{padding:96px 0 84px}
+  .intro-o .intro-o-two{grid-template-columns:1fr;gap:28px}.coords-o{border-left:0;border-top:1px solid #ddd;padding:24px 0 0}
+}
 @media (max-width:860px){
   .hero-m{padding:48px 0}.hero-m-box{padding:26px 22px}
   .tuiles{grid-template-columns:1fr 1fr;gap:10px}
