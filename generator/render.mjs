@@ -140,13 +140,47 @@ function servicesTerroir(d) {
 </div></section>`;
 }
 
+// ── Thème « maison » : bandeau doré, photo plein écran avec encadré sombre, tuiles de catégories.
+// Le bandeau ne reprend que des informations du profil (téléphone, horaires) : rien d'inventé.
+function bandeau(d) {
+  const bouts = [d.telephone && `<span>${esc(d.cta)} au <a href="${telHref(d.telephone)}">${esc(d.telephone)}</a></span>`, d.horaires && `<span class="bandeau-h">${esc(d.horaires)}</span>`].filter(Boolean);
+  return bouts.length ? `<div class="bandeau">${bouts.join('')}</div>` : '';
+}
+
+function heroMaison(d) {
+  const ph = d.photos[0];
+  return `<section class="hero-m${ph ? ' hero-m-photo' : ''}" id="top">
+  ${ph ? `<img class="hero-m-img" src="${esc(ph.src)}" alt="${esc(ph.legende || d.name)}" loading="eager">${credit(ph)}` : `<span class="hero-m-ic" aria-hidden="true">${icon(d.icon, 460)}</span>`}
+  <div class="wrap"><div class="hero-m-box">
+    <p class="eyebrow">${esc(d.metier_label)}${d.ville ? ' · ' + esc(d.ville) : ''}</p>
+    <h1>${esc(d.accroche)}</h1>
+    <p class="lead${d.description_a_valider ? ' tbv' : ''}">${esc(d.description)}</p>
+    <div class="hero-cta"><a class="btn btn-accent btn-lg" href="${d.telephone ? telHref(d.telephone) : '#contact'}">${esc(d.cta)}</a><a class="btn btn-ghost-w btn-lg" href="#zone">Nous trouver</a></div>
+  </div></div>
+</section>`;
+}
+
+// Prestations en tuiles : photo du commerçant (photos 2 à 5) avec le nom en surimpression, sinon tuile sombre et pictogramme doré.
+function servicesMaison(d) {
+  const illus = d.photos.slice(1, 1 + d.services.length);
+  d.photosRangees = illus.length;
+  return `<section class="sec" id="services"><div class="wrap">
+  <div class="intro-t"><p class="eyebrow">${esc(d.metier_label)}</p><h2>${esc(d.titreServices)}</h2></div>
+  <div class="tuiles">${d.services.map((s, i) => `<a class="tuile${illus[i] ? '' : ' tuile-vide'}${s.a_valider ? ' tbv' : ''}" href="${d.telephone ? telHref(d.telephone) : '#contact'}">
+    ${illus[i] ? `<img src="${esc(illus[i].src)}" alt="${esc(illus[i].legende || s.titre)}" loading="lazy">${credit(illus[i])}` : `<span class="tuile-ic">${icon(d.icon, 64)}</span>`}
+    <span class="tuile-txt"><b>${esc(s.titre)}</b><small>${esc(s.description)}</small></span>
+  </a>`).join('')}</div>
+  <div class="centre"><a class="btn btn-accent btn-lg" href="${d.telephone ? telHref(d.telephone) : '#contact'}">${esc(d.cta)}</a></div>
+</div></section>`;
+}
+
 function atouts(d) {
   const items = d.atouts.length ? d.atouts.map((a) => ({ t: a, tbv: false })) : d.atouts_defaut ? d.atouts_defaut.map((t) => ({ t, tbv: true })) : [
     { t: 'Devis détaillé et gratuit, sans engagement', tbv: true },
     { t: 'Un interlocuteur unique du devis à la réception du chantier', tbv: true },
     { t: 'Chantiers propres, délais annoncés et tenus', tbv: true },
   ];
-  return `<section class="sec sec-soft" id="atouts">${d.theme === 'terroir' ? `<span class="filigrane" aria-hidden="true">${icon(d.icon, 560)}</span>` : ''}<div class="wrap two">
+  return `<section class="sec sec-soft" id="atouts">${d.theme ? `<span class="filigrane" aria-hidden="true">${icon(d.icon, 560)}</span>` : ''}<div class="wrap two">
   <div><p class="eyebrow">${d.commerce ? 'La maison' : 'L\'entreprise'}</p><h2>${d.commerce ? `Bienvenue chez ${esc(d.name)}` : `Pourquoi choisir ${esc(d.name)}&nbsp;?`}</h2>
   ${d.histoire ? `<p>${esc(d.histoire)}</p>` : ''}
   <ul class="checks">${items.map((i) => `<li class="${i.tbv ? 'tbv' : ''}">${icon('check', 20)}<span>${esc(i.t)}</span></li>`).join('')}</ul></div>
@@ -216,7 +250,7 @@ function head(d, { preview, title, description }) {
 ${preview ? '<meta name="robots" content="noindex,nofollow,noarchive">' : ''}
 <meta name="theme-color" content="${esc(p.primary)}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=${d.theme === 'terroir' ? 'Merriweather:wght@400;700;900&family=Mulish:wght@400;600;700' : 'Inter:wght@400;600;700;800'}&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=${{ terroir: 'Merriweather:wght@400;700;900&family=Mulish:wght@400;600;700', maison: 'Playfair+Display:wght@400;600;700&family=Jost:wght@400;500;600' }[d.theme] || 'Inter:wght@400;600;700;800'}&display=swap" rel="stylesheet">
 <style>:root{--primary:${p.primary};--accent:${p.accent};--dark:${p.dark};--soft:${p.soft}}${CSS}</style>`;
 }
 
@@ -237,7 +271,7 @@ export function renderIndex(profile, { preview = false, liens = {} } = {}) {
   if (!preview) d.photos = d.photos.filter((ph) => ph.origine !== 'google');
   const title = `${d.name} — ${d.metier_label}${d.ville ? ' à ' + d.ville : ''}`;
   return `${head(d, { preview, title, description: d.accroche })}${preview ? '' : jsonLd(d)}</head>
-<body class="${[preview && 'is-preview', d.theme && 'th-' + d.theme].filter(Boolean).join(' ')}">${preview ? previewBanner(d) : ''}${header(d)}<main>${d.theme === 'terroir' ? heroTerroir(d) + servicesTerroir(d) : hero(d) + services(d)}${galerie(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d, liens)}</body></html>
+<body class="${[preview && 'is-preview', d.theme && 'th-' + d.theme].filter(Boolean).join(' ')}">${preview ? previewBanner(d) : ''}${d.theme === 'maison' ? bandeau(d) : ''}${header(d)}<main>${d.theme === 'terroir' ? heroTerroir(d) + servicesTerroir(d) : d.theme === 'maison' ? heroMaison(d) + servicesMaison(d) : hero(d) + services(d)}${galerie(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d, liens)}</body></html>
 `;
 }
 

@@ -127,6 +127,22 @@ test('fromagerie : thème terroir (serif, photo plein écran, rangées alternée
   assert.ok(!/<body class="[^"]*th-terroir|family=Merriweather/.test(boulangerie), 'les autres métiers gardent le thème standard');
 });
 
+test('boucherie : thème maison (Playfair, bandeau doré, tuiles)', () => {
+  const base = { raison_sociale: 'BOUCHERIE TEST', metier: 'boucher', ville: 'Lyon 7e', telephone: '04 00 00 00 09', horaires: 'Mardi-samedi 8 h - 19 h' };
+  const sans = renderIndex(base, { preview: true });
+  assert.match(sans, /<body class="is-preview th-maison"/);
+  assert.match(sans, /family=Playfair\+Display/);
+  assert.match(sans, /class="bandeau"><span>Passer commande au <a href="tel:\+33400000009">/);
+  assert.match(sans, /class="tuile tuile-vide/);
+  const ph = (n) => ({ src: `https://x.supabase.co/storage/v1/object/public/maquettes-photos/${n}.jpg` });
+  const avec = renderIndex({ ...base, photos: [ph('a'), ph('b'), ph('c'), ph('d'), ph('e'), ph('f')] });
+  assert.match(avec, /hero-m hero-m-photo[\s\S]*a\.jpg/);
+  assert.match(avec, /class="tuile( tbv)?"[^>]*>\s*<img src="[^"]*b\.jpg/);
+  assert.match(avec, /<figure><img src="[^"]*f\.jpg/);
+  const sansInfos = renderIndex({ raison_sociale: 'B', metier: 'boucher' });
+  assert.ok(!/class="bandeau"/.test(sansInfos), 'pas de bandeau sans téléphone ni horaires (rien d\'inventé)');
+});
+
 test('profil sans nom refusé', () => {
   assert.throws(() => normalize({ metier: 'maconnerie' }));
 });

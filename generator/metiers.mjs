@@ -203,7 +203,9 @@ export const METIERS = {
   boucher: {
     famille: 'commerce', activite: 'une boucherie', photos: 'photos de vos produits', schema: 'Store',
     label: 'Boucherie-charcuterie', pros: 'des boucheries', naf: ['47.22Z'],
-    palette: { primary: '#991B1B', accent: '#FDBA74', dark: '#1C1917', soft: '#FEF2F2' },
+    // Thème « maison » (style maison de charcuterie haut de gamme) : Playfair noir, or, crème, boutons pilule noirs, tuiles de catégories.
+    theme: 'maison',
+    palette: { primary: '#111111', accent: '#C5A059', dark: '#111111', soft: '#FDF8F5' },
     icon: 'meat',
     cta: 'Passer commande', titreServices: 'Nos produits',
     description: '{name}, votre boucherie {a_ville} : viandes, charcuterie et préparations, découpées et conseillées par des artisans.',

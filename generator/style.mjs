@@ -133,6 +133,57 @@ h3{font-size:18px;color:var(--dark);margin-bottom:8px}
 .th-terroir .ftr{background:var(--sand);color:var(--primary)}
 .th-terroir .ftr a:hover{color:var(--dark)}
 .th-terroir .gal figure{border-radius:2px}
+/* ── Thème « maison » (boucherie) : Playfair noir, or, crème, boutons pilule noirs, tuiles ── */
+.th-maison{font-family:Jost,-apple-system,'Segoe UI',Roboto,sans-serif;color:#555;background:#fff}
+.th-maison h1,.th-maison h2,.th-maison h3,.th-maison .logo,.th-maison .facts b,.th-maison .tuile b{font-family:'Playfair Display',Georgia,serif;letter-spacing:0;font-weight:400;color:#111}
+.th-maison h1{font-size:clamp(34px,4.6vw,54px);line-height:1.12}
+.th-maison h2{font-size:clamp(28px,3.4vw,40px)}
+.th-maison h3{font-weight:600}
+.th-maison .eyebrow{color:var(--accent);letter-spacing:.18em;font-weight:500;font-size:12px}
+.bandeau{background:var(--accent);color:#fff;font-size:14px;font-weight:500;text-align:center;padding:9px 16px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px}
+.bandeau a{color:#fff;text-decoration:underline}
+.bandeau span+span::before{content:'·';margin-right:14px}
+.th-maison .hdr{border-bottom-color:#ebebeb}
+.th-maison .logo-mark{border-radius:50%;background:#111;color:var(--accent)}
+.th-maison .btn{border-radius:999px;text-transform:uppercase;letter-spacing:.06em;font-size:13px;font-weight:600}
+.th-maison .btn-lg{padding:15px 30px}
+.th-maison .btn-accent{background:#111;color:#fff}
+.th-maison .btn-ghost{background:transparent;border-color:#111;color:#111}
+.hero-m{position:relative;overflow:hidden;background:#1b1714;padding:110px 0}
+.hero-m-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-m .credit{z-index:3;left:auto;right:12px;bottom:12px}
+.hero-m-ic{position:absolute;right:-40px;bottom:-110px;color:var(--accent);opacity:.12;pointer-events:none}
+.hero-m-box{position:relative;z-index:2;max-width:640px;background:rgba(17,17,17,.62);backdrop-filter:blur(2px);border-radius:14px;padding:40px}
+.hero-m h1,.hero-m .lead{color:#fff}.hero-m .lead{color:#eee;font-size:17px}
+.hero-m .btn-accent{background:#fff;color:#111}
+.th-maison .intro-t h2{margin-bottom:6px}
+.tuiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.tuile{position:relative;display:block;aspect-ratio:4/5;border-radius:10px;overflow:hidden;background:#1b1714}
+.tuile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.tuile:hover img{transform:scale(1.04)}
+.tuile::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 35%,rgba(0,0,0,.72))}
+.tuile .credit{z-index:3;top:8px;bottom:auto}
+.tuile-ic{position:absolute;inset:0;display:grid;place-items:center;color:var(--accent);padding-bottom:30%}
+.tuile-txt{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:18px;color:#fff}
+.th-maison .tuile b{display:block;color:#fff;font-size:24px;text-transform:uppercase;letter-spacing:.04em;line-height:1.15}
+.tuile small{display:block;font-size:14px;color:#e8e2da;margin-top:6px;line-height:1.4}
+.is-preview .tuile.tbv{background-image:none;outline:3px dashed rgba(234,179,8,.8);outline-offset:3px}
+.centre{text-align:center;margin-top:36px}
+.th-maison .sec-soft{background:var(--soft);position:relative;overflow:hidden}
+.th-maison .sec-soft .wrap{position:relative;z-index:1}
+.th-maison .filigrane{color:var(--accent);opacity:.1}
+.th-maison .panel{border-radius:14px;border-color:#ebebeb;box-shadow:0 10px 30px rgba(0,0,0,.05)}
+.th-maison .checks svg,.th-maison .coords-light svg,.th-maison .zone svg{color:var(--accent)}
+.th-maison .sec-dark{background:#111}.th-maison .sec-dark h2{color:#fff}
+.th-maison .ftr{background:#FFEFDC;color:#111}
+.th-maison .ftr a:hover{color:var(--accent)}
+.th-maison .gal figure{border-radius:10px}
+@media (max-width:860px){
+  .hero-m{padding:48px 0}.hero-m-box{padding:26px 22px}
+  .tuiles{grid-template-columns:1fr 1fr;gap:10px}
+  .th-maison .tuile b{font-size:18px}.tuile small{display:none}.tuile-txt{padding:12px}
+  .bandeau span+.bandeau-h{display:none}
+}
 @media (max-width:860px){
   .hero-t{padding:72px 0 80px}.hero-t-photo{padding:96px 0 104px}
   .rang{grid-template-columns:1fr;gap:18px;margin-bottom:44px}.rang-inv .rang-vis{order:0}
