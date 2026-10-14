@@ -88,7 +88,7 @@ summary{font-weight:700;cursor:pointer}.c{background:var(--card);border:1px soli
 <li><b>Accroche</b> — « Je suis consultant en informatique depuis plus de 5 ans, et je crée les sites internet des entreprises et des commerces lyonnais. [Accroche de la carte]. »</li>
 <li><b>La maquette</b> — « Plutôt que de vous envoyer un devis, j'ai déjà préparé une maquette du site de [entreprise]. Je vous envoie le lien par SMS, vous y jetez un œil quand vous avez deux minutes ? »</li>
 <li><b>Si oui</b> — envoyer le SMS (bouton sur la carte), puis : « Je vous rappelle [jour] pour avoir votre avis ? » → noter le créneau.</li>
-<li><b>Le prix, s'il demande</b> — « 39 € HT par mois, la création est offerte : nom de domaine, hébergement et modifications compris. En ligne en 48 heures après votre accord. Engagement d'un an, ensuite sans engagement. »</li>
+<li><b>Le prix, s'il demande</b> — « 39 € HT par mois, la création est offerte : nom de domaine, hébergement et modifications compris. Pour 45 €, je m'occupe aussi de votre fiche Google et je la garde identique au site. En ligne en 48 heures après votre accord. Engagement d'un an, ensuite sans engagement. »</li>
 </ol>
 <p class="m">Toujours : poli, court, pas de jargon (« site », « Google », « téléphone », jamais « SEO » ou « responsive »). Pas de promesse de résultat (« premier sur Google », « X clients en plus »).</p>
 </div>
@@ -100,6 +100,7 @@ summary{font-weight:700;cursor:pointer}.c{background:var(--card);border:1px soli
 <p><b>« Mon neveu / un ami va me le faire. »</b> — « Très bien. Regardez quand même la maquette, elle est gratuite ; si elle ne vous sert pas, je la supprime. »</p>
 <p><b>« C'est trop cher. »</b> — « C'est 39 € HT par mois, tout compris, création offerte : moins qu'un seul client perdu dans l'année. »</p>
 <p><b>« Je n'aime pas les engagements. »</b> — « Je comprends. Je note, et je reviens vers vous avec une proposition. » (pas de geste commercial sans décision de ta part)</p>
+<p><b>« J'ai déjà une fiche Google. »</b> — « Très bien, c'est elle qui vous fait trouver. Le site, c'est ce que les gens regardent ensuite pour se décider : aujourd'hui, sur votre fiche, le bouton "Site web" ne mène nulle part. Pour 45 € par mois, je relie les deux et je les garde à jour ensemble. »</p>
 <p><b>« Comment avez-vous eu mon numéro ? »</b> — « Il est publié dans les annuaires d'entreprises. Si vous préférez ne plus être appelé, je le note tout de suite. » → cocher <i>Ne plus appeler</i>.</p>
 <p><b>« Envoyez-moi un email. »</b> — envoyer le SMS ou l'email avec le lien de la maquette, et proposer un rappel.</p>
 </div></details>

@@ -3,7 +3,7 @@
 Variables : `{site_de}` (« Le site de X » / « Le site d'X »), `{de_entreprise}` (« de X » / « d'X »), `{entreprise}`, `{prenom_nom}` (dirigeant publié, sinon « Bonjour, »), `{ville}`, `{lien_maquette}`, `{probleme}` (premier problème de l'audit, ou « je n'ai pas trouvé de site internet pour X »), `{pied}` (signature + désinscription, voir `.claude/agents/site-seller.md`).
 Variables par métier (`prospection(metier)` dans `generator/metiers.mjs`) : `{pros}` (« des couvreurs », « des restaurants »…), `{clientele}` (« des entreprises du bâtiment » / « des commerces lyonnais »), `{photos}` (« photos de vos chantiers », « photos de vos plats »…), `{contenu}` (ce que montre la maquette).
 
-Toujours personnaliser au moins une phrase. Texte brut, pas d'image, pas de pièce jointe. Tarifs : 39 € HT/mois (Essentiel, création offerte).
+Toujours personnaliser au moins une phrase. Texte brut, pas d'image, pas de pièce jointe. Tarifs : dès 39 € HT/mois (Site), 45 € (Site + Google), 69 € (Sérénité), création offerte. Les emails n'annoncent que « 39 € HT par mois » ; le détail des offres se donne au téléphone ou en réponse.
 
 ---
 

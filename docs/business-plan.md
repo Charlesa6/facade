@@ -9,18 +9,21 @@ Une PME du bâtiment de 3 à 20 personnes est choisie sur recommandation, puis *
 
 ## 2. L'offre
 
-| | **Essentiel** | **Pro** |
-|---|---|---|
-| Mise en ligne | 0 € (pilote) | 290 € HT |
-| Abonnement | **39 € HT/mois** | **69 € HT/mois** |
-| Site | 1 page : prestations, entreprise, zone, contact | Multi-pages + galerie de chantiers + page par prestation |
-| Nom de domaine + hébergement + HTTPS | inclus | inclus |
-| Modifications | 2 par mois | illimitées |
-| Fiche Google Business Profile | conseils | création et optimisation |
-| Référencement local | de base (titres, données structurées) | pages ville/prestation |
-| Engagement | 12 mois, puis mensuel | 12 mois, puis mensuel |
+| | **Site** | **Site + Google** | **Sérénité** |
+|---|---|---|---|
+| Mise en ligne | offerte | offerte | offerte |
+| Abonnement | **39 € HT/mois** | **45 € HT/mois** | **69 € HT/mois** |
+| Site | 1 page : présentation, prestations, horaires/zone, contact | idem | idem + galerie de photos enrichie chaque mois |
+| Nom de domaine + hébergement + HTTPS | inclus | inclus | inclus |
+| Fiche Google (Fiche d'établissement) | — | création ou reprise, complétée, reliée au site ; QR code « Laissez-nous un avis » | idem |
+| Site et fiche toujours identiques | — | tout changement (horaires, numéro, fermeture) reporté sur les deux **le jour même** | idem |
+| Suivi mensuel | — | — | photos et actualités publiées, horaires des jours fériés/vacances, réponses aux avis préparées |
+| Modifications | 2 par mois | 2 par mois | illimitées |
+| Engagement | 12 mois, puis mensuel | 12 mois, puis mensuel | 12 mois, puis mensuel |
 
-Annuel = 10 × le mensuel (2 mois offerts). Tarifs fixés par Charles le 12/10/2026 : **39 € et 69 € HT/mois**.
+Annuel = 10 × le mensuel (2 mois offerts). Grille fixée par Charles le 14/10/2026 : **39 € / 45 € / 69 € HT/mois**, création offerte.
+
+**Fiche Google : ce qu'on fait et ne fait pas.** La vérification de propriété est toujours faite par le commerçant (vidéo, appel ou SMS de Google) ; il ajoute ensuite Charles comme gestionnaire (jamais de mot de passe partagé). Outil : « Kit fiche Google » du studio (textes prêts à copier, QR code avis imprimable). Jamais de faux avis ni d'avis achetés (pratique commerciale trompeuse, suspension de la fiche), jamais de promesse de position. La synchronisation site/fiche est manuelle (le jour même) tant que l'accès à l'API Google Business Profile n'est pas obtenu ; à demander dès les premiers clients Sérénité pour automatiser le suivi mensuel.
 
 Le client est **propriétaire de son nom de domaine** et peut partir avec son site (export HTML) : argument de confiance face aux offres « location de site » mal perçues dans le BTP.
 
@@ -79,7 +82,7 @@ Une plainte ou un rebond sur la prospection n'affecte que la réputation de kons
 
 - Coût de production d'une maquette : quelques centimes (génération automatique) + 5 min de relecture.
 - Coût d'un client en production : domaine ~8 €/an, hébergement ~0 € (Vercel, statique), Stripe ~1,5 %.
-- **100 clients Essentiel ≈ 3 900 €/mois ≈ 47 k€/an de revenu récurrent**, marge brute > 90 %.
+- **100 clients au panier moyen de 45 € ≈ 4 500 €/mois ≈ 54 k€/an de revenu récurrent**, marge brute > 90 %.
 - Le vrai coût est le temps commercial (appels de closing) : c'est lui qu'il faut mesurer pendant le pilote.
 
 ## 8. Cadre légal (à faire valider par un juriste avant le passage à l'échelle)
