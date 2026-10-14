@@ -143,9 +143,9 @@ test('boucherie : thème maison (Playfair, bandeau doré, tuiles)', () => {
   assert.ok(!/class="bandeau"/.test(sansInfos), 'pas de bandeau sans téléphone ni horaires (rien d\'inventé)');
 });
 
-test('commerces : thèmes fournil, atelier, boucle, trattoria, marée (photos non répétées, rien d\'inventé)', () => {
+test('commerces : thèmes fournil, atelier, boucle, trattoria, marée, énergie (photos non répétées, rien d\'inventé)', () => {
   const ph = (n) => ({ src: `https://x.supabase.co/storage/v1/object/public/maquettes-photos/${n}.jpg` });
-  const attendus = { boulangerie: ['fournil', 'Montserrat', 'hero-f'], fleuriste: ['atelier', 'Gloock', 'hero-a'], coiffure: ['boucle', 'Bricolage', 'hero-c'], restaurant: ['trattoria', 'Lora', 'hero-r'], poissonnier: ['maree', 'Lato', 'hero-o'] };
+  const attendus = { boulangerie: ['fournil', 'Montserrat', 'hero-f'], fleuriste: ['atelier', 'Gloock', 'hero-a'], coiffure: ['boucle', 'Bricolage', 'hero-c'], restaurant: ['trattoria', 'Lora', 'hero-r'], poissonnier: ['maree', 'Lato', 'hero-o'], sport: ['energie', 'Oswald', 'hero-e'] };
   for (const [metier, [theme, police, hero]] of Object.entries(attendus)) {
     const base = { raison_sociale: 'COMMERCE TEST', metier, ville: 'Lyon 3e', telephone: '04 00 00 00 10' };
     const sans = renderIndex(base, { preview: true });

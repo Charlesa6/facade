@@ -1,4 +1,4 @@
-// Préréglages par métier (BTP et commerces de proximité : restaurant, coiffure, fleuriste, boulangerie, pharmacie, fromager, boucher, poissonnier) : palette, libellé, prestations types.
+// Préréglages par métier (BTP et commerces de proximité : restaurant, coiffure, fleuriste, boulangerie, pharmacie, fromager, boucher, poissonnier, salle de sport) : palette, libellé, prestations types.
 // Pour les emails : `activite` (« vous dirigez … »), `photos` (« … photos de vos chantiers »), sinon valeurs BTP par défaut.
 // Les prestations par défaut sont des descriptions génériques du métier,
 // signalées « à valider » dans la maquette tant que l'entreprise ne les a pas confirmées.
@@ -242,6 +242,23 @@ export const METIERS = {
       ['Traiteur de la mer', 'Soupes, terrines et préparations maison.'],
     ],
   },
+  sport: {
+    famille: 'commerce', activite: 'une salle de sport', photos: 'photos de la salle et des cours', schema: 'ExerciseGym',
+    label: 'Salle de sport', pros: 'des salles de sport', naf: ['93.13Z'],
+    // Thème « énergie » (style salle de sport) : noir, jaune fluo, titres condensés en capitales, cartes numérotées.
+    theme: 'energie',
+    palette: { primary: '#0E0E0E', accent: '#D4FF3A', dark: '#0E0E0E', soft: '#F2F2EE' },
+    icon: 'dumbbell',
+    cta: 'Nous contacter', titreServices: 'Nos activités',
+    description: '{name}, votre salle de sport {a_ville} : musculation, cardio et cours collectifs, avec une équipe pour vous accompagner.',
+    atouts: ['Une équipe pour vous accompagner', 'Cours collectifs', 'Programme adapté à vos objectifs'],
+    services: [
+      ['Musculation', 'Plateau de musculation, poids libres et machines guidées.'],
+      ['Cardio', 'Tapis, vélos, rameurs et elliptiques.'],
+      ['Cours collectifs', 'Des séances encadrées pour progresser ensemble.'],
+      ['Coaching', 'Un accompagnement personnalisé selon vos objectifs.'],
+    ],
+  },
 };
 
 // Pictogrammes en SVG inline (aucune image externe à charger).
@@ -268,6 +285,7 @@ export const ICONS = {
   pin: '<path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>',
   check: '<path d="M4 12l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
   mail: '<path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+  dumbbell: '<path d="M2 12h20M5 8v8M8 6v12M16 6v12M19 8v8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
   clock: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
 };
 

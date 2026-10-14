@@ -174,7 +174,7 @@ function servicesMaison(d) {
 </div></section>`;
 }
 
-// ── Thèmes de commerces (boulangerie, fleuriste, coiffure, restaurant, poissonnerie) : mêmes données, mises en page propres.
+// ── Thèmes de commerces (boulangerie, fleuriste, coiffure, restaurant, poissonnerie, salle de sport) : mêmes données, mises en page propres.
 // Rien d'inventé : seuls les champs du profil sont affichés ; les textes par défaut restent marqués « à valider ».
 const ctaHref = (d) => (d.telephone ? telHref(d.telephone) : '#contact');
 const noteGoogle = (d) => (d.google_note ? `<p class="note-g">${icon('star', 16)} ${esc(String(d.google_note).replace('.', ','))} / 5${d.google_avis ? ` · ${esc(d.google_avis)} avis Google` : ' sur Google'}</p>` : '');
@@ -324,6 +324,33 @@ function servicesMaree(d) {
 </div></section>`;
 }
 
+// « Énergie » (salle de sport) : fond noir, titres condensés en capitales, jaune fluo, cartes numérotées.
+function heroEnergie(d) {
+  const ph = d.photos[0];
+  return `<section class="hero-e${ph ? ' hero-e-photo' : ''}" id="top">
+  ${ph ? imgPhoto(ph, d.name, 'hero-e-img', true) : `<span class="hero-e-ic" aria-hidden="true">${icon(d.icon, 560)}</span>`}
+  <div class="wrap hero-e-in">
+    <p class="eyebrow">${esc(d.metier_label)}${d.ville ? ' · ' + esc(d.ville) : ''}</p>
+    <h1>${esc(d.accroche)}</h1>
+    <p class="lead${d.description_a_valider ? ' tbv' : ''}">${esc(d.description)}</p>
+    ${noteGoogle(d)}
+    <div class="hero-cta"><a class="btn btn-accent btn-lg" href="${ctaHref(d)}">${esc(d.cta)}</a><a class="btn btn-ghost-w btn-lg" href="#zone">Nous trouver</a></div>
+  </div>
+</section>`;
+}
+
+function servicesEnergie(d) {
+  const illus = illustrer(d);
+  return `<section class="sec sec-e" id="services"><div class="wrap">
+  <p class="eyebrow">${esc(d.name)}</p><h2>${esc(d.titreServices)}</h2>
+  <div class="cartes-e">${d.services.map((s, i) => `<article class="carte-e${illus[i] ? ' carte-e-photo' : ''}${s.a_valider ? ' tbv' : ''}">
+    ${illus[i] ? imgPhoto(illus[i], s.titre) : ''}<span class="num-e">${String(i + 1).padStart(2, '0')}</span>
+    <div class="carte-e-txt"><h3>${esc(s.titre)}</h3><p>${esc(s.description)}</p></div>
+  </article>`).join('')}</div>
+  <div class="hero-cta"><a class="btn btn-accent btn-lg" href="${ctaHref(d)}">${esc(d.cta)}</a></div>
+</div></section>`;
+}
+
 // Polices, bandeau et sections propres à chaque thème (le thème vient du métier, voir metiers.mjs).
 const THEMES = {
   terroir: { polices: 'Merriweather:wght@400;700;900&family=Mulish:wght@400;600;700', corps: (d) => heroTerroir(d) + servicesTerroir(d) },
@@ -333,6 +360,7 @@ const THEMES = {
   boucle: { polices: 'Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700', bandeau: true, corps: (d) => heroBoucle(d) + servicesBoucle(d) },
   trattoria: { polices: 'Lora:ital,wght@0,400;0,500;1,400&family=Red+Hat+Display:wght@500;700&family=Playfair+Display:ital,wght@1,900', corps: (d) => heroTrattoria(d) + servicesTrattoria(d) },
   maree: { polices: 'Lato:wght@300;400;700;900', corps: (d) => heroMaree(d) + servicesMaree(d) },
+  energie: { polices: 'Oswald:wght@500;600;700&family=Inter:wght@400;500;600', bandeau: true, corps: (d) => heroEnergie(d) + servicesEnergie(d) },
 };
 
 function atouts(d) {

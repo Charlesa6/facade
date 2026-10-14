@@ -414,6 +414,56 @@ h3{font-size:18px;color:var(--dark);margin-bottom:8px}
   .hero-o{padding:96px 0 84px}
   .intro-o .intro-o-two{grid-template-columns:1fr;gap:28px}.coords-o{border-left:0;border-top:1px solid #ddd;padding:24px 0 0}
 }
+/* ── Thème « énergie » (salle de sport) : noir, jaune fluo, titres condensés en capitales, cartes numérotées ── */
+.th-energie{font-family:Inter,-apple-system,'Segoe UI',Roboto,sans-serif;color:#2a2a2a;background:var(--soft)}
+.th-energie h1,.th-energie h2,.th-energie h3,.th-energie .logo,.num-e{font-family:Oswald,Impact,'Arial Narrow',sans-serif;text-transform:uppercase;letter-spacing:.01em;font-weight:700;color:#0E0E0E}
+.th-energie h1{font-size:clamp(40px,6.4vw,84px);line-height:.98}
+.th-energie h2{font-size:clamp(32px,4.4vw,56px);line-height:1}
+.th-energie h3{font-size:22px;font-weight:600}
+.th-energie .eyebrow{color:#0E0E0E;font-weight:700;letter-spacing:.16em}
+.th-energie .bandeau{color:#0E0E0E;font-weight:600}.th-energie .bandeau a{color:#0E0E0E}
+.th-energie .hdr{background:rgba(14,14,14,.97);border-bottom:0}
+.th-energie .logo{color:#fff}.th-energie .logo-mark{border-radius:6px;background:var(--accent);color:#0E0E0E}
+.th-energie .nav a{color:#ddd;text-transform:uppercase;font-size:13px;letter-spacing:.06em}
+.th-energie .nav a:hover{background:none;color:var(--accent)}
+.th-energie .btn{border-radius:4px;text-transform:uppercase;letter-spacing:.06em;font-size:14px;font-weight:700}
+.th-energie .btn-accent{background:var(--accent);color:#0E0E0E}
+.th-energie .btn-ghost{background:transparent;border-color:#0E0E0E;color:#0E0E0E}
+.hero-e{position:relative;overflow:hidden;background:#0E0E0E;padding:120px 0 110px}
+.hero-e-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-e-photo::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(0,0,0,.85),rgba(0,0,0,.35))}
+.hero-e .credit{z-index:3;left:auto;right:12px;bottom:12px}
+.hero-e-ic{position:absolute;right:-80px;top:50%;transform:translateY(-50%) rotate(-30deg);color:var(--accent);opacity:.14}
+.hero-e-in{position:relative;z-index:2}
+.hero-e h1{color:#fff;max-width:820px}
+.hero-e h1::after{content:'';display:block;width:96px;height:8px;background:var(--accent);margin-top:22px}
+.hero-e .eyebrow{color:var(--accent)}
+.hero-e .lead{color:#d8d8d8}
+.hero-e .note-g{color:#fff}
+.sec-e{background:#0E0E0E}
+.sec-e h2{color:#fff}.sec-e .eyebrow{color:var(--accent)}
+.cartes-e{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:8px}
+.carte-e{position:relative;overflow:hidden;min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;background:#1a1a1a;border-radius:6px;padding:24px;border-top:4px solid var(--accent)}
+.carte-e img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;transition:transform .4s}
+.carte-e:hover img{transform:scale(1.04)}
+.carte-e .credit{z-index:3;top:8px;bottom:auto}
+.num-e{position:absolute;z-index:2;top:16px;left:22px;font-size:56px;line-height:1;color:var(--accent)!important}
+.carte-e-txt{position:relative;z-index:2}
+.carte-e h3{color:#fff}
+.carte-e p{color:#cfcfcf;font-size:15px}
+.is-preview .carte-e.tbv{background:#1a1a1a;outline:2px dashed rgba(234,179,8,.8);outline-offset:3px}
+.th-energie .sec-soft{background:#fff}
+.th-energie .filigrane{color:#0E0E0E;opacity:.05}
+.th-energie .panel{border-radius:6px;border-left:4px solid var(--accent)}
+.th-energie .checks svg,.th-energie .coords-light svg,.th-energie .zone svg,.th-energie .note-g svg{color:#0E0E0E}
+.hero-e .note-g svg{color:var(--accent)}
+.th-energie .sec-dark{background:#0E0E0E}.th-energie .sec-dark .eyebrow{color:var(--accent)}
+.th-energie .gal figure{border-radius:6px}
+.th-energie .ftr{background:var(--accent);color:#0E0E0E}.th-energie .ftr a:hover{color:#555}
+@media (max-width:860px){
+  .hero-e{padding:72px 0 64px}.hero-e-ic{right:-200px}
+  .cartes-e{grid-template-columns:1fr 1fr;gap:10px}.carte-e{min-height:220px;padding:14px}.carte-e p{display:none}.num-e{font-size:40px;left:14px;top:10px}.carte-e h3{font-size:18px}
+}
 @media (max-width:860px){
   .hero-m{padding:48px 0}.hero-m-box{padding:26px 22px}
   .tuiles{grid-template-columns:1fr 1fr;gap:10px}
