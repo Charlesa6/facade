@@ -26,6 +26,7 @@ Offre **« sites internet BTP » de Konsilys** : des sites internet clés en mai
 - `supabase/` : schéma `fc_*` et deux fonctions, **toutes deux déployées avec `verify_jwt=false`** :
   - `apercu` : `?t=<preview_token>` → `{ html }` de la maquette, rendue à la volée depuis `profile`. **Déployer avec `generator/render.mjs`, `metiers.mjs` et `style.mjs` à côté de `index.ts`**, à chaque modification du générateur (sinon les maquettes en ligne divergent).
   - `unsubscribe` : JSON (GET = lecture, POST = désinscription, `List-Unsubscribe=One-Click` → 204).
+  - `studio` : outil de Charles pour la prospection de rue (page `konsilys.com/studio`, dépôt esn-manager `com/studio.html`) : recherche SIRENE, création/modification d'une fiche `canal = 'terrain'` (jamais d'email automatique), rendu immédiat de la maquette. Protégé par un code d'accès (en-tête `x-studio-key`, empreinte SHA-256 dans `fc_studio_acces`). **Déployer avec `render.mjs`, `metiers.mjs`, `style.mjs`** comme `apercu`.
   - Supabase sert le HTML des fonctions en `text/plain` : les pages publiques (`/apercu/<jeton>`, `/desinscription`, site de l'offre) sont donc dans le dépôt **`esn-manager`, dossier `com/`**, servies par Vercel sur konsilys.com, et appellent ces fonctions en JSON.
 - `.claude/agents/` : `site-builder` (sourcing + maquettes + production) et `site-seller` (emails, réponses, closing).
 - `emails/sequence.md` : modèles de la séquence de prospection.
