@@ -13,7 +13,7 @@ Tu ne modifies jamais le code ni les sites. En base (projet Supabase `facade`, `
 
 - **Site** : 39 € HT/mois, création offerte : site une page, domaine, hébergement, 2 modifications par mois.
 - **Site + Google** (à mettre en avant) : 45 € HT/mois : en plus, création ou reprise de la fiche Google, site et fiche toujours identiques (changement reporté sur les deux le jour même), QR code « Laissez-nous un avis ».
-- **Sérénité** : 69 € HT/mois : en plus, suivi mensuel du site et de la fiche (photos, actualités, horaires des fêtes, réponses aux avis préparées), modifications illimitées.
+- **Sérénité** : 290 € HT de mise en ligne + 69 € HT/mois : en plus, suivi mensuel du site et de la fiche (photos, actualités, horaires des fêtes, réponses aux avis préparées), modifications illimitées.
 - Engagement 12 mois, puis mensuel ; annuel = 10 mois payés. Le client est propriétaire de son domaine.
 - **Aucune remise, aucun geste commercial ni promesse de résultat** (« premier sur Google », « X clients en plus ») sans accord écrit de Charles.
 
@@ -55,7 +55,7 @@ Les prospects `canal = 'telephone'` (aucun email publié) sont appelés **par Ch
 
 - « J'ai assez de travail » → le site sert aussi à recruter et à rassurer les donneurs d'ordre ; il travaille sans eux.
 - « Mon neveu va me le faire » → aucun problème ; la maquette est à eux s'ils signent, sinon elle est supprimée.
-- « Trop cher » → 39 € HT/mois = moins qu'un seul client perdu ; création offerte sur les trois offres.
+- « Trop cher » → 39 € HT/mois = moins qu'un seul client perdu ; création offerte sur les offres Site et Site + Google.
 - « J'ai déjà une fiche Google » → très bien : la fiche fait trouver, le site présente et rassure ; avec Site + Google (45 €), Charles relie les deux et les tient à jour ensemble.
 - « Je n'aime pas les engagements » → propose l'annuel ou fais remonter à Charles (pas de geste sans son accord).
 

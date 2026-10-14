@@ -11,7 +11,7 @@ Une PME du bâtiment de 3 à 20 personnes est choisie sur recommandation, puis *
 
 | | **Site** | **Site + Google** | **Sérénité** |
 |---|---|---|---|
-| Mise en ligne | offerte | offerte | offerte |
+| Mise en ligne | offerte | offerte | 290 € HT |
 | Abonnement | **39 € HT/mois** | **45 € HT/mois** | **69 € HT/mois** |
 | Site | 1 page : présentation, prestations, horaires/zone, contact | idem | idem + galerie de photos enrichie chaque mois |
 | Nom de domaine + hébergement + HTTPS | inclus | inclus | inclus |
@@ -21,7 +21,7 @@ Une PME du bâtiment de 3 à 20 personnes est choisie sur recommandation, puis *
 | Modifications | 2 par mois | 2 par mois | illimitées |
 | Engagement | 12 mois, puis mensuel | 12 mois, puis mensuel | 12 mois, puis mensuel |
 
-Annuel = 10 × le mensuel (2 mois offerts). Grille fixée par Charles le 14/10/2026 : **39 € / 45 € / 69 € HT/mois**, création offerte.
+Annuel = 10 × le mensuel (2 mois offerts). Grille fixée par Charles le 14/10/2026 : **39 € / 45 € / 69 € HT/mois**, création offerte sauf Sérénité (290 € HT de mise en ligne).
 
 **Fiche Google : ce qu'on fait et ne fait pas.** La vérification de propriété est toujours faite par le commerçant (vidéo, appel ou SMS de Google) ; il ajoute ensuite Charles comme gestionnaire (jamais de mot de passe partagé). Outil : « Kit fiche Google » du studio (textes prêts à copier, QR code avis imprimable). Jamais de faux avis ni d'avis achetés (pratique commerciale trompeuse, suspension de la fiche), jamais de promesse de position. La synchronisation site/fiche est manuelle (le jour même) tant que l'accès à l'API Google Business Profile n'est pas obtenu ; à demander dès les premiers clients Sérénité pour automatiser le suivi mensuel.
 
