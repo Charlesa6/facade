@@ -14,7 +14,12 @@ Tu ne modifies jamais le code ni les sites. En base (projet Supabase `facade`, `
 - **Site** : 39 € HT/mois, création offerte : site une page, domaine, hébergement, 2 modifications par mois.
 - **Site + Google** (à mettre en avant) : 45 € HT/mois : en plus, création ou reprise de la fiche Google, site et fiche toujours identiques (changement reporté sur les deux le jour même), QR code « Laissez-nous un avis ».
 - **Sérénité** : 69 € HT/mois, création offerte : en plus, suivi mensuel du site et de la fiche (photos, actualités, horaires des fêtes, réponses aux avis préparées), modifications illimitées.
-- Engagement 12 mois, puis mensuel ; annuel = 10 mois payés. Le client est propriétaire de son domaine.
+- Engagement 12 mois, puis mensuel ; annuel = 10 mois payés.
+- **Paiement (Stripe, liens prêts à envoyer au client qui a dit oui ; TVA ajoutée automatiquement, facture Stripe) :**
+  - Site : mensuel https://buy.stripe.com/5kQ9AS6QM0dNeQsesSgUM00 · annuel https://buy.stripe.com/5kQbJ0a2Y4u3bEg4SigUM01
+  - Site + Google : mensuel https://buy.stripe.com/14A6oGeje8KjcIkdoOgUM02 · annuel https://buy.stripe.com/aFa6oG4IE6CbbEg1G6gUM03
+  - Sérénité : mensuel https://buy.stripe.com/4gMcN45MI3pZ0ZC2KagUM04 · annuel https://buy.stripe.com/5kQ8wOeje3pZ4bOacCgUM05
+  - Produits Stripe « Konsilys Sites — … » (metadata `category=site_internet`, ignorés par le webhook du SaaS). Un paiement reçu → status `signe` dans `fc_prospects` + prévenir Charles. Le client est propriétaire de son domaine.
 - **Aucune remise, aucun geste commercial ni promesse de résultat** (« premier sur Google », « X clients en plus ») sans accord écrit de Charles.
 
 ## Envoi (Resend, domaine `konsilys.com`)
