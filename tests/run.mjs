@@ -94,6 +94,20 @@ test('chaque métier a son pictogramme ; pharmacie sans « commande » ni promes
   assert.doesNotMatch(html, /commande|promo|remise/i);
 });
 
+test('photos : principale + galerie ; photos Google seulement dans la maquette ; URL non https refusées', () => {
+  const p = { raison_sociale: 'X', metier: 'boulangerie', google_maps_url: 'https://maps.app.goo.gl/abc', google_note: 4.7, google_avis: 120,
+    photos: [{ src: 'https://cdn.test/a.jpg', origine: 'commercant' }, { src: 'https://cdn.test/g.jpg', origine: 'google' }, { src: 'javascript:alert(1)' }, { src: 'https://cdn.test/b.jpg"><script>', origine: 'commercant' }] };
+  const pv = renderIndex(p, { preview: true });
+  assert.match(pv, /class="hero-art hero-photo"[\s\S]*src="https:\/\/cdn\.test\/a\.jpg"/);
+  assert.match(pv, /id="photos"[\s\S]*g\.jpg[\s\S]*Photo : fiche Google/);
+  assert.doesNotMatch(pv, /javascript:|<script>/);
+  assert.match(pv, /Nos avis Google/);
+  assert.match(pv, /4,7 ★/);
+  const prod = renderIndex(p, { preview: false });
+  assert.doesNotMatch(prod, /g\.jpg/);
+  assert.doesNotMatch(renderIndex({ raison_sociale: 'X', metier: 'boulangerie', google_maps_url: 'https://evil.test/maps/' }), /avis Google/);
+});
+
 test('profil sans nom refusé', () => {
   assert.throws(() => normalize({ metier: 'maconnerie' }));
 });

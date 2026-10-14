@@ -2,7 +2,7 @@
 // Page : https://www.konsilys.com/studio (dépôt esn-manager, com/studio.html) → appelle cette fonction en JSON.
 // Accès : en-tête `x-studio-key` = code d'accès de Charles (saisi une fois sur son téléphone) ; seule son empreinte SHA-256
 // est en base (table fc_studio_acces). verify_jwt=false.
-// Déployer avec generator/render.mjs, metiers.mjs et style.mjs à côté de index.ts (comme `apercu`).
+// Déployer avec generator/render.mjs, metiers.mjs, style.mjs et google.mjs à côté de index.ts (comme `apercu`).
 //
 // Actions (POST { action, ... }) :
 //   init                  → { metiers: [{ key, label, famille }] }
@@ -11,14 +11,20 @@
 //   get { token }         → { profile, contact, url }
 //   save { token?, profile, contact } → crée ou met à jour la fiche (canal 'terrain') → { token, url, html }
 //   archive { token }     → status 'perdu' : la maquette n'est plus visible
+//   upload { data, type } → photo prise sur place (base64, déjà réduite par le téléphone) → { src } dans le stockage public
+//   google { q }          → fiche Google du commerce (horaires, note, site, photos) si une clé Places est configurée
 // Les prospects 'terrain' ne reçoivent jamais d'email automatique (les routines ne traitent que canal = 'email').
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
 import { renderIndex, normalize } from './render.mjs';
 import { METIERS, metierFromNaf } from './metiers.mjs';
+import { chercherFiche, resoudrePhotos, urlPhoto } from './google.mjs';
 
 const sb = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
 const ORIGINES = ['https://www.konsilys.com', 'https://konsilys.com'];
 const BASE = 'https://www.konsilys.com/apercu/';
+const BUCKET = 'maquettes-photos';
+const PHOTOS_URL = `${Deno.env.get('SUPABASE_URL')}/storage/v1/object/public/${BUCKET}/`;
+const cleGoogle = async () => (await sb.from('fc_config').select('valeur').eq('cle', 'google_places_key').maybeSingle()).data?.valeur ?? null;
 
 const sha256 = async (s: string) => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)))].map((b) => b.toString(16).padStart(2, '0')).join('');
 const egal = (a: string, b: string) => {
@@ -55,6 +61,17 @@ function nettoyer(p: Record<string, unknown>) {
     services: liste(p.services, 8).map((s: any) => ({ titre: txt(s?.titre, 60), description: txt(s?.description, 240) })).filter((s) => s.titre),
     atouts: liste(p.atouts, 6).map((a) => txt(a, 120)).filter(Boolean),
     certifications: liste(p.certifications, 6).map((c) => txt(c, 60)).filter(Boolean),
+    // Photos : fichiers de notre stockage (prises sur place) ou références de la fiche Google du commerce.
+    photos: liste(p.photos, 9).map((ph: any) => {
+      const src = typeof ph?.src === 'string' ? ph.src : '';
+      if (src.startsWith(PHOTOS_URL) && /^[\w-]+\.(jpg|png|webp)$/.test(src.slice(PHOTOS_URL.length))) return { src, origine: 'commercant', legende: txt(ph.legende, 80) ?? undefined };
+      if (/^google:places\/[\w-]+\/photos\/[\w-]+$/.test(src)) return { src, origine: 'google', legende: txt(ph.legende, 80) ?? undefined };
+      return null;
+    }).filter(Boolean),
+    google_maps_url: txt(p.google_maps_url, 300),
+    google_place_id: typeof p.google_place_id === 'string' && /^[\w-]{10,300}$/.test(p.google_place_id) ? p.google_place_id : null,
+    google_note: typeof p.google_note === 'number' && p.google_note >= 1 && p.google_note <= 5 ? Math.round(p.google_note * 10) / 10 : null,
+    google_avis: Number.isInteger(p.google_avis) && (p.google_avis as number) > 0 ? p.google_avis : null,
     sources: ['Rencontre sur place (démarchage), informations données par le commerçant'],
   };
   const pal = (p.palette ?? {}) as Record<string, unknown>;
@@ -126,7 +143,7 @@ Deno.serve(async (req) => {
   try {
     switch (body.action) {
       case 'init':
-        return json({ metiers: Object.entries(METIERS).map(([key, m]: [string, any]) => ({ key, label: m.label, famille: m.famille || 'btp' })) });
+        return json({ google: !!(await cleGoogle()), metiers: Object.entries(METIERS).map(([key, m]: [string, any]) => ({ key, label: m.label, famille: m.famille || 'btp' })) });
 
       case 'search': {
         const q = txt(body.q, 100);
@@ -145,7 +162,11 @@ Deno.serve(async (req) => {
         if (!token) return json({ error: 'lien invalide' }, 400);
         const { data } = await sb.from('fc_prospects').select('profile, contact_name, contact_role, email, phone, notes, status, preview_token').eq('preview_token', token).maybeSingle();
         if (!data) return json({ error: 'maquette introuvable' }, 404);
-        return json({ profile: data.profile, contact: { nom: data.contact_name, role: data.contact_role, email: data.email, telephone: data.phone, notes: data.notes, status: data.status }, url: BASE + token });
+        // Miniatures des photos Google pour l'affichage dans le studio (non enregistrées).
+        const cle = await cleGoogle();
+        const photos = await Promise.all((data.profile?.photos || []).map(async (ph: any) =>
+          String(ph?.src).startsWith('google:') && cle ? { ...ph, apercu: await urlPhoto(ph.src.slice(7), cle, 400).catch(() => null) } : ph));
+        return json({ profile: { ...data.profile, photos }, contact: { nom: data.contact_name, role: data.contact_role, email: data.email, telephone: data.phone, notes: data.notes, status: data.status }, url: BASE + token });
       }
 
       case 'save': {
@@ -175,7 +196,29 @@ Deno.serve(async (req) => {
         const t = res.data.preview_token;
         await sb.from('fc_prospects').update({ preview_url: BASE + t }).eq('preview_token', t);
         const base = `/apercu/${t}`;
-        return json({ token: t, url: BASE + t, html: renderIndex(profile, { preview: true, liens: { mentions: `${base}?page=mentions`, accueil: base } }) });
+        const affiche = await resoudrePhotos(profile, await cleGoogle());
+        return json({ token: t, url: BASE + t, html: renderIndex(affiche, { preview: true, liens: { mentions: `${base}?page=mentions`, accueil: base } }) });
+      }
+
+      case 'upload': {
+        const type = ['image/jpeg', 'image/png', 'image/webp'].includes(body.type) ? body.type : null;
+        if (!type || typeof body.data !== 'string') return json({ error: 'photo invalide' }, 400);
+        const octets = Uint8Array.from(atob(body.data), (c) => c.charCodeAt(0));
+        if (octets.length > 5 * 1024 * 1024) return json({ error: 'photo trop lourde (5 Mo maximum)' }, 400);
+        const signature = octets[0] === 0xff && octets[1] === 0xd8 ? 'image/jpeg' : octets[0] === 0x89 && octets[1] === 0x50 ? 'image/png' : octets[8] === 0x57 && octets[9] === 0x45 ? 'image/webp' : null;
+        if (signature !== type) return json({ error: 'le fichier n\'est pas une image' }, 400);
+        const nom = `${crypto.randomUUID()}.${type.split('/')[1].replace('jpeg', 'jpg')}`;
+        const { error } = await sb.storage.from(BUCKET).upload(nom, octets, { contentType: type, cacheControl: '31536000' });
+        if (error) throw error;
+        return json({ src: PHOTOS_URL + nom });
+      }
+
+      case 'google': {
+        const cle = await cleGoogle();
+        if (!cle) return json({ disponible: false, fiches: [] });
+        const q = txt(body.q, 120);
+        if (!q || q.length < 3) return json({ disponible: true, fiches: [] });
+        return json({ disponible: true, fiches: await chercherFiche(q, cle) });
       }
 
       case 'archive': {

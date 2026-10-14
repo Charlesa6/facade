@@ -39,6 +39,12 @@ export function normalize(p) {
     atouts: p.atouts || [],
     atouts_defaut: m.atouts || null,
     certifications: p.certifications || [],
+    // Photos : celles du commerçant (origine « commercant ») et, dans la maquette seulement, celles de sa fiche Google
+    // (origine « google », jamais dans le site de production). `src` est toujours une URL https.
+    photos: (Array.isArray(p.photos) ? p.photos : [])
+      .filter((ph) => ph && typeof ph.src === 'string' && /^https:\/\//.test(ph.src))
+      .slice(0, 9),
+    google_maps_url: typeof p.google_maps_url === 'string' && /^https:\/\/(www\.)?(google\.[a-z.]+\/maps|maps\.google\.[a-z.]+|maps\.app\.goo\.gl|goo\.gl\/maps|g\.page)\//.test(p.google_maps_url) ? p.google_maps_url : null,
   };
 }
 
@@ -54,6 +60,7 @@ function hero(d) {
   const facts = [];
   const age = d.annee ? new Date().getFullYear() - d.annee : 0;
   if (d.annee) facts.push(age >= 2 ? `<li><b>${age} ans</b><span>d'expérience</span></li>` : `<li><b>${d.annee}</b><span>année de création</span></li>`);
+  if (d.google_note) facts.push(`<li><b>${esc(String(d.google_note).replace('.', ','))} ★</b><span>${d.google_avis ? `${esc(d.google_avis)} avis Google` : 'note Google'}</span></li>`);
   if (d.effectif) facts.push(`<li><b>${esc(d.effectif)}</b><span>à votre service</span></li>`);
   if (d.commerce && d.ville) facts.push(`<li><b>${esc(d.ville)}</b><span>${d.adresse ? 'nous trouver' : 'votre adresse de quartier'}</span></li>`);
   else if (d.zone.length) facts.push(`<li><b>${esc(d.zone[0])}</b><span>${d.zone.length > 1 ? `et ${d.zone.length - 1} autre${d.zone.length > 2 ? 's' : ''} secteur${d.zone.length > 2 ? 's' : ''}` : 'zone d\'intervention'}</span></li>`);
@@ -67,8 +74,25 @@ function hero(d) {
       : `<a class="btn btn-accent btn-lg" href="#contact">${esc(d.cta)}</a>${d.telephone ? `<a class="btn btn-ghost btn-lg" href="${telHref(d.telephone)}">${icon('phone', 18)} Appeler</a>` : ''}`}</div>
     ${d.certifications.length ? `<ul class="badges">${d.certifications.map((c) => `<li>${icon('check', 16)} ${esc(c)}</li>`).join('')}</ul>` : ''}
   </div>
-  <div class="hero-art" aria-hidden="true"><div class="art-card">${icon(d.icon, 120)}</div><div class="art-stripes${d.commerce ? ' art-dots' : ''}"></div></div>
+  ${d.photos.length
+    ? `<div class="hero-art hero-photo"><div class="art-stripes${d.commerce ? ' art-dots' : ''}" aria-hidden="true"></div><img src="${esc(d.photos[0].src)}" alt="${esc(d.photos[0].legende || d.name)}" loading="eager">${credit(d.photos[0])}</div>`
+    : `<div class="hero-art" aria-hidden="true"><div class="art-card">${icon(d.icon, 120)}</div><div class="art-stripes${d.commerce ? ' art-dots' : ''}"></div></div>`}
 </div>${facts.length ? `<div class="wrap"><ul class="facts">${facts.join('')}</ul></div>` : ''}</section>`;
+}
+
+const credit = (ph) => (ph.origine === 'google' ? '<span class="credit">Photo : fiche Google</span>' : '');
+
+function galerie(d) {
+  const autres = d.photos.slice(1);
+  if (!autres.length) return '';
+  return `<section class="sec gal-sec" id="photos"><div class="wrap">
+  <p class="eyebrow">En images</p><h2>${d.commerce ? `Découvrez ${esc(d.name)}` : 'Nos réalisations'}</h2>
+  <div class="gal">${autres.map((ph) => `<figure><img src="${esc(ph.src)}" alt="${esc(ph.legende || d.name)}" loading="lazy">${ph.legende ? `<figcaption>${esc(ph.legende)}</figcaption>` : ''}${credit(ph)}</figure>`).join('')}</div>
+</div></section>`;
+}
+
+function avisGoogle(d) {
+  return d.google_maps_url ? `<a class="btn btn-ghost btn-lg" href="${esc(d.google_maps_url)}" target="_blank" rel="noopener">${icon('star', 18)} Nos avis Google</a>` : '';
 }
 
 function services(d) {
@@ -100,7 +124,7 @@ function atouts(d) {
 
 function zone(d) {
   if (d.commerce) {
-    const maps = d.adresse ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.adresse)}` : null;
+    const maps = d.google_maps_url || (d.adresse ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.adresse)}` : null);
     return `<section class="sec" id="zone"><div class="wrap two">
   <div><p class="eyebrow">Nous trouver</p><h2>Venez nous voir</h2>
   <ul class="coords coords-light">
@@ -108,13 +132,14 @@ function zone(d) {
     <li class="${d.horaires ? '' : 'tbv'}">${icon('clock')}<div><b>Horaires</b><span>${esc(d.horaires || 'Horaires d\'ouverture à compléter')}</span></div></li>
     ${d.telephone ? `<li>${icon('phone')}<div><b>Téléphone</b><a href="${telHref(d.telephone)}">${esc(d.telephone)}</a></div></li>` : ''}
   </ul>
-  ${maps ? `<div class="hero-cta"><a class="btn btn-ghost btn-lg" href="${esc(maps)}" target="_blank" rel="noopener">${icon('pin', 18)} Itinéraire</a></div>` : ''}</div>
+  ${maps ? `<div class="hero-cta"><a class="btn btn-ghost btn-lg" href="${esc(maps)}" target="_blank" rel="noopener">${icon('pin', 18)} Itinéraire</a>${avisGoogle(d)}</div>` : ''}</div>
   <div class="panel"><h3>${esc(d.cta)}</h3><p>${d.telephone ? `Appelez-nous au <a class="link" href="${telHref(d.telephone)}">${esc(d.telephone)}</a>.` : 'Contactez-nous par email.'}</p></div>
 </div></section>`;
   }
   return `<section class="sec" id="zone"><div class="wrap">
   <p class="eyebrow">Zone d'intervention</p><h2>Nous intervenons près de chez vous</h2>
   <ul class="zone">${d.zone.map((z) => `<li>${icon('pin', 18)} ${esc(z)}</li>`).join('')}</ul>
+  ${d.google_maps_url ? `<div class="hero-cta">${avisGoogle(d)}</div>` : ''}
 </div></section>`;
 }
 
@@ -170,9 +195,11 @@ function jsonLd(d) {
 // `liens` : URLs des pages annexes quand le site n'est pas servi comme fichiers statiques (maquettes en ligne).
 export function renderIndex(profile, { preview = false, liens = {} } = {}) {
   const d = normalize(profile);
+  // Site de production : uniquement les photos fournies par le commerçant (droits et invariant « zéro invention »).
+  if (!preview) d.photos = d.photos.filter((ph) => ph.origine !== 'google');
   const title = `${d.name} — ${d.metier_label}${d.ville ? ' à ' + d.ville : ''}`;
   return `${head(d, { preview, title, description: d.accroche })}${preview ? '' : jsonLd(d)}</head>
-<body class="${preview ? 'is-preview' : ''}">${preview ? previewBanner(d) : ''}${header(d)}<main>${hero(d)}${services(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d, liens)}</body></html>
+<body class="${preview ? 'is-preview' : ''}">${preview ? previewBanner(d) : ''}${header(d)}<main>${hero(d)}${services(d)}${galerie(d)}${atouts(d)}${zone(d)}${contact(d)}</main>${footer(d, liens)}</body></html>
 `;
 }
 

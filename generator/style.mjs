@@ -39,6 +39,16 @@ h3{font-size:18px;color:var(--dark);margin-bottom:8px}
 .art-card{position:absolute;inset:8% 8% 8% 8%;border-radius:28px;background:var(--primary);color:var(--accent);display:grid;place-items:center;box-shadow:0 30px 60px rgba(0,0,0,.18);transform:rotate(-3deg)}
 .art-stripes{position:absolute;right:0;bottom:0;width:45%;height:30%;border-radius:18px;background:repeating-linear-gradient(-45deg,var(--accent) 0 14px,var(--dark) 14px 28px);opacity:.9}
 .art-dots{background:radial-gradient(circle,var(--accent) 0 5px,transparent 6px) 0 0/22px 22px,var(--dark);opacity:1}
+.hero-photo .art-stripes{z-index:0}
+.hero-photo img{position:absolute;z-index:1;inset:4% 10% 10% 4%;width:86%;height:86%;object-fit:cover;border-radius:28px;box-shadow:0 30px 60px rgba(0,0,0,.18);transform:rotate(-2deg);background:var(--soft)}
+.credit{position:absolute;z-index:2;left:8px;bottom:8px;font-size:11px;background:rgba(0,0,0,.55);color:#fff;padding:2px 8px;border-radius:999px}
+.hero-photo .credit{left:8%;bottom:12%}
+.gal-sec{padding-top:0}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.gal figure{position:relative;margin:0;border-radius:16px;overflow:hidden;background:var(--soft);aspect-ratio:4/3}
+.gal img{width:100%;height:100%;object-fit:cover;display:block}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:18px 12px 8px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.gal figcaption~.credit{bottom:auto;top:8px}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;list-style:none;margin-top:48px}
 .facts li{background:#fff;border:1px solid #eef0f3;border-radius:16px;padding:18px 20px;box-shadow:0 6px 18px rgba(0,0,0,.04)}
 .facts b{display:block;font-size:22px;color:var(--dark)}
@@ -76,7 +86,8 @@ h3{font-size:18px;color:var(--dark);margin-bottom:8px}
 @media (max-width:860px){
   .nav{display:none}.hdr-cta{margin-left:auto}
   .hero{padding:40px 0 24px}.hero-in,.two{grid-template-columns:1fr;gap:28px}
-  .hero-art{max-width:240px;order:-1}
+  .hero-art{max-width:240px;order:-1}.hero-photo{max-width:320px}
+  .gal{grid-template-columns:1fr 1fr;gap:10px}
   .facts{grid-template-columns:1fr;margin-top:28px}
   .sec{padding:56px 0}.made{margin-left:0}
 }

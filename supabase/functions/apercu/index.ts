@@ -1,11 +1,12 @@
 // Maquette en ligne d'un prospect : GET ?t=<preview_token>[&page=mentions] → { name, html }.
 // Supabase sert les pages de fonctions en text/plain : la fonction renvoie donc du JSON, et la page
 // https://www.konsilys.com/apercu/<jeton> (dépôt esn-manager, com/apercu.html) l'affiche.
-// Le rendu utilise le générateur du dépôt : déployer avec generator/render.mjs, metiers.mjs et style.mjs
+// Le rendu utilise le générateur du dépôt : déployer avec generator/render.mjs, metiers.mjs, style.mjs et google.mjs
 // à côté de index.ts (même dossier), à chaque modification du générateur. Aucune maquette n'est stockée : désinscription ou perte → 404 immédiat.
 // verify_jwt=false : la page publique appelle la fonction sans session (le jeton fait office de secret).
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
 import { renderIndex, renderMentions } from './render.mjs';
+import { resoudrePhotos } from './google.mjs';
 
 const sb = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
 const ORIGINES = ['https://www.konsilys.com', 'https://konsilys.com'];
@@ -31,8 +32,12 @@ Deno.serve(async (req) => {
 
   const base = `/apercu/${token}`;
   const liens = { mentions: `${base}?page=mentions`, accueil: base };
+  // Photos de la fiche Google : URL d'affichage redemandée à Google à chaque rendu (rien n'est copié chez nous).
+  const aGoogle = (p.profile.photos || []).some((ph: { src?: string }) => String(ph?.src).startsWith('google:'));
+  const cle = aGoogle ? (await sb.from('fc_config').select('valeur').eq('cle', 'google_places_key').maybeSingle()).data?.valeur : null;
+  const profil = aGoogle ? await resoudrePhotos(p.profile, cle) : p.profile;
   const html = url.searchParams.get('page') === 'mentions'
-    ? renderMentions(p.profile, { preview: true, liens })
-    : renderIndex(p.profile, { preview: true, liens });
+    ? renderMentions(profil, { preview: true, liens })
+    : renderIndex(profil, { preview: true, liens });
   return json({ name: p.company, html });
 });
