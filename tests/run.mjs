@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Tests du générateur (aucune dépendance) : node tests/run.mjs
 import { renderIndex, renderMentions, normalize } from '../generator/render.mjs';
-import { METIERS, metierFromNaf } from '../generator/metiers.mjs';
+import { METIERS, ICONS, metierFromNaf } from '../generator/metiers.mjs';
 import { readFileSync, readdirSync } from 'node:fs';
 import assert from 'node:assert/strict';
 
@@ -70,7 +70,7 @@ test('élision devant un métier commençant par une voyelle', () => {
 });
 
 test('commerces : bouton d\'action du métier, « Nous trouver », pas de devis', () => {
-  for (const [metier, cta] of [['restaurant', 'Réserver une table'], ['coiffure', 'Prendre rendez-vous'], ['fleuriste', 'Commander un bouquet'], ['boulangerie', 'Passer commande']]) {
+  for (const [metier, cta] of [['restaurant', 'Réserver une table'], ['coiffure', 'Prendre rendez-vous'], ['fleuriste', 'Commander un bouquet'], ['boulangerie', 'Passer commande'], ['fromager', 'Passer commande'], ['boucher', 'Passer commande'], ['poissonnier', 'Passer commande'], ['pharmacie', 'Appeler la pharmacie']]) {
     const html = renderIndex({ raison_sociale: 'X', metier, ville: 'Lyon 3e', adresse: '1 rue A, 69003 Lyon', telephone: '04 00 00 00 00' }, { preview: false });
     assert.match(html, new RegExp(cta));
     assert.match(html, /Nous trouver/);
@@ -84,6 +84,14 @@ test('commerces : bouton d\'action du métier, « Nous trouver », pas de devis'
 
 test('horaires manquants d\'un commerce marqués « à valider »', () => {
   assert.match(renderIndex({ raison_sociale: 'X', metier: 'boulangerie' }, { preview: true }), /class="tbv">[\s\S]*?Horaires d&#39;ouverture à compléter/);
+});
+
+test('chaque métier a son pictogramme ; pharmacie sans « commande » ni promesse', () => {
+  for (const [k, m] of Object.entries(METIERS)) assert.ok(ICONS[m.icon], `pictogramme manquant : ${k}`);
+  const html = renderIndex({ raison_sociale: 'X', metier: 'pharmacie' }, { preview: true });
+  assert.match(html, /Appeler la pharmacie/);
+  assert.match(html, /"?Pharmacie/);
+  assert.doesNotMatch(html, /commande|promo|remise/i);
 });
 
 test('profil sans nom refusé', () => {

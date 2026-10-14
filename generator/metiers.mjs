@@ -1,4 +1,4 @@
-// Préréglages par métier (BTP et commerces de proximité) : palette, libellé, prestations types.
+// Préréglages par métier (BTP et commerces de proximité : restaurant, coiffure, fleuriste, boulangerie, pharmacie, fromager, boucher, poissonnier) : palette, libellé, prestations types.
 // Pour les emails : `activite` (« vous dirigez … »), `photos` (« … photos de vos chantiers »), sinon valeurs BTP par défaut.
 // Les prestations par défaut sont des descriptions génériques du métier,
 // signalées « à valider » dans la maquette tant que l'entreprise ne les a pas confirmées.
@@ -166,6 +166,68 @@ export const METIERS = {
       ['Commandes', 'Gâteaux d\'anniversaire et pièces pour vos événements.'],
     ],
   },
+  pharmacie: {
+    famille: 'commerce', activite: 'une pharmacie', photos: "photos de l'officine", schema: 'Pharmacy',
+    label: 'Pharmacie', pros: 'des pharmacies', naf: ['47.73Z'],
+    palette: { primary: '#047857', accent: '#6EE7B7', dark: '#052E2B', soft: '#ECFDF5' },
+    icon: 'cross',
+    // Site d'officine : information uniquement (règles déontologiques des pharmaciens) — pas de promotion ni de vente en ligne.
+    cta: 'Appeler la pharmacie', titreServices: 'Nos services',
+    description: '{name}, votre pharmacie {a_ville} : délivrance de vos ordonnances, conseils et produits de santé, avec une équipe à votre écoute.',
+    atouts: ['Une équipe à votre écoute', 'Conseils personnalisés', 'Délivrance de vos ordonnances'],
+    services: [
+      ['Ordonnances', 'Délivrance de vos médicaments sur ordonnance.'],
+      ['Conseil', 'Conseils santé et produits sans ordonnance.'],
+      ['Matériel médical', 'Location et vente de matériel de maintien à domicile.'],
+      ['Parapharmacie', 'Hygiène, soins et dermocosmétique.'],
+    ],
+  },
+  fromager: {
+    // 47.29Z regroupe aussi d'autres commerces alimentaires (épiceries fines) : métier à vérifier au sourcing.
+    famille: 'commerce', activite: 'une fromagerie', photos: 'photos de vos fromages', schema: 'Store',
+    label: 'Fromagerie', pros: 'des fromagers', naf: ['47.29Z'],
+    palette: { primary: '#A16207', accent: '#FDE68A', dark: '#1C1917', soft: '#FEFCE8' },
+    icon: 'cheese',
+    cta: 'Passer commande', titreServices: 'Nos produits',
+    description: '{name}, votre fromager {a_ville} : fromages affinés, crèmerie et conseils pour vos plateaux.',
+    atouts: ['Fromages affinés avec soin', 'Conseils de dégustation', 'Plateaux sur commande'],
+    services: [
+      ['Fromages', 'Une sélection de fromages de nos régions, au lait cru et pasteurisé.'],
+      ['Plateaux', 'Plateaux de fromages sur commande pour vos repas et réceptions.'],
+      ['Crèmerie', 'Beurre, crème, yaourts et œufs.'],
+      ['Épicerie fine', 'Vins, confitures et accompagnements.'],
+    ],
+  },
+  boucher: {
+    famille: 'commerce', activite: 'une boucherie', photos: 'photos de vos produits', schema: 'Store',
+    label: 'Boucherie-charcuterie', pros: 'des boucheries', naf: ['47.22Z'],
+    palette: { primary: '#991B1B', accent: '#FDBA74', dark: '#1C1917', soft: '#FEF2F2' },
+    icon: 'meat',
+    cta: 'Passer commande', titreServices: 'Nos produits',
+    description: '{name}, votre boucherie {a_ville} : viandes, charcuterie et préparations, découpées et conseillées par des artisans.',
+    atouts: ['Découpe à la demande', 'Conseils de cuisson', 'Commandes pour vos repas de fête'],
+    services: [
+      ['Viandes', 'Bœuf, veau, agneau, porc et volailles, découpés à la demande.'],
+      ['Charcuterie', 'Charcuteries et préparations maison.'],
+      ['Traiteur', 'Plats cuisinés et préparations pour vos repas.'],
+      ['Commandes', 'Colis, barbecues et commandes pour vos événements.'],
+    ],
+  },
+  poissonnier: {
+    famille: 'commerce', activite: 'une poissonnerie', photos: 'photos de vos étals', schema: 'Store',
+    label: 'Poissonnerie', pros: 'des poissonneries', naf: ['47.23Z'],
+    palette: { primary: '#0E7490', accent: '#67E8F9', dark: '#083344', soft: '#ECFEFF' },
+    icon: 'fish',
+    cta: 'Passer commande', titreServices: 'Nos produits',
+    description: "{name}, votre poissonnerie {a_ville} : poissons et fruits de mer frais, préparés à la demande.",
+    atouts: ['Arrivages frais', 'Poisson préparé à la demande', 'Plateaux de fruits de mer sur commande'],
+    services: [
+      ['Poissons', "Poissons frais selon l'arrivage, préparés à la demande."],
+      ['Fruits de mer', 'Coquillages et crustacés, plateaux sur commande.'],
+      ['Préparation', 'Écaillage, filets et conseils de cuisson.'],
+      ['Traiteur de la mer', 'Soupes, terrines et préparations maison.'],
+    ],
+  },
 };
 
 // Pictogrammes en SVG inline (aucune image externe à charger).
@@ -182,6 +244,10 @@ export const ICONS = {
   plate: '<circle cx="12" cy="12" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 4v6a2 2 0 0 0 2 2M2.5 4v16M21.5 4c-1.5 1-2 3-2 5v3h2v8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
   scissors: '<circle cx="6" cy="6" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 7.5 20 19M8.5 16.5 20 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
   flower: '<circle cx="12" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 6.5C12 4 13.5 3 15 3.5c1.5.5 1.5 2.5 0 4M14.5 9c2.5 0 3.5 1.5 3 3s-2.5 1.5-4 0M12 11.5c0 2.5-1.5 3.5-3 3s-1.5-2.5 0-4M9.5 9C7 9 6 7.5 6.5 6S9 4.5 10.5 6M12 11.5V21M12 17c-2-2-4-2-5-1M12 18c2-2 4-2 5-1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  cross: '<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+  cheese: '<path d="M3 17V10l12-6 6 6v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zM3 10h18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8" cy="14" r="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="14.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+  meat: '<path d="M7 4c5-2 13 1 13 8 0 5-5 8-10 8-4 0-7-2-7-6 0-3 2-4 2-6s0-3 2-4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="14" cy="11" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+  fish: '<path d="M2 12c3-5 9-7 14-4l5-3v14l-5-3c-5 3-11 1-14-4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.5" cy="11" r="1" fill="currentColor"/>',
   bread: '<path d="M4 11a5 5 0 0 1 3-9h10a5 5 0 0 1 3 9v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 9l2 3M13 8l2 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
   phone: '<path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
   pin: '<path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>',
